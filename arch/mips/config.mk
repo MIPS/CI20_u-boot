@@ -43,11 +43,18 @@ PLATFORM_CPPFLAGS += -DCONFIG_MIPS -D__MIPS__
 # MODFLAGS			+= -mlong-calls
 #
 # On the other hand, we want PIC in the U-Boot code to relocate it from ROM
-# to RAM. $28 is always used as gp.
+# to RAM, unless we're building SPL which doesn't relocate. $28 is always
+# used as gp.
 #
-PLATFORM_CPPFLAGS		+= -G 0 -mabicalls -fpic $(ENDIANNESS)
+PLATFORM_CPPFLAGS		+= -G 0 -mabicalls $(ENDIANNESS)
 PLATFORM_CPPFLAGS		+= -msoft-float
 PLATFORM_LDFLAGS		+= -G 0 -static -n -nostdlib $(ENDIANNESS)
 PLATFORM_RELFLAGS		+= -ffunction-sections -fdata-sections
-LDFLAGS_FINAL			+= --gc-sections -pie
+LDFLAGS_FINAL			+= --gc-sections
 OBJCFLAGS			+= --remove-section=.dynsym
+ifdef CONFIG_SPL_BUILD
+PLATFORM_CPPFLAGS		+= -fno-pic
+else
+PLATFORM_CPPFLAGS		+= -fpic
+LDFLAGS_FINAL			+= -pie
+endif

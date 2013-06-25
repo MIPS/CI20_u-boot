@@ -18,8 +18,12 @@ LGOBJS	:= $(addprefix $(obj),$(GLSOBJS))
 
 SOBJS-y	+=
 
+ifndef CONFIG_SPL_BUILD
 COBJS-y	+= board.o
 COBJS-$(CONFIG_CMD_BOOTM) += bootm.o
+else
+COBJS-$(CONFIG_SPL_FRAMEWORK) += spl.o
+endif
 
 SRCS	:= $(SOBJS-y:.o=.S) $(COBJS-y:.o=.c)
 OBJS	:= $(addprefix $(obj),$(SOBJS-y) $(COBJS-y))
