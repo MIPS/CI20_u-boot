@@ -9,7 +9,7 @@
 #include <common.h>
 #include <asm/io.h>
 
-#include <asm/jz4740.h>
+#include <asm/arch/jz4740.h>
 
 #define TIMER_CHAN  0
 #define TIMER_FDATA 0xffff  /* Timer full data value */

@@ -12,7 +12,7 @@
 
 /* Architecture-specific global data */
 struct arch_global_data {
-#ifdef CONFIG_JZSOC
+#ifdef CONFIG_JZ4740
 	/* There are other clocks in the jz4740 */
 	unsigned long per_clk;	/* Peripheral bus clock */
 	unsigned long dev_clk;	/* Device clock */
