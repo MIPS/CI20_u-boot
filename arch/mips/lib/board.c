@@ -149,6 +149,9 @@ void board_init_f(ulong bootflag)
 	 * relocate the code and continue running from DRAM.
 	 */
 	addr = CONFIG_SYS_SDRAM_BASE + gd->ram_size;
+#ifdef CONFIG_SYS_SDRAM_MAX_TOP
+	addr = MIN(addr, CONFIG_SYS_SDRAM_MAX_TOP);
+#endif
 
 	/* We can reserve some RAM "on top" here.
 	 */
