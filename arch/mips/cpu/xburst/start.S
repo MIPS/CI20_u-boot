@@ -75,7 +75,7 @@ relocate_code:
 
 	/* flush d-cache */
 	li	t0, KSEG0
-	addi	t1, t0, CONFIG_SYS_DCACHE_SIZE
+	or	t1, t0, CONFIG_SYS_DCACHE_SIZE
 2:
 	cache	INDEX_WRITEBACK_INV_D, 0(t0)
 	bne	t0, t1, 2b
@@ -85,7 +85,7 @@ relocate_code:
 
 	/* flush i-cache */
 	li	t0, KSEG0
-	addi	t1, t0, CONFIG_SYS_ICACHE_SIZE
+	or	t1, t0, CONFIG_SYS_ICACHE_SIZE
 3:
 	cache	INDEX_INVALIDATE_I, 0(t0)
 	bne	t0, t1, 3b
