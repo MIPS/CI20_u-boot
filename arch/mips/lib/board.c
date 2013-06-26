@@ -16,6 +16,7 @@
 #include <nand.h>
 #include <onenand_uboot.h>
 #include <spi.h>
+#include <mmc.h>
 
 #ifdef CONFIG_BITBANGMII
 #include <miiphy.h>
@@ -278,6 +279,11 @@ void board_init_r(gd_t *id, ulong dest_addr)
 
 #if defined(CONFIG_CMD_ONENAND)
 	onenand_init();
+#endif
+
+#ifdef CONFIG_GENERIC_MMC
+	puts("MMC:   ");
+	mmc_initialize(bd);
 #endif
 
 	/* relocate environment function pointers etc. */
