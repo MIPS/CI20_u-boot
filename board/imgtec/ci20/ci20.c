@@ -138,7 +138,7 @@ int board_eth_init(bd_t *bis)
 	writel(0x0dff00ff, GPIO_PXMASKC(0));
 	writel(0x0dff00ff, GPIO_PXPAT1C(0));
 	writel(0x0dff00ff, GPIO_PXPAT0C(0));
-	writel(0x0d5ff00ff, GPIO_PXPENS(0));
+	writel(0x0dff00ff, GPIO_PXPENS(0));
 	writel(0x00000003, GPIO_PXINTC(1));
 	writel(0x00000003, GPIO_PXMASKC(1));
 	writel(0x00000003, GPIO_PXPAT1C(1));
@@ -175,13 +175,6 @@ int checkboard(void)
 
 void spl_board_init(void)
 {
-#if 0
-	/* set I2C pins low */
-	gpio_direction_output(32 * 3 + 30, 0); /* I2C0 SDA */
-	gpio_direction_output(32 * 4 + 31, 0); /* I2C1 SCL */
-	gpio_direction_output(32 * 5 + 17, 0); /* I2C2 SCL */
-	gpio_direction_output(32 * 4 + 13, 0); /* I2C4 SCL */
-#endif
 }
 
 #endif /* CONFIG_SPL_BUILD */
