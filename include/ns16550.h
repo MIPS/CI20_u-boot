@@ -92,6 +92,15 @@ typedef struct NS16550 *NS16550_t;
 #define UART_FCR_RXSR		0x02 /* Receiver soft reset */
 #define UART_FCR_TXSR		0x04 /* Transmitter soft reset */
 
+#ifdef CONFIG_JZSOC
+/*
+ * Ingenic JZ47xx SoCs require that a 'UART Module Enable' bit be set
+ */
+#define UART_FCR_UME		0x10
+#else
+#define UART_FCR_UME		0x00
+#endif
+
 /*
  * These are the definitions for the Modem Control Register
  */

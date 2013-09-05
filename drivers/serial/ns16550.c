@@ -15,7 +15,8 @@
 		     UART_MCR_RTS)		/* RTS/DTR */
 #define UART_FCRVAL (UART_FCR_FIFO_EN |	\
 		     UART_FCR_RXSR |	\
-		     UART_FCR_TXSR)		/* Clear & enable FIFOs */
+		     UART_FCR_TXSR | \
+		     UART_FCR_UME)		/* Clear & enable FIFOs */
 #ifdef CONFIG_SYS_NS16550_PORT_MAPPED
 #define serial_out(x, y)	outb(x, (ulong)y)
 #define serial_in(y)		inb((ulong)y)
