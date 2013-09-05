@@ -10,7 +10,7 @@ LIB	= $(obj)lib$(CPU).o
 
 START	= start.o
 SOBJS-y	=
-COBJS-y	= cpu.o timer.o jz_serial.o
+COBJS-y	= cpu.o timer.o
 
 COBJS-$(CONFIG_JZ4740) += jz4740.o
 
