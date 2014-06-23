@@ -37,7 +37,7 @@ int find_dev_and_part(const char *id, struct mtd_device **dev,
 		      u8 *part_num, struct part_info **part);
 #endif
 
-static int nand_dump(nand_info_t *nand, ulong off, int only_oob, int repeat)
+static int nand_dump(nand_info_t *nand, loff_t off, int only_oob, int repeat)
 {
 	int i;
 	u_char *datbuf, *oobbuf, *p;
@@ -61,7 +61,7 @@ static int nand_dump(nand_info_t *nand, ulong off, int only_oob, int repeat)
 		ret = 1;
 		goto free_dat;
 	}
-	off &= ~(nand->writesize - 1);
+	off &= ~((loff_t)nand->writesize - 1);
 	loff_t addr = (loff_t) off;
 	struct mtd_oob_ops ops;
 	memset(&ops, 0, sizeof(ops));
@@ -72,11 +72,11 @@ static int nand_dump(nand_info_t *nand, ulong off, int only_oob, int repeat)
 	ops.mode = MTD_OPS_RAW;
 	i = mtd_read_oob(nand, addr, &ops);
 	if (i < 0) {
-		printf("Error (%d) reading page %08lx\n", i, off);
+		printf("Error (%d) reading page %08llx\n", i, off);
 		ret = 1;
 		goto free_all;
 	}
-	printf("Page %08lx dump:\n", off);
+	printf("Page %08llx dump:\n", off);
 
 	if (!only_oob) {
 		i = nand->writesize >> 4;
@@ -633,7 +633,11 @@ static int do_nand(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		if (argc < 3)
 			goto usage;
 
-		off = (int)simple_strtoul(argv[2], NULL, 16);
+		if (!str2off(argv[2], &off)) {
+			puts("Offset is not a valid number\n");
+			return 1;
+		}
+
 		ret = nand_dump(nand, off, !strcmp(&cmd[4], ".oob"), repeat);
 
 		return ret == 0 ? 1 : 0;
