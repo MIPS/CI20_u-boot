@@ -45,7 +45,7 @@
 /* define this if you require JTAG support */
 #undef CONFIG_JTAG
 
-/* NS16550-ish UARTs, uart[013] are accessible */
+/* NS16550-ish UARTs, uart[0134] are accessible */
 #define CONFIG_SYS_NS16550
 #define CONFIG_SYS_NS16550_SERIAL
 #define CONFIG_SYS_NS16550_REG_SIZE	(-4)
@@ -53,6 +53,7 @@
 #define CONFIG_SYS_NS16550_COM1		0xb0030000 /* uart0 */
 #define CONFIG_SYS_NS16550_COM2		0xb0031000 /* uart1 */
 #define CONFIG_SYS_NS16550_COM4		0xb0033000 /* uart3 */
+#define CONFIG_SYS_NS16550_COM5		0xb0034000 /* uart4 */
 #define CONFIG_SYS_CONSOLE_IS_IN_ENV
 #define CONFIG_CONSOLE_MUX
 #define CONFIG_CONS_INDEX		1
@@ -73,7 +74,7 @@
 
 #define CONFIG_BOOTDELAY 2
 #define CONFIG_SYS_BOOTM_LEN (64 << 20)
-#define BOOTARGS_COMMON "console=ttyS0,115200 console=tty0 mem=256M@0x0 mem=768M@0x30000000"
+#define BOOTARGS_COMMON "console=ttyS0,115200 console=ttyS4,115200 console=tty0 mem=256M@0x0 mem=768M@0x30000000"
 
 #ifdef CONFIG_SPL_MMC_SUPPORT
 
@@ -97,9 +98,9 @@
 #endif /* !CONFIG_SPL_MMC_SUPPORT */
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
-	"stdin=eserial0,eserial3\0" \
-	"stdout=eserial0,eserial3\0" \
-	"stderr=eserial0,eserial3\0"
+	"stdin=eserial0,eserial4\0" \
+	"stdout=eserial0,eserial4\0" \
+	"stderr=eserial0,eserial4\0"
 
 #define CONFIG_SYS_HUSH_PARSER
 
