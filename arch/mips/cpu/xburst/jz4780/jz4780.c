@@ -83,7 +83,11 @@ void board_init_f(ulong dummy)
 #endif
 
 	/* UART4 init */
-	/* TODO: pins */
+	writel(0x100400, GPIO_PXINTC(2));
+	writel(0x100400, GPIO_PXMASKC(2));
+	writel(0x100400, GPIO_PXPAT1S(2));
+	writel(0x100400, GPIO_PXPAT0C(2));
+	writel(0x100400, GPIO_PXPENC(2));
 	writel(readl(CPM_CLKGR0) & ~CPM_CLKGR1_UART4, CPM_CLKGR1);
 
 #ifdef CONFIG_SPL_SERIAL_SUPPORT
