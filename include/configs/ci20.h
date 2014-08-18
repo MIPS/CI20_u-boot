@@ -43,7 +43,7 @@
 #define CONFIG_SYS_AUDIO_SPEED (768 * 1000000)
 
 /* define this if you require JTAG support */
-#undef CONFIG_JTAG
+#define CONFIG_JTAG
 
 /* NS16550-ish UARTs, uart[0134] are accessible */
 #define CONFIG_SYS_NS16550
