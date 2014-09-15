@@ -27,6 +27,7 @@ COBJS-$(CONFIG_SYS_GENERIC_BOARD) += board_r.o
 # core command
 COBJS-y += cmd_boot.o
 COBJS-$(CONFIG_CMD_BOOTM) += cmd_bootm.o
+COBJS-$(CONFIG_CMD_BOOTA) += cmd_boota.o
 COBJS-y += cmd_help.o
 COBJS-y += cmd_version.o
 

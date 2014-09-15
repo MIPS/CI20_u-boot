@@ -93,6 +93,9 @@ static inline int bootm_maybe_autostart(cmd_tbl_t *cmdtp, const char *cmd)
 	return 0;
 }
 #endif
+#ifdef CONFIG_CMD_BOOTA
+extern int do_boota(cmd_tbl_t * cmdtp, int flag, int argc, char *const argv[]);
+#endif
 
 extern int do_bootz(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]);
 
