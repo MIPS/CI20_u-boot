@@ -188,6 +188,7 @@
  * Command line configuration.
  */
 #define CONFIG_CMD_BDI		/* bdinfo                       */
+#define CONFIG_CMD_BOOTA	/* boota                        */
 #define CONFIG_CMD_BOOTD	/* bootd                        */
 #define CONFIG_CMD_CONSOLE	/* coninfo                      */
 #define CONFIG_CMD_DHCP		/* DHCP support                 */
