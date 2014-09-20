@@ -39,8 +39,7 @@ DECLARE_GLOBAL_DATA_PTR;
 
 #include <fastboot.h>
 
-void do_boota_linux(bootm_headers_t *, const char *,
-		    struct fastboot_boot_img_hdr *);
+void do_boota_linux(bootm_headers_t *, struct fastboot_boot_img_hdr *);
 
 /*
  * If everything is successful, this function will never return because
@@ -50,54 +49,51 @@ void do_boota_linux(bootm_headers_t *, const char *,
 int do_boota(cmd_tbl_t * cmdtp, int flag, int argc, char *const argv[])
 {
 	ulong addr;
+	struct fastboot_boot_img_hdr *fb_hdr;
 
 	if (argc < 2)
 		return cmd_usage(cmdtp);
 
 	addr = simple_strtoul(argv[1], NULL, 16);
 
-	// This logic stolen from init_boot_linux() in
-	// boot/usb/jz4780_poll.c from the X-Boot code for urboard.
-	struct fastboot_boot_img_hdr fb_hdr;
-	memcpy(&fb_hdr, (struct fastboot_boot_img_hdr *)addr,
-	       sizeof(struct fastboot_boot_img_hdr));
+	fb_hdr = (struct fastboot_boot_img_hdr *)addr;
 
-	if (memcmp(fb_hdr.magic, FASTBOOT_BOOT_MAGIC, 8)) {
+	if (memcmp(fb_hdr->magic, FASTBOOT_BOOT_MAGIC, 8)) {
 		puts("boota: bad boot image magic, maybe not a boot.img?\n");
 		return 1;
 	}
 #ifdef DEBUG
 	printf("---------------------\n");
-	printf("kernel_size: 0x%x\n", fb_hdr.kernel_size);
-	printf("kernel_addr: 0x%x\n\n", fb_hdr.kernel_addr);
+	printf("kernel_size: 0x%x\n", fb_hdr->kernel_size);
+	printf("kernel_addr: 0x%x\n\n", fb_hdr->kernel_addr);
 
-	printf("ramdisk_size: 0x%x\n", fb_hdr.ramdisk_size);
-	printf("ramdisk_addr: 0x%x\n\n", fb_hdr.ramdisk_addr);
+	printf("ramdisk_size: 0x%x\n", fb_hdr->ramdisk_size);
+	printf("ramdisk_addr: 0x%x\n\n", fb_hdr->ramdisk_addr);
 
-	printf("second_size: 0x%x\n", fb_hdr.second_size);
-	printf("second_addr: 0x%x\n\n", fb_hdr.second_addr);
+	printf("second_size: 0x%x\n", fb_hdr->second_size);
+	printf("second_addr: 0x%x\n\n", fb_hdr->second_addr);
 
-	printf("tags_addr:  0x%x\n\n", fb_hdr.tags_addr);
+	printf("tags_addr:  0x%x\n\n", fb_hdr->tags_addr);
 
-	printf("page_size:  0x%x\n\n", fb_hdr.page_size);
+	printf("page_size:  0x%x\n\n", fb_hdr->page_size);
 
-	if (fb_hdr.unused[0] || fb_hdr.unused[1]) {
+	if (fb_hdr->unused[0] || fb_hdr->unused[1]) {
 		printf("***** ERROR unused:  0x%x 0x%x\n",
-		       fb_hdr.unused[0], fb_hdr.unused[1]);
+		       fb_hdr->unused[0], fb_hdr->unused[1]);
 		return 1;
 	}
 
-	printf("name: \"%s\"\n\n", fb_hdr.name);
+	printf("name: \"%s\"\n\n", fb_hdr->name);
 
-	printf("cmdline: \"%s\"\n", fb_hdr.cmdline);
+	printf("cmdline: \"%s\"\n", fb_hdr->cmdline);
 #endif /* DEBUG */
 
 	// TODO:  Need to incorporate more code from do_bootm() to
-	// initialize 'images'.  Eventually, I expect the call to
+	// initialize 'images'. Eventually, I expect the call to
 	// do_boota_linx() to mirror the call to do_bootm_linux().
 
 	/* init kernel, ramdisk and prepare parameters */
-	do_boota_linux(&images, (char *)addr, &fb_hdr);
+	do_boota_linux(&images, fb_hdr);
 
 	printf("%s, %d:  We should not come here ... \n", __FILE__, __LINE__);
 
