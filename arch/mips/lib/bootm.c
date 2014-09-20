@@ -260,80 +260,74 @@ int do_bootm_linux(int flag, int argc, char * const argv[],
 
 extern void flush_cache_all(void);
 
-// TODO:  This is a bunch of cruft from X-Boot.  All these things
-// should be replaced with either U-Boot definitions, or the values
-// should be calculated at run time.  I suspect that the correct place
-// to get this stuff from is the boot.img header.
-//
-// In the case of CFG_KERNEL_DST, it seems that the corresponding
-// address from the the uImage file used to build boot.img is
-// 0x80010000:
-//
-//      $ file uImage
-//      uImage: u-boot legacy uImage, Linux-3.0.8-gb006f40, Linux/MIPS,
-//      OS Kernel Image (gzip), 3762679 bytes, Thu Aug  7 16:22:16 2014,
-//      Load Address: 0x80010000, Entry Point: 0x805FF400,
-//      Header CRC: 0xC31FEAAA, Data CRC: 0xABB89D18
-//
-// Don't yet have a guess about what should replace CFG_RAMDISK_DST.
-#define	CFG_KERNEL_DST	0x80f00000	/* Load Linux kernel to this addr */
-#define	CFG_RAMDISK_DST	0x81a00000	/* initrd address */
-
-bootm_headers_t images;		/* pointers to os/initrd/fdt images */
-
-void do_boota_linux(bootm_headers_t * images, const char *addr,
+void do_boota_linux(bootm_headers_t * images,
 		    struct fastboot_boot_img_hdr *fb_hdr)
 {
 	unsigned page_mask;
 	unsigned kernel_actual;
-	unsigned ramdisk_actual;
-	char initrd_param[64];
+	const void *kernel_src_addr, *ramdisk_src_addr;
+	void *kernel_dst_addr, *ramdisk_dst_addr;
 	char cmdline[256];
-	void (*kernel) (int, char **, char **, ulong);
 
 	/* init kernel, ramdisk and prepare parameters */
 	page_mask = fb_hdr->page_size - 1;
 	kernel_actual = (fb_hdr->kernel_size + page_mask) & (~page_mask);
-	ramdisk_actual = (fb_hdr->ramdisk_size + page_mask) & (~page_mask);
-	fb_hdr->kernel_addr = (unsigned int)(addr + fb_hdr->page_size);
-	fb_hdr->ramdisk_addr = fb_hdr->kernel_addr + kernel_actual;
+	kernel_src_addr =
+	    (const void *)((unsigned int)fb_hdr + fb_hdr->page_size);
+	kernel_dst_addr = (void *)fb_hdr->kernel_addr;
+	ramdisk_src_addr =
+	    (const void *)(((unsigned int)kernel_src_addr) + kernel_actual);
+	ramdisk_dst_addr = (void *)fb_hdr->ramdisk_addr;
 
-#ifdef  DEBUG
+	// The default kernel load address used by mkbootimg.c is 0x10000000
+	// If the load address specified in the header appears invalid make
+	// a guess about where to load it. The default zImage execution address
+	// is 0x80f00000
+	if (kernel_dst_addr < (void *)0x80000000)
+		kernel_dst_addr = (void *)0x80f00000;
+
+	// For the ramdisk we just make a SWAG
+	// maybe it would be possible to just leave it where it is?
+	if (kernel_dst_addr < (void *)0x80000000)
+		kernel_dst_addr = (void *)0x81f00000;
+
+#ifdef	DEBUG
 	printf("      page_mask: 0x%x\n", page_mask);
 	printf("    kernel size: 0x%x\n", kernel_actual);
-	printf(" kernel address: 0x%x\n", fb_hdr->kernel_addr);
-	printf("   ramdisk size: 0x%x\n", ramdisk_actual);
-	printf("ramdisk address: 0x%x\n", fb_hdr->ramdisk_addr);
+	printf(" kernel srcaddr: %p\n", kernel_src_addr);
+	printf(" kernel dstaddr: %p\n", kernel_dst_addr);
+	printf("ramdisk srcaddr: %p\n", ramdisk_src_addr);
+	printf("ramdisk dstaddr: %p\n", ramdisk_dst_addr);
 #endif /* DEBUG */
 
-	memcpy((char *)CFG_KERNEL_DST, (char *)fb_hdr->kernel_addr,
-	       fb_hdr->kernel_size);
-
-	memcpy((char *)CFG_RAMDISK_DST, (char *)fb_hdr->ramdisk_addr,
-	       fb_hdr->ramdisk_size);
-
-	sprintf(initrd_param, " rd_start=0x%X rd_size=0x%X",
-		CFG_RAMDISK_DST, fb_hdr->ramdisk_size);
-#ifdef  DEBUG
-	printf("initrd_param: \"%s\"\n", initrd_param);
-#endif /* DEBUG */
+	memcpy(kernel_dst_addr, kernel_src_addr, fb_hdr->kernel_size);
+	memcpy(ramdisk_dst_addr, ramdisk_src_addr, fb_hdr->ramdisk_size);
 
 	boot_cmdline_linux(NULL);
+
+	// Include any kernel command line options from boot.img
+	const char *bcmdline = (const char *)fb_hdr->cmdline;
+	linux_cmdline_set(bcmdline, strlen(bcmdline));
+
 	// TODO:  These extra lines are being added to support old
 	// kernels which expect these two parameters to be included
 	// on the command line.
-	sprintf(cmdline, "rd_start=0x%X", CFG_RAMDISK_DST);
+	sprintf(cmdline, "rd_start=0x%0X", (unsigned int)ramdisk_dst_addr);
 	linux_cmdline_set(cmdline, strlen(cmdline));
 	sprintf(cmdline, "rd_size=0x%X", fb_hdr->ramdisk_size);
 	linux_cmdline_set(cmdline, strlen(cmdline));
+#ifdef	DEBUG
+	printf("rd_start=0x%X rd_size=0x%X\n",
+	       (unsigned int)ramdisk_dst_addr, fb_hdr->ramdisk_size);
+#endif /* DEBUG */
 
 	boot_prep_linux(images);
 
-	kernel = (void (*)(int, char **, char **))CFG_KERNEL_DST;
-
 	// TODO:  Replace with boot_jump_linux(images)?
 	flush_cache_all();
-	(*kernel) (linux_argc, linux_argv, linux_env, 0ul);
+	typedef void __noreturn(*kernel_entry_t) (int, ulong, ulong, ulong);
+	kernel_entry_t kernel = (kernel_entry_t) kernel_dst_addr;
+	(*kernel) (linux_argc, (ulong) linux_argv, (ulong) linux_env, 0ul);
 }
 
 #endif /* CONFIG_CMD_BOOTA */
