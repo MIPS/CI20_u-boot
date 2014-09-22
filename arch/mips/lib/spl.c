@@ -41,7 +41,7 @@ __weak gd_t gdata __attribute__ ((section(".data")));
 void __weak board_init_f(ulong dummy)
 {
 	/* Clear the BSS. */
-	memset(__bss_start, 0, __bss_end - (ulong)__bss_start);
+	memset(__bss_start, 0, __bss_end - (ulong) __bss_start);
 
 	/* Set global data pointer. */
 	gd = &gdata;
@@ -59,10 +59,10 @@ void __noreturn jump_to_image_linux(void *arg)
 {
 #error TODO
 	debug("Entering kernel arg pointer: 0x%p\n", arg);
-	typedef void (*image_entry_arg_t)(int, int, void *)
-		__attribute__ ((noreturn));
+	typedef void (*image_entry_arg_t) (int, int, void *)
+	    __attribute__ ((noreturn));
 	image_entry_arg_t image_entry =
-		(image_entry_arg_t) spl_image.entry_point;
+	    (image_entry_arg_t) spl_image.entry_point;
 	cleanup_before_linux();
 	image_entry(0, CONFIG_MACH_TYPE, arg);
 }

@@ -23,10 +23,9 @@
 #define INCAASC_USE_FDV
 
 #ifdef INCAASC_USE_FDV
-   #define INCAASC_FDV_LOW_BAUDRATE        71
-   #define INCAASC_FDV_HIGH_BAUDRATE       453
-#endif /*INCAASC_USE_FDV*/
-
+#define INCAASC_FDV_LOW_BAUDRATE        71
+#define INCAASC_FDV_HIGH_BAUDRATE       453
+#endif /*INCAASC_USE_FDV */
 
 #define INCAASC_TXFIFO_FL       1
 #define INCAASC_RXFIFO_FL       1
@@ -34,12 +33,12 @@
 
 /* interrupt lines masks for the ASC device interrupts*/
 /* change these macroses if it's necessary */
-#define INCAASC_IRQ_LINE_ALL        0x000F0000  /* all IRQs */
+#define INCAASC_IRQ_LINE_ALL        0x000F0000	/* all IRQs */
 
-#define INCAASC_IRQ_LINE_TIR            0x00010000      /* TIR - Tx */
-#define INCAASC_IRQ_LINE_RIR            0x00020000      /* RIR - Rx */
-#define INCAASC_IRQ_LINE_EIR            0x00040000      /* EIR - Err */
-#define INCAASC_IRQ_LINE_TBIR           0x00080000      /* TBIR - Tx Buf*/
+#define INCAASC_IRQ_LINE_TIR            0x00010000	/* TIR - Tx */
+#define INCAASC_IRQ_LINE_RIR            0x00020000	/* RIR - Rx */
+#define INCAASC_IRQ_LINE_EIR            0x00040000	/* EIR - Err */
+#define INCAASC_IRQ_LINE_TBIR           0x00080000	/* TBIR - Tx Buf */
 
 /* interrupt controller access macros */
 #define ASC_INTERRUPTS_ENABLE(X)  \
@@ -57,13 +56,13 @@
 
 /* CON register's bits and bitfields */
 #define ASCCON_MODEMASK 0x0007
-    #define ASCCON_M_8SYNC          0x0
-    #define ASCCON_M_8ASYNC         0x1
-    #define ASCCON_M_8IRDAASYNC     0x2
-    #define ASCCON_M_7ASYNCPAR      0x3
-    #define ASCCON_M_9ASYNC         0x4
-    #define ASCCON_M_8WAKEUPASYNC   0x5
-    #define ASCCON_M_8ASYNCPAR      0x7
+#define ASCCON_M_8SYNC          0x0
+#define ASCCON_M_8ASYNC         0x1
+#define ASCCON_M_8IRDAASYNC     0x2
+#define ASCCON_M_7ASYNCPAR      0x3
+#define ASCCON_M_9ASYNC         0x4
+#define ASCCON_M_8WAKEUPASYNC   0x5
+#define ASCCON_M_8ASYNCPAR      0x7
 #define ASCCON_STP      0x0008
 #define ASCCON_REN      0x0010
 #define ASCCON_PEN      0x0020
@@ -95,10 +94,10 @@
 #define ASCABCON_ABDETEN    0x0008
 #define ASCABCON_FCDETEN    0x0010
 #define ASCABCON_EMMASK     0x0300
-    #define ASCABCON_EMOFF          8
-	#define ASCABCON_EM_DISAB       0x0
-	#define ASCABCON_EM_DURAB       0x1
-	#define ASCABCON_EM_ALWAYS      0x2
+#define ASCABCON_EMOFF          8
+#define ASCABCON_EM_DISAB       0x0
+#define ASCABCON_EM_DURAB       0x1
+#define ASCABCON_EM_ALWAYS      0x2
 #define ASCABCON_TXINV      0x0400
 #define ASCABCON_RXINV      0x0800
 
@@ -149,28 +148,27 @@
 
 #define INCAASC_PMU_ENABLE(BIT) *((volatile ulong*)0xBF102000) |= (0x1 << BIT);
 
-typedef  struct         /* incaAsc_t */
-{
-    volatile unsigned long  asc_clc;                            /*0x0000*/
-    volatile unsigned long  asc_pisel;                          /*0x0004*/
-    volatile unsigned long  asc_rsvd1[2];   /* for mapping */   /*0x0008*/
-    volatile unsigned long  asc_con;                            /*0x0010*/
-    volatile unsigned long  asc_bg;                             /*0x0014*/
-    volatile unsigned long  asc_fdv;                            /*0x0018*/
-    volatile unsigned long  asc_pmw;        /* not used */      /*0x001C*/
-    volatile unsigned long  asc_tbuf;                           /*0x0020*/
-    volatile unsigned long  asc_rbuf;                           /*0x0024*/
-    volatile unsigned long  asc_rsvd2[2];   /* for mapping */   /*0x0028*/
-    volatile unsigned long  asc_abcon;                          /*0x0030*/
-    volatile unsigned long  asc_abstat;     /* not used */      /*0x0034*/
-    volatile unsigned long  asc_rsvd3[2];   /* for mapping */   /*0x0038*/
-    volatile unsigned long  asc_rxfcon;                         /*0x0040*/
-    volatile unsigned long  asc_txfcon;                         /*0x0044*/
-    volatile unsigned long  asc_fstat;                          /*0x0048*/
-    volatile unsigned long  asc_rsvd4;      /* for mapping */   /*0x004C*/
-    volatile unsigned long  asc_whbcon;                         /*0x0050*/
-    volatile unsigned long  asc_whbabcon;                       /*0x0054*/
-    volatile unsigned long  asc_whbabstat;  /* not used */      /*0x0058*/
+typedef struct {		/* incaAsc_t */
+	volatile unsigned long asc_clc;	/*0x0000 */
+	volatile unsigned long asc_pisel;	/*0x0004 */
+	volatile unsigned long asc_rsvd1[2];	/* for mapping *//*0x0008 */
+	volatile unsigned long asc_con;	/*0x0010 */
+	volatile unsigned long asc_bg;	/*0x0014 */
+	volatile unsigned long asc_fdv;	/*0x0018 */
+	volatile unsigned long asc_pmw;	/* not used *//*0x001C */
+	volatile unsigned long asc_tbuf;	/*0x0020 */
+	volatile unsigned long asc_rbuf;	/*0x0024 */
+	volatile unsigned long asc_rsvd2[2];	/* for mapping *//*0x0028 */
+	volatile unsigned long asc_abcon;	/*0x0030 */
+	volatile unsigned long asc_abstat;	/* not used *//*0x0034 */
+	volatile unsigned long asc_rsvd3[2];	/* for mapping *//*0x0038 */
+	volatile unsigned long asc_rxfcon;	/*0x0040 */
+	volatile unsigned long asc_txfcon;	/*0x0044 */
+	volatile unsigned long asc_fstat;	/*0x0048 */
+	volatile unsigned long asc_rsvd4;	/* for mapping *//*0x004C */
+	volatile unsigned long asc_whbcon;	/*0x0050 */
+	volatile unsigned long asc_whbabcon;	/*0x0054 */
+	volatile unsigned long asc_whbabstat;	/* not used *//*0x0058 */
 
 } incaAsc_t;
 

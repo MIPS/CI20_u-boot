@@ -94,6 +94,7 @@
 #define BCH_BHINT_ERR         (1 << 0)
 
 extern int jz4780_nand_init(struct nand_chip *nand);
-extern void jz4780_nand_set_pn(nand_info_t *nand, int bytes, int size, int skip);
+extern void jz4780_nand_set_pn(nand_info_t * nand, int bytes, int size,
+			       int skip);
 
 #endif /* __JZ4780_NAND_H__ */

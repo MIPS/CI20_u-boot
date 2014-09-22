@@ -15,7 +15,7 @@ phys_size_t initdram(int board_type)
 {
 	/* Sdram is setup by assembler code */
 	/* If memory could be changed, we should return the true value here */
-	return MEM_SIZE*1024*1024;
+	return MEM_SIZE * 1024 * 1024;
 }
 
 int checkboard(void)
@@ -73,7 +73,7 @@ int misc_init_r(void)
 	return 0;
 }
 
-int board_eth_init(bd_t *bis)
+int board_eth_init(bd_t * bis)
 {
 	return ne2k_register();
 }

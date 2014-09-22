@@ -84,7 +84,7 @@ extern const unsigned long mips_io_port_base;
  */
 static inline void set_io_port_base(unsigned long base)
 {
-	* (unsigned long *) &mips_io_port_base = base;
+	*(unsigned long *)&mips_io_port_base = base;
 }
 
 /*
@@ -118,7 +118,7 @@ static inline void set_io_port_base(unsigned long base)
  * Change virtual addresses to physical addresses and vv.
  * These are trivial on the 1:1 Linux/MIPS mapping
  */
-extern inline phys_addr_t virt_to_phys(volatile void * address)
+extern inline phys_addr_t virt_to_phys(volatile void *address)
 {
 #ifndef CONFIG_64BIT
 	return CPHYSADDR(address);
@@ -127,7 +127,7 @@ extern inline phys_addr_t virt_to_phys(volatile void * address)
 #endif
 }
 
-extern inline void * phys_to_virt(unsigned long address)
+extern inline void *phys_to_virt(unsigned long address)
 {
 #ifndef CONFIG_64BIT
 	return (void *)KSEG0ADDR(address);
@@ -139,7 +139,7 @@ extern inline void * phys_to_virt(unsigned long address)
 /*
  * IO bus memory addresses are also 1:1 with the physical address
  */
-extern inline unsigned long virt_to_bus(volatile void * address)
+extern inline unsigned long virt_to_bus(volatile void *address)
 {
 #ifndef CONFIG_64BIT
 	return CPHYSADDR(address);
@@ -148,7 +148,7 @@ extern inline unsigned long virt_to_bus(volatile void * address)
 #endif
 }
 
-extern inline void * bus_to_virt(unsigned long address)
+extern inline void *bus_to_virt(unsigned long address)
 {
 #ifndef CONFIG_64BIT
 	return (void *)KSEG0ADDR(address);
@@ -163,7 +163,8 @@ extern inline void * bus_to_virt(unsigned long address)
  */
 extern unsigned long isa_slot_offset;
 
-extern void * __ioremap(unsigned long offset, unsigned long size, unsigned long flags);
+extern void *__ioremap(unsigned long offset, unsigned long size,
+		       unsigned long flags);
 
 #if 0
 extern inline void *ioremap(unsigned long offset, unsigned long size)
@@ -247,6 +248,7 @@ static inline int check_signature(unsigned long io_addr,
 out:
 	return retval;
 }
+
 #define isa_check_signature(io, s, l) check_signature(i,s,l)
 
 /*
@@ -336,22 +338,13 @@ __OUTS1(s##c) __OUTS2(m) \
 	: "0" (addr), "1" (count), "ir" (port), "r" (mips_io_port_base), "I" (i) \
 	: "$1");}
 
-__IN(unsigned char,b,b,8)
-__IN(unsigned short,h,w,16)
-__IN(unsigned int,w,l,32)
+__IN(unsigned char, b, b, 8)
 
-__OUT(b,b,8)
-__OUT(h,w,16)
-__OUT(w,l,32)
 
-__INS(b,b,1)
-__INS(h,w,2)
-__INS(w,l,4)
-
-__OUTS(b,b,1)
-__OUTS(h,w,2)
-__OUTS(w,l,4)
-
+__IN(unsigned short, h, w, 16) __IN(unsigned int, w, l, 32)
+__OUT(b, b, 8) __OUT(h, w, 16) __OUT(w, l, 32)
+__INS(b, b, 1) __INS(h, w, 2) __INS(w, l, 4)
+__OUTS(b, b, 1) __OUTS(h, w, 2) __OUTS(w, l, 4)
 
 /*
  * Note that due to the way __builtin_constant_p() works, you
@@ -362,95 +355,75 @@ __OUTS(w,l,4)
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__outbc((val),(port)) : \
 	__outb((val),(port)))
-
 #define inb(port) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__inbc(port) : \
 	__inb(port))
-
 #define outb_p(val,port) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__outbc_p((val),(port)) : \
 	__outb_p((val),(port)))
-
 #define inb_p(port) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__inbc_p(port) : \
 	__inb_p(port))
-
 #define outw(val,port) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__outwc((val),(port)) : \
 	__outw((val),(port)))
-
 #define inw(port) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__inwc(port) : \
 	__inw(port))
-
 #define outw_p(val,port) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__outwc_p((val),(port)) : \
 	__outw_p((val),(port)))
-
 #define inw_p(port) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__inwc_p(port) : \
 	__inw_p(port))
-
 #define outl(val,port) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__outlc((val),(port)) : \
 	__outl((val),(port)))
-
 #define inl(port) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__inlc(port) : \
 	__inl(port))
-
 #define outl_p(val,port) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__outlc_p((val),(port)) : \
 	__outl_p((val),(port)))
-
 #define inl_p(port) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__inlc_p(port) : \
 	__inl_p(port))
-
-
 #define outsb(port,addr,count) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__outsbc((port),(addr),(count)) : \
 	__outsb ((port),(addr),(count)))
-
 #define insb(port,addr,count) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__insbc((port),(addr),(count)) : \
 	__insb((port),(addr),(count)))
-
 #define outsw(port,addr,count) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__outswc((port),(addr),(count)) : \
 	__outsw ((port),(addr),(count)))
-
 #define insw(port,addr,count) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__inswc((port),(addr),(count)) : \
 	__insw((port),(addr),(count)))
-
 #define outsl(port,addr,count) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__outslc((port),(addr),(count)) : \
 	__outsl ((port),(addr),(count)))
-
 #define insl(port,addr,count) \
 ((__builtin_constant_p((port)) && (port) < 32768) ? \
 	__inslc((port),(addr),(count)) : \
 	__insl((port),(addr),(count)))
-
 #define IO_SPACE_LIMIT 0xffff
-
 /*
  * The caches on some architectures aren't dma-coherent and have need to
  * handle this in software.  There are three types of operations that
@@ -469,9 +442,9 @@ __OUTS(w,l,4)
  *    be discarded.  This operation is necessary before dma operations
  *    to the memory.
  */
-extern void (*_dma_cache_wback_inv)(unsigned long start, unsigned long size);
-extern void (*_dma_cache_wback)(unsigned long start, unsigned long size);
-extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
+extern void (*_dma_cache_wback_inv) (unsigned long start, unsigned long size);
+extern void (*_dma_cache_wback) (unsigned long start, unsigned long size);
+extern void (*_dma_cache_inv) (unsigned long start, unsigned long size);
 
 #define dma_cache_wback_inv(start,size)	_dma_cache_wback_inv(start,size)
 #define dma_cache_wback(start,size)	_dma_cache_wback(start,size)
@@ -491,8 +464,8 @@ static inline void sync(void)
 #define MAP_WRBACK	(0)
 #define MAP_WRTHROUGH	(0)
 
-static inline void *
-map_physmem(phys_addr_t paddr, unsigned long len, unsigned long flags)
+static inline void *map_physmem(phys_addr_t paddr, unsigned long len,
+				unsigned long flags)
 {
 	return (void *)paddr;
 }

@@ -26,9 +26,9 @@ static inline u32 spl_boot_device(void)
 static inline u32 spl_boot_mode(void)
 {
 #ifdef CONFIG_SPL_FAT_SUPPORT
-	return 2; /* MMCSD_MODE_FAT */
+	return 2;		/* MMCSD_MODE_FAT */
 #else
-	return 1; /* MMCSD_MODE_RAW */
+	return 1;		/* MMCSD_MODE_RAW */
 #endif
 }
 

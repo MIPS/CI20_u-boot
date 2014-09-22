@@ -25,7 +25,8 @@ extern char *strncpy(char *__dest, __const__ char *__src, __kernel_size_t __n);
 extern int strcmp(__const__ char *__cs, __const__ char *__ct);
 
 #undef __HAVE_ARCH_STRNCMP
-extern int strncmp(__const__ char *__cs, __const__ char *__ct, __kernel_size_t __count);
+extern int strncmp(__const__ char *__cs, __const__ char *__ct,
+		   __kernel_size_t __count);
 
 #undef __HAVE_ARCH_MEMSET
 extern void *memset(void *__s, int __c, __kernel_size_t __count);

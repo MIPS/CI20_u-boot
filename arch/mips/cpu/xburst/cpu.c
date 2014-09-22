@@ -25,11 +25,11 @@
 		:			\
 		: "i" (op), "R" (*(unsigned char *)(addr)))
 
-void __attribute__((weak)) _machine_restart(void)
+void __attribute__ ((weak)) _machine_restart(void)
 {
 }
 
-int do_reset(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+int do_reset(cmd_tbl_t * cmdtp, int flag, int argc, char *const argv[])
 {
 	_machine_restart();
 
@@ -73,8 +73,8 @@ void flush_icache_all(void)
 {
 	u32 addr, t = 0;
 
-	__asm__ __volatile__("mtc0 $0, $28"); /* Clear Taglo */
-	__asm__ __volatile__("mtc0 $0, $29"); /* Clear TagHi */
+	__asm__ __volatile__("mtc0 $0, $28");	/* Clear Taglo */
+	__asm__ __volatile__("mtc0 $0, $29");	/* Clear TagHi */
 
 	for (addr = CKSEG0; addr < CKSEG0 + CONFIG_SYS_ICACHE_SIZE;
 	     addr += CONFIG_SYS_CACHELINE_SIZE) {
@@ -82,15 +82,11 @@ void flush_icache_all(void)
 	}
 
 	/* invalidate btb */
-	__asm__ __volatile__(
-		".set mips32\n\t"
-		"mfc0 %0, $16, 7\n\t"
-		"nop\n\t"
-		"ori %0,2\n\t"
-		"mtc0 %0, $16, 7\n\t"
-		".set mips2\n\t"
-		:
-		: "r" (t));
+	__asm__ __volatile__(".set mips32\n\t"
+			     "mfc0 %0, $16, 7\n\t"
+			     "nop\n\t"
+			     "ori %0,2\n\t"
+			     "mtc0 %0, $16, 7\n\t" ".set mips2\n\t"::"r"(t));
 }
 
 void flush_dcache_all(void)

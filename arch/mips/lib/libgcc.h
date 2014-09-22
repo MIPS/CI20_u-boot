@@ -3,7 +3,7 @@
 
 #include <asm/byteorder.h>
 
-typedef int word_type __attribute__ ((mode (__word__)));
+typedef int word_type __attribute__ ((mode(__word__)));
 
 #ifdef __BIG_ENDIAN
 struct DWstruct {

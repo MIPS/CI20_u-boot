@@ -41,8 +41,8 @@
 #define JZ4740_IRQ_IPU		29
 #define JZ4740_IRQ_LCD		30
 /* 2nd-level interrupts */
-#define JZ4740_IRQ_DMA_0	32  /* 32 to 37 for DMAC channel 0 to 5 */
-#define JZ4740_IRQ_GPIO_0	48  /* 48 to 175 for GPIO pin 0 to 127 */
+#define JZ4740_IRQ_DMA_0	32	/* 32 to 37 for DMAC channel 0 to 5 */
+#define JZ4740_IRQ_GPIO_0	48	/* 48 to 175 for GPIO pin 0 to 127 */
 
 /* Register Definitions */
 #define JZ4740_CPM_BASE		0x10000000
@@ -73,49 +73,49 @@
 /* GPIO (General-Purpose I/O Ports) */
 /*  = 0,1,2,3 */
 #define GPIO_PXPIN(n)	\
-	(JZ4740_GPIO_BASE + (0x00 + (n)*0x100)) /* PIN Level Register */
+	(JZ4740_GPIO_BASE + (0x00 + (n)*0x100))	/* PIN Level Register */
 #define GPIO_PXDAT(n)	\
-	(JZ4740_GPIO_BASE + (0x10 + (n)*0x100)) /* Port Data Register */
+	(JZ4740_GPIO_BASE + (0x10 + (n)*0x100))	/* Port Data Register */
 #define GPIO_PXDATS(n)	\
-	(JZ4740_GPIO_BASE + (0x14 + (n)*0x100)) /* Port Data Set Register */
+	(JZ4740_GPIO_BASE + (0x14 + (n)*0x100))	/* Port Data Set Register */
 #define GPIO_PXDATC(n)	\
-	(JZ4740_GPIO_BASE + (0x18 + (n)*0x100)) /* Port Data Clear Register */
+	(JZ4740_GPIO_BASE + (0x18 + (n)*0x100))	/* Port Data Clear Register */
 #define GPIO_PXIM(n)	\
-	(JZ4740_GPIO_BASE + (0x20 + (n)*0x100)) /* Interrupt Mask Register */
+	(JZ4740_GPIO_BASE + (0x20 + (n)*0x100))	/* Interrupt Mask Register */
 #define GPIO_PXIMS(n)	\
-	(JZ4740_GPIO_BASE + (0x24 + (n)*0x100)) /* Interrupt Mask Set Reg */
+	(JZ4740_GPIO_BASE + (0x24 + (n)*0x100))	/* Interrupt Mask Set Reg */
 #define GPIO_PXIMC(n)	\
-	(JZ4740_GPIO_BASE + (0x28 + (n)*0x100)) /* Interrupt Mask Clear Reg */
+	(JZ4740_GPIO_BASE + (0x28 + (n)*0x100))	/* Interrupt Mask Clear Reg */
 #define GPIO_PXPE(n)	\
-	(JZ4740_GPIO_BASE + (0x30 + (n)*0x100)) /* Pull Enable Register */
+	(JZ4740_GPIO_BASE + (0x30 + (n)*0x100))	/* Pull Enable Register */
 #define GPIO_PXPES(n)	\
-	(JZ4740_GPIO_BASE + (0x34 + (n)*0x100)) /* Pull Enable Set Reg. */
+	(JZ4740_GPIO_BASE + (0x34 + (n)*0x100))	/* Pull Enable Set Reg. */
 #define GPIO_PXPEC(n)	\
-	(JZ4740_GPIO_BASE + (0x38 + (n)*0x100)) /* Pull Enable Clear Reg. */
+	(JZ4740_GPIO_BASE + (0x38 + (n)*0x100))	/* Pull Enable Clear Reg. */
 #define GPIO_PXFUN(n)	\
-	(JZ4740_GPIO_BASE + (0x40 + (n)*0x100)) /* Function Register */
+	(JZ4740_GPIO_BASE + (0x40 + (n)*0x100))	/* Function Register */
 #define GPIO_PXFUNS(n)	\
-	(JZ4740_GPIO_BASE + (0x44 + (n)*0x100)) /* Function Set Register */
+	(JZ4740_GPIO_BASE + (0x44 + (n)*0x100))	/* Function Set Register */
 #define GPIO_PXFUNC(n)	\
-	(JZ4740_GPIO_BASE + (0x48 + (n)*0x100)) /* Function Clear Register */
+	(JZ4740_GPIO_BASE + (0x48 + (n)*0x100))	/* Function Clear Register */
 #define GPIO_PXSEL(n)	\
-	(JZ4740_GPIO_BASE + (0x50 + (n)*0x100)) /* Select Register */
+	(JZ4740_GPIO_BASE + (0x50 + (n)*0x100))	/* Select Register */
 #define GPIO_PXSELS(n)	\
-	(JZ4740_GPIO_BASE + (0x54 + (n)*0x100)) /* Select Set Register */
+	(JZ4740_GPIO_BASE + (0x54 + (n)*0x100))	/* Select Set Register */
 #define GPIO_PXSELC(n)	\
-	(JZ4740_GPIO_BASE + (0x58 + (n)*0x100)) /* Select Clear Register */
+	(JZ4740_GPIO_BASE + (0x58 + (n)*0x100))	/* Select Clear Register */
 #define GPIO_PXDIR(n)	\
-	(JZ4740_GPIO_BASE + (0x60 + (n)*0x100)) /* Direction Register */
+	(JZ4740_GPIO_BASE + (0x60 + (n)*0x100))	/* Direction Register */
 #define GPIO_PXDIRS(n)	\
-	(JZ4740_GPIO_BASE + (0x64 + (n)*0x100)) /* Direction Set Register */
+	(JZ4740_GPIO_BASE + (0x64 + (n)*0x100))	/* Direction Set Register */
 #define GPIO_PXDIRC(n)	\
-	(JZ4740_GPIO_BASE + (0x68 + (n)*0x100)) /* Direction Clear Register */
+	(JZ4740_GPIO_BASE + (0x68 + (n)*0x100))	/* Direction Clear Register */
 #define GPIO_PXTRG(n)	\
-	(JZ4740_GPIO_BASE + (0x70 + (n)*0x100)) /* Trigger Register */
+	(JZ4740_GPIO_BASE + (0x70 + (n)*0x100))	/* Trigger Register */
 #define GPIO_PXTRGS(n)	\
-	(JZ4740_GPIO_BASE + (0x74 + (n)*0x100)) /* Trigger Set Register */
+	(JZ4740_GPIO_BASE + (0x74 + (n)*0x100))	/* Trigger Set Register */
 #define GPIO_PXTRGC(n)	\
-	(JZ4740_GPIO_BASE + (0x78 + (n)*0x100)) /* Trigger Set Register */
+	(JZ4740_GPIO_BASE + (0x78 + (n)*0x100))	/* Trigger Set Register */
 
 /* Static Memory Control Register */
 #define EMC_SMCR_STRV_BIT	24
@@ -130,16 +130,16 @@
 #define EMC_SMCR_TAS_MASK	(0x07 << EMC_SMCR_TAS_BIT)
 #define EMC_SMCR_BW_BIT		6
 #define EMC_SMCR_BW_MASK	(0x03 << EMC_SMCR_BW_BIT)
-  #define EMC_SMCR_BW_8BIT	(0 << EMC_SMCR_BW_BIT)
-  #define EMC_SMCR_BW_16BIT	(1 << EMC_SMCR_BW_BIT)
-  #define EMC_SMCR_BW_32BIT	(2 << EMC_SMCR_BW_BIT)
+#define EMC_SMCR_BW_8BIT	(0 << EMC_SMCR_BW_BIT)
+#define EMC_SMCR_BW_16BIT	(1 << EMC_SMCR_BW_BIT)
+#define EMC_SMCR_BW_32BIT	(2 << EMC_SMCR_BW_BIT)
 #define EMC_SMCR_BCM		(1 << 3)
 #define EMC_SMCR_BL_BIT		1
 #define EMC_SMCR_BL_MASK	(0x03 << EMC_SMCR_BL_BIT)
-  #define EMC_SMCR_BL_4		(0 << EMC_SMCR_BL_BIT)
-  #define EMC_SMCR_BL_8		(1 << EMC_SMCR_BL_BIT)
-  #define EMC_SMCR_BL_16	(2 << EMC_SMCR_BL_BIT)
-  #define EMC_SMCR_BL_32	(3 << EMC_SMCR_BL_BIT)
+#define EMC_SMCR_BL_4		(0 << EMC_SMCR_BL_BIT)
+#define EMC_SMCR_BL_8		(1 << EMC_SMCR_BL_BIT)
+#define EMC_SMCR_BL_16	(2 << EMC_SMCR_BL_BIT)
+#define EMC_SMCR_BL_32	(3 << EMC_SMCR_BL_BIT)
 #define EMC_SMCR_SMT		(1 << 0)
 
 /* Static Memory Bank Addr Config Reg */
@@ -149,8 +149,8 @@
 #define EMC_SACR_MASK_MASK	(0xff << EMC_SACR_MASK_BIT)
 
 /* NAND Flash Control/Status Register */
-#define EMC_NFCSR_NFCE4		(1 << 7) /* NAND Flash Enable */
-#define EMC_NFCSR_NFE4		(1 << 6) /* NAND Flash FCE# Assertion Enable */
+#define EMC_NFCSR_NFCE4		(1 << 7)	/* NAND Flash Enable */
+#define EMC_NFCSR_NFE4		(1 << 6)	/* NAND Flash FCE# Assertion Enable */
 #define EMC_NFCSR_NFCE3		(1 << 5)
 #define EMC_NFCSR_NFE3		(1 << 4)
 #define EMC_NFCSR_NFCE2		(1 << 3)
@@ -159,13 +159,13 @@
 #define EMC_NFCSR_NFE1		(1 << 0)
 
 /* NAND Flash ECC Control Register */
-#define EMC_NFECR_PRDY		(1 << 4) /* Parity Ready */
-#define EMC_NFECR_RS_DECODING	(0 << 3) /* RS is in decoding phase */
-#define EMC_NFECR_RS_ENCODING	(1 << 3) /* RS is in encoding phase */
-#define EMC_NFECR_HAMMING	(0 << 2) /* Use HAMMING Correction Algorithm */
-#define EMC_NFECR_RS		(1 << 2) /* Select RS Correction Algorithm */
-#define EMC_NFECR_ERST		(1 << 1) /* ECC Reset */
-#define EMC_NFECR_ECCE		(1 << 0) /* ECC Enable */
+#define EMC_NFECR_PRDY		(1 << 4)	/* Parity Ready */
+#define EMC_NFECR_RS_DECODING	(0 << 3)	/* RS is in decoding phase */
+#define EMC_NFECR_RS_ENCODING	(1 << 3)	/* RS is in encoding phase */
+#define EMC_NFECR_HAMMING	(0 << 2)	/* Use HAMMING Correction Algorithm */
+#define EMC_NFECR_RS		(1 << 2)	/* Select RS Correction Algorithm */
+#define EMC_NFECR_ERST		(1 << 1)	/* ECC Reset */
+#define EMC_NFECR_ECCE		(1 << 0)	/* ECC Enable */
 
 /* NAND Flash ECC Data Register */
 #define EMC_NFECC_ECC2_BIT	16
@@ -176,25 +176,25 @@
 #define EMC_NFECC_ECC0_MASK	(0xff << EMC_NFECC_ECC0_BIT)
 
 /* NAND Flash Interrupt Status Register */
-#define EMC_NFINTS_ERRCNT_BIT	29       /* Error Count */
+#define EMC_NFINTS_ERRCNT_BIT	29	/* Error Count */
 #define EMC_NFINTS_ERRCNT_MASK	(0x7 << EMC_NFINTS_ERRCNT_BIT)
-#define EMC_NFINTS_PADF		(1 << 4) /* Padding Finished */
-#define EMC_NFINTS_DECF		(1 << 3) /* Decoding Finished */
-#define EMC_NFINTS_ENCF		(1 << 2) /* Encoding Finished */
-#define EMC_NFINTS_UNCOR	(1 << 1) /* Uncorrectable Error Occurred */
-#define EMC_NFINTS_ERR		(1 << 0) /* Error Occurred */
+#define EMC_NFINTS_PADF		(1 << 4)	/* Padding Finished */
+#define EMC_NFINTS_DECF		(1 << 3)	/* Decoding Finished */
+#define EMC_NFINTS_ENCF		(1 << 2)	/* Encoding Finished */
+#define EMC_NFINTS_UNCOR	(1 << 1)	/* Uncorrectable Error Occurred */
+#define EMC_NFINTS_ERR		(1 << 0)	/* Error Occurred */
 
 /* NAND Flash Interrupt Enable Register */
-#define EMC_NFINTE_PADFE	(1 << 4) /* Padding Finished Interrupt */
-#define EMC_NFINTE_DECFE	(1 << 3) /* Decoding Finished Interrupt */
-#define EMC_NFINTE_ENCFE	(1 << 2) /* Encoding Finished Interrupt */
-#define EMC_NFINTE_UNCORE	(1 << 1) /* Uncorrectable Error Occurred Intr */
-#define EMC_NFINTE_ERRE		(1 << 0) /* Error Occurred Interrupt */
+#define EMC_NFINTE_PADFE	(1 << 4)	/* Padding Finished Interrupt */
+#define EMC_NFINTE_DECFE	(1 << 3)	/* Decoding Finished Interrupt */
+#define EMC_NFINTE_ENCFE	(1 << 2)	/* Encoding Finished Interrupt */
+#define EMC_NFINTE_UNCORE	(1 << 1)	/* Uncorrectable Error Occurred Intr */
+#define EMC_NFINTE_ERRE		(1 << 0)	/* Error Occurred Interrupt */
 
 /* NAND Flash RS Error Report Register */
-#define EMC_NFERR_INDEX_BIT	16       /* Error Symbol Index */
+#define EMC_NFERR_INDEX_BIT	16	/* Error Symbol Index */
 #define EMC_NFERR_INDEX_MASK	(0x1ff << EMC_NFERR_INDEX_BIT)
-#define EMC_NFERR_MASK_BIT	0        /* Error Symbol Value */
+#define EMC_NFERR_MASK_BIT	0	/* Error Symbol Value */
 #define EMC_NFERR_MASK_MASK	(0x1ff << EMC_NFERR_MASK_BIT)
 
 /* DRAM Control Register */
@@ -202,19 +202,19 @@
 #define EMC_DMCR_BW		(1 << EMC_DMCR_BW_BIT)
 #define EMC_DMCR_CA_BIT		26
 #define EMC_DMCR_CA_MASK	(0x07 << EMC_DMCR_CA_BIT)
-  #define EMC_DMCR_CA_8		(0 << EMC_DMCR_CA_BIT)
-  #define EMC_DMCR_CA_9		(1 << EMC_DMCR_CA_BIT)
-  #define EMC_DMCR_CA_10	(2 << EMC_DMCR_CA_BIT)
-  #define EMC_DMCR_CA_11	(3 << EMC_DMCR_CA_BIT)
-  #define EMC_DMCR_CA_12	(4 << EMC_DMCR_CA_BIT)
+#define EMC_DMCR_CA_8		(0 << EMC_DMCR_CA_BIT)
+#define EMC_DMCR_CA_9		(1 << EMC_DMCR_CA_BIT)
+#define EMC_DMCR_CA_10	(2 << EMC_DMCR_CA_BIT)
+#define EMC_DMCR_CA_11	(3 << EMC_DMCR_CA_BIT)
+#define EMC_DMCR_CA_12	(4 << EMC_DMCR_CA_BIT)
 #define EMC_DMCR_RMODE		(1 << 25)
 #define EMC_DMCR_RFSH		(1 << 24)
 #define EMC_DMCR_MRSET		(1 << 23)
 #define EMC_DMCR_RA_BIT		20
 #define EMC_DMCR_RA_MASK	(0x03 << EMC_DMCR_RA_BIT)
-  #define EMC_DMCR_RA_11	(0 << EMC_DMCR_RA_BIT)
-  #define EMC_DMCR_RA_12	(1 << EMC_DMCR_RA_BIT)
-  #define EMC_DMCR_RA_13	(2 << EMC_DMCR_RA_BIT)
+#define EMC_DMCR_RA_11	(0 << EMC_DMCR_RA_BIT)
+#define EMC_DMCR_RA_12	(1 << EMC_DMCR_RA_BIT)
+#define EMC_DMCR_RA_13	(2 << EMC_DMCR_RA_BIT)
 #define EMC_DMCR_BA_BIT		19
 #define EMC_DMCR_BA		(1 << EMC_DMCR_BA_BIT)
 #define EMC_DMCR_PDM		(1 << 18)
@@ -236,14 +236,14 @@
 #define EMC_RTCSR_CMF		(1 << 7)
 #define EMC_RTCSR_CKS_BIT	0
 #define EMC_RTCSR_CKS_MASK	(0x07 << EMC_RTCSR_CKS_BIT)
-  #define EMC_RTCSR_CKS_DISABLE	(0 << EMC_RTCSR_CKS_BIT)
-  #define EMC_RTCSR_CKS_4	(1 << EMC_RTCSR_CKS_BIT)
-  #define EMC_RTCSR_CKS_16	(2 << EMC_RTCSR_CKS_BIT)
-  #define EMC_RTCSR_CKS_64	(3 << EMC_RTCSR_CKS_BIT)
-  #define EMC_RTCSR_CKS_256	(4 << EMC_RTCSR_CKS_BIT)
-  #define EMC_RTCSR_CKS_1024	(5 << EMC_RTCSR_CKS_BIT)
-  #define EMC_RTCSR_CKS_2048	(6 << EMC_RTCSR_CKS_BIT)
-  #define EMC_RTCSR_CKS_4096	(7 << EMC_RTCSR_CKS_BIT)
+#define EMC_RTCSR_CKS_DISABLE	(0 << EMC_RTCSR_CKS_BIT)
+#define EMC_RTCSR_CKS_4	(1 << EMC_RTCSR_CKS_BIT)
+#define EMC_RTCSR_CKS_16	(2 << EMC_RTCSR_CKS_BIT)
+#define EMC_RTCSR_CKS_64	(3 << EMC_RTCSR_CKS_BIT)
+#define EMC_RTCSR_CKS_256	(4 << EMC_RTCSR_CKS_BIT)
+#define EMC_RTCSR_CKS_1024	(5 << EMC_RTCSR_CKS_BIT)
+#define EMC_RTCSR_CKS_2048	(6 << EMC_RTCSR_CKS_BIT)
+#define EMC_RTCSR_CKS_4096	(7 << EMC_RTCSR_CKS_BIT)
 
 /* SDRAM Bank Address Configuration Register */
 #define EMC_DMAR_BASE_BIT	8
@@ -252,25 +252,25 @@
 #define EMC_DMAR_MASK_MASK	(0xff << EMC_DMAR_MASK_BIT)
 
 /* Mode Register of SDRAM bank 0 */
-#define EMC_SDMR_BM		(1 << 9) /* Write Burst Mode */
-#define EMC_SDMR_OM_BIT		7        /* Operating Mode */
+#define EMC_SDMR_BM		(1 << 9)	/* Write Burst Mode */
+#define EMC_SDMR_OM_BIT		7	/* Operating Mode */
 #define EMC_SDMR_OM_MASK	(3 << EMC_SDMR_OM_BIT)
-  #define EMC_SDMR_OM_NORMAL	(0 << EMC_SDMR_OM_BIT)
-#define EMC_SDMR_CAS_BIT	4        /* CAS Latency */
+#define EMC_SDMR_OM_NORMAL	(0 << EMC_SDMR_OM_BIT)
+#define EMC_SDMR_CAS_BIT	4	/* CAS Latency */
 #define EMC_SDMR_CAS_MASK	(7 << EMC_SDMR_CAS_BIT)
-  #define EMC_SDMR_CAS_1	(1 << EMC_SDMR_CAS_BIT)
-  #define EMC_SDMR_CAS_2	(2 << EMC_SDMR_CAS_BIT)
-  #define EMC_SDMR_CAS_3	(3 << EMC_SDMR_CAS_BIT)
-#define EMC_SDMR_BT_BIT		3        /* Burst Type */
+#define EMC_SDMR_CAS_1	(1 << EMC_SDMR_CAS_BIT)
+#define EMC_SDMR_CAS_2	(2 << EMC_SDMR_CAS_BIT)
+#define EMC_SDMR_CAS_3	(3 << EMC_SDMR_CAS_BIT)
+#define EMC_SDMR_BT_BIT		3	/* Burst Type */
 #define EMC_SDMR_BT_MASK	(1 << EMC_SDMR_BT_BIT)
-  #define EMC_SDMR_BT_SEQ	(0 << EMC_SDMR_BT_BIT) /* Sequential */
-  #define EMC_SDMR_BT_INT	(1 << EMC_SDMR_BT_BIT) /* Interleave */
-#define EMC_SDMR_BL_BIT		0        /* Burst Length */
+#define EMC_SDMR_BT_SEQ	(0 << EMC_SDMR_BT_BIT)	/* Sequential */
+#define EMC_SDMR_BT_INT	(1 << EMC_SDMR_BT_BIT)	/* Interleave */
+#define EMC_SDMR_BL_BIT		0	/* Burst Length */
 #define EMC_SDMR_BL_MASK	(7 << EMC_SDMR_BL_BIT)
-  #define EMC_SDMR_BL_1		(0 << EMC_SDMR_BL_BIT)
-  #define EMC_SDMR_BL_2		(1 << EMC_SDMR_BL_BIT)
-  #define EMC_SDMR_BL_4		(2 << EMC_SDMR_BL_BIT)
-  #define EMC_SDMR_BL_8		(3 << EMC_SDMR_BL_BIT)
+#define EMC_SDMR_BL_1		(0 << EMC_SDMR_BL_BIT)
+#define EMC_SDMR_BL_2		(1 << EMC_SDMR_BL_BIT)
+#define EMC_SDMR_BL_4		(2 << EMC_SDMR_BL_BIT)
+#define EMC_SDMR_BL_8		(3 << EMC_SDMR_BL_BIT)
 
 #define EMC_SDMR_CAS2_16BIT \
 	(EMC_SDMR_CAS_2 | EMC_SDMR_BT_SEQ | EMC_SDMR_BL_2)
@@ -282,23 +282,23 @@
 	(EMC_SDMR_CAS_3 | EMC_SDMR_BT_SEQ | EMC_SDMR_BL_4)
 
 /* RTC Control Register */
-#define RTC_RCR_WRDY	(1 << 7)  /* Write Ready Flag */
-#define RTC_RCR_HZ	(1 << 6)  /* 1Hz Flag */
-#define RTC_RCR_HZIE	(1 << 5)  /* 1Hz Interrupt Enable */
-#define RTC_RCR_AF	(1 << 4)  /* Alarm Flag */
-#define RTC_RCR_AIE	(1 << 3)  /* Alarm Interrupt Enable */
-#define RTC_RCR_AE	(1 << 2)  /* Alarm Enable */
-#define RTC_RCR_RTCE	(1 << 0)  /* RTC Enable */
+#define RTC_RCR_WRDY	(1 << 7)	/* Write Ready Flag */
+#define RTC_RCR_HZ	(1 << 6)	/* 1Hz Flag */
+#define RTC_RCR_HZIE	(1 << 5)	/* 1Hz Interrupt Enable */
+#define RTC_RCR_AF	(1 << 4)	/* Alarm Flag */
+#define RTC_RCR_AIE	(1 << 3)	/* Alarm Interrupt Enable */
+#define RTC_RCR_AE	(1 << 2)	/* Alarm Enable */
+#define RTC_RCR_RTCE	(1 << 0)	/* RTC Enable */
 
 /* RTC Regulator Register */
-#define RTC_RGR_LOCK		(1 << 31) /* Lock Bit */
+#define RTC_RGR_LOCK		(1 << 31)	/* Lock Bit */
 #define RTC_RGR_ADJC_BIT	16
 #define RTC_RGR_ADJC_MASK	(0x3ff << RTC_RGR_ADJC_BIT)
 #define RTC_RGR_NC1HZ_BIT	0
 #define RTC_RGR_NC1HZ_MASK	(0xffff << RTC_RGR_NC1HZ_BIT)
 
 /* Hibernate Control Register */
-#define RTC_HCR_PD		(1 << 0)  /* Power Down */
+#define RTC_HCR_PD		(1 << 0)	/* Power Down */
 
 /* Hibernate Wakeup Filter Counter Register */
 #define RTC_HWFCR_BIT		5
@@ -309,13 +309,13 @@
 #define RTC_HRCR_MASK		(0x7f << RTC_HRCR_BIT)
 
 /* Hibernate Wakeup Control Register */
-#define RTC_HWCR_EALM		(1 << 0)  /* RTC alarm wakeup enable */
+#define RTC_HWCR_EALM		(1 << 0)	/* RTC alarm wakeup enable */
 
 /* Hibernate Wakeup Status Register */
-#define RTC_HWRSR_HR		(1 << 5)  /* Hibernate reset */
-#define RTC_HWRSR_PPR		(1 << 4)  /* PPR reset */
-#define RTC_HWRSR_PIN		(1 << 1)  /* Wakeup pin status bit */
-#define RTC_HWRSR_ALM		(1 << 0)  /* RTC alarm status bit */
+#define RTC_HWRSR_HR		(1 << 5)	/* Hibernate reset */
+#define RTC_HWRSR_PPR		(1 << 4)	/* PPR reset */
+#define RTC_HWRSR_PIN		(1 << 1)	/* Wakeup pin status bit */
+#define RTC_HWRSR_ALM		(1 << 0)	/* RTC alarm status bit */
 
 /* Clock Control Register */
 #define CPM_CPCCR_I2CS		(1 << 31)
@@ -367,8 +367,8 @@
 #define CPM_LCR_DOZE_ON		(1 << 2)
 #define CPM_LCR_LPM_BIT		0
 #define CPM_LCR_LPM_MASK	(0x3 << CPM_LCR_LPM_BIT)
-  #define CPM_LCR_LPM_IDLE	(0x0 << CPM_LCR_LPM_BIT)
-  #define CPM_LCR_LPM_SLEEP	(0x1 << CPM_LCR_LPM_BIT)
+#define CPM_LCR_LPM_IDLE	(0x0 << CPM_LCR_LPM_BIT)
+#define CPM_LCR_LPM_SLEEP	(0x1 << CPM_LCR_LPM_BIT)
 
 /* Clock Gate Register */
 #define CPM_CLKGR_UART1		(1 << 15)
@@ -563,12 +563,12 @@
 /* Register definition */
 #define WDT_TCSR_PRESCALE_BIT	3
 #define WDT_TCSR_PRESCALE_MASK	(0x7 << WDT_TCSR_PRESCALE_BIT)
-  #define WDT_TCSR_PRESCALE1	(0x0 << WDT_TCSR_PRESCALE_BIT)
-  #define WDT_TCSR_PRESCALE4	(0x1 << WDT_TCSR_PRESCALE_BIT)
-  #define WDT_TCSR_PRESCALE16	(0x2 << WDT_TCSR_PRESCALE_BIT)
-  #define WDT_TCSR_PRESCALE64	(0x3 << WDT_TCSR_PRESCALE_BIT)
-  #define WDT_TCSR_PRESCALE256	(0x4 << WDT_TCSR_PRESCALE_BIT)
-  #define WDT_TCSR_PRESCALE1024	(0x5 << WDT_TCSR_PRESCALE_BIT)
+#define WDT_TCSR_PRESCALE1	(0x0 << WDT_TCSR_PRESCALE_BIT)
+#define WDT_TCSR_PRESCALE4	(0x1 << WDT_TCSR_PRESCALE_BIT)
+#define WDT_TCSR_PRESCALE16	(0x2 << WDT_TCSR_PRESCALE_BIT)
+#define WDT_TCSR_PRESCALE64	(0x3 << WDT_TCSR_PRESCALE_BIT)
+#define WDT_TCSR_PRESCALE256	(0x4 << WDT_TCSR_PRESCALE_BIT)
+#define WDT_TCSR_PRESCALE1024	(0x5 << WDT_TCSR_PRESCALE_BIT)
 #define WDT_TCSR_EXT_EN		(1 << 2)
 #define WDT_TCSR_RTC_EN		(1 << 1)
 #define WDT_TCSR_PCK_EN		(1 << 0)
@@ -578,22 +578,22 @@
  * Define macros for UART_IER
  * UART Interrupt Enable Register
  */
-#define UART_IER_RIE	(1 << 0) /* 0: receive fifo full interrupt disable */
-#define UART_IER_TIE	(1 << 1) /* 0: transmit fifo empty interrupt disable */
-#define UART_IER_RLIE	(1 << 2) /* 0: receive line status interrupt disable */
-#define UART_IER_MIE	(1 << 3) /* 0: modem status interrupt disable */
-#define UART_IER_RTIE	(1 << 4) /* 0: receive timeout interrupt disable */
+#define UART_IER_RIE	(1 << 0)	/* 0: receive fifo full interrupt disable */
+#define UART_IER_TIE	(1 << 1)	/* 0: transmit fifo empty interrupt disable */
+#define UART_IER_RLIE	(1 << 2)	/* 0: receive line status interrupt disable */
+#define UART_IER_MIE	(1 << 3)	/* 0: modem status interrupt disable */
+#define UART_IER_RTIE	(1 << 4)	/* 0: receive timeout interrupt disable */
 
 /*
  * Define macros for UART_ISR
  * UART Interrupt Status Register
  */
-#define UART_ISR_IP	(1 << 0) /* 0: interrupt is pending 1: no interrupt */
-#define UART_ISR_IID	(7 << 1) /* Source of Interrupt */
-#define UART_ISR_IID_MSI  (0 << 1) /* Modem status interrupt */
-#define UART_ISR_IID_THRI (1 << 1) /* Transmitter holding register empty */
-#define UART_ISR_IID_RDI  (2 << 1) /* Receiver data interrupt */
-#define UART_ISR_IID_RLSI (3 << 1) /* Receiver line status interrupt */
+#define UART_ISR_IP	(1 << 0)	/* 0: interrupt is pending 1: no interrupt */
+#define UART_ISR_IID	(7 << 1)	/* Source of Interrupt */
+#define UART_ISR_IID_MSI  (0 << 1)	/* Modem status interrupt */
+#define UART_ISR_IID_THRI (1 << 1)	/* Transmitter holding register empty */
+#define UART_ISR_IID_RDI  (2 << 1)	/* Receiver data interrupt */
+#define UART_ISR_IID_RLSI (3 << 1)	/* Receiver line status interrupt */
 /* FIFO mode select, set when UART_FCR.FE is set to 1 */
 #define UART_ISR_FFMS	(3 << 6)
 #define UART_ISR_FFMS_NO_FIFO	(0 << 6)
@@ -633,10 +633,10 @@
 	/* 0: 1 stop bit when word length is 5,6,7,8
 	   1: 1.5 stop bits when 5; 2 stop bits when 6,7,8 */
 
-#define UART_LCR_PE	(1 << 3) /* 0: parity disable */
-#define UART_LCR_PROE	(1 << 4) /* 0: even parity  1: odd parity */
-#define UART_LCR_SPAR	(1 << 5) /* 0: sticky parity disable */
-#define UART_LCR_SBRK	(1 << 6) /* write 0 normal, write 1 send break */
+#define UART_LCR_PE	(1 << 3)	/* 0: parity disable */
+#define UART_LCR_PROE	(1 << 4)	/* 0: even parity  1: odd parity */
+#define UART_LCR_SPAR	(1 << 5)	/* 0: sticky parity disable */
+#define UART_LCR_SBRK	(1 << 6)	/* write 0 normal, write 1 send break */
 /* 0: access UART_RDR/TDR/IER  1: access UART_DLLR/DLHR */
 #define UART_LCR_DLAB	(1 << 7)
 
@@ -665,38 +665,38 @@
  * Define macros for UART_MCR
  * UART Modem Control Register
  */
-#define UART_MCR_DTR	(1 << 0) /* 0: DTR_ ouput high */
-#define UART_MCR_RTS	(1 << 1) /* 0: RTS_ output high */
+#define UART_MCR_DTR	(1 << 0)	/* 0: DTR_ ouput high */
+#define UART_MCR_RTS	(1 << 1)	/* 0: RTS_ output high */
 /* 0: UART_MSR.RI is set to 0 and RI_ input high */
 #define UART_MCR_OUT1	(1 << 2)
 /* 0: UART_MSR.DCD is set to 0 and DCD_ input high */
 #define UART_MCR_OUT2	(1 << 3)
-#define UART_MCR_LOOP	(1 << 4) /* 0: normal  1: loopback mode */
-#define UART_MCR_MCE	(1 << 7) /* 0: modem function is disable */
+#define UART_MCR_LOOP	(1 << 4)	/* 0: normal  1: loopback mode */
+#define UART_MCR_MCE	(1 << 7)	/* 0: modem function is disable */
 
 /*
  * Define macros for UART_MSR
  * UART Modem Status Register
  */
-#define UART_MSR_DCTS	(1 << 0) /* 0: no change on CTS_ since last read */
-#define UART_MSR_DDSR	(1 << 1) /* 0: no change on DSR_ since last read */
-#define UART_MSR_DRI	(1 << 2) /* 0: no change on RI_  since last read */
-#define UART_MSR_DDCD	(1 << 3) /* 0: no change on DCD_ since last read */
-#define UART_MSR_CTS	(1 << 4) /* 0: CTS_ pin is high */
-#define UART_MSR_DSR	(1 << 5) /* 0: DSR_ pin is high */
-#define UART_MSR_RI	(1 << 6) /* 0: RI_ pin is high */
-#define UART_MSR_DCD	(1 << 7) /* 0: DCD_ pin is high */
+#define UART_MSR_DCTS	(1 << 0)	/* 0: no change on CTS_ since last read */
+#define UART_MSR_DDSR	(1 << 1)	/* 0: no change on DSR_ since last read */
+#define UART_MSR_DRI	(1 << 2)	/* 0: no change on RI_  since last read */
+#define UART_MSR_DDCD	(1 << 3)	/* 0: no change on DCD_ since last read */
+#define UART_MSR_CTS	(1 << 4)	/* 0: CTS_ pin is high */
+#define UART_MSR_DSR	(1 << 5)	/* 0: DSR_ pin is high */
+#define UART_MSR_RI	(1 << 6)	/* 0: RI_ pin is high */
+#define UART_MSR_DCD	(1 << 7)	/* 0: DCD_ pin is high */
 
 /*
  * Define macros for SIRCR
  * Slow IrDA Control Register
  */
-#define SIRCR_TSIRE (1 << 0) /* 0: TX is in UART mode 1: IrDA mode */
-#define SIRCR_RSIRE (1 << 1) /* 0: RX is in UART mode 1: IrDA mode */
-#define SIRCR_TPWS  (1 << 2) /* 0: transmit 0 pulse width is 3/16 of bit length
-				1: 0 pulse width is 1.6us for 115.2Kbps */
-#define SIRCR_TXPL  (1 << 3) /* 0: encoder generates a positive pulse for 0 */
-#define SIRCR_RXPL  (1 << 4) /* 0: decoder interprets positive pulse as 0 */
+#define SIRCR_TSIRE (1 << 0)	/* 0: TX is in UART mode 1: IrDA mode */
+#define SIRCR_RSIRE (1 << 1)	/* 0: RX is in UART mode 1: IrDA mode */
+#define SIRCR_TPWS  (1 << 2)	/* 0: transmit 0 pulse width is 3/16 of bit length
+				   1: 0 pulse width is 1.6us for 115.2Kbps */
+#define SIRCR_TXPL  (1 << 3)	/* 0: encoder generates a positive pulse for 0 */
+#define SIRCR_RXPL  (1 << 4)	/* 0: decoder interprets positive pulse as 0 */
 
 /* MSC Clock and Control Register (MSC_STRPCL) */
 #define MSC_STRPCL_EXIT_MULTIPLE	(1 << 7)
@@ -726,25 +726,25 @@
 #define MSC_STAT_CRC_WRITE_ERROR_BIT	2
 #define MSC_STAT_CRC_WRITE_ERROR_MASK	(0x3 << MSC_STAT_CRC_WRITE_ERROR_BIT)
 /* No error on transmission of data */
-  #define MSC_STAT_CRC_WRITE_ERROR_NO	(0 << MSC_STAT_CRC_WRITE_ERROR_BIT)
+#define MSC_STAT_CRC_WRITE_ERROR_NO	(0 << MSC_STAT_CRC_WRITE_ERROR_BIT)
 /* Card observed erroneous transmission of data */
-  #define MSC_STAT_CRC_WRITE_ERROR	(1 << MSC_STAT_CRC_WRITE_ERROR_BIT)
+#define MSC_STAT_CRC_WRITE_ERROR	(1 << MSC_STAT_CRC_WRITE_ERROR_BIT)
 /* No CRC status is sent back */
-  #define MSC_STAT_CRC_WRITE_ERROR_NOSTS (2 << MSC_STAT_CRC_WRITE_ERROR_BIT)
+#define MSC_STAT_CRC_WRITE_ERROR_NOSTS (2 << MSC_STAT_CRC_WRITE_ERROR_BIT)
 #define MSC_STAT_TIME_OUT_RES		(1 << 1)
 #define MSC_STAT_TIME_OUT_READ		(1 << 0)
 
 /* MSC Bus Clock Control Register (MSC_CLKRT) */
 #define MSC_CLKRT_CLK_RATE_BIT		0
 #define MSC_CLKRT_CLK_RATE_MASK		(0x7 << MSC_CLKRT_CLK_RATE_BIT)
-  #define MSC_CLKRT_CLK_RATE_DIV_1  (0x0 << MSC_CLKRT_CLK_RATE_BIT)
-  #define MSC_CLKRT_CLK_RATE_DIV_2  (0x1 << MSC_CLKRT_CLK_RATE_BIT)
-  #define MSC_CLKRT_CLK_RATE_DIV_4  (0x2 << MSC_CLKRT_CLK_RATE_BIT)
-  #define MSC_CLKRT_CLK_RATE_DIV_8  (0x3 << MSC_CLKRT_CLK_RATE_BIT)
-  #define MSC_CLKRT_CLK_RATE_DIV_16  (0x4 << MSC_CLKRT_CLK_RATE_BIT)
-  #define MSC_CLKRT_CLK_RATE_DIV_32  (0x5 << MSC_CLKRT_CLK_RATE_BIT)
-  #define MSC_CLKRT_CLK_RATE_DIV_64  (0x6 << MSC_CLKRT_CLK_RATE_BIT)
-  #define MSC_CLKRT_CLK_RATE_DIV_128 (0x7 << MSC_CLKRT_CLK_RATE_BIT)
+#define MSC_CLKRT_CLK_RATE_DIV_1  (0x0 << MSC_CLKRT_CLK_RATE_BIT)
+#define MSC_CLKRT_CLK_RATE_DIV_2  (0x1 << MSC_CLKRT_CLK_RATE_BIT)
+#define MSC_CLKRT_CLK_RATE_DIV_4  (0x2 << MSC_CLKRT_CLK_RATE_BIT)
+#define MSC_CLKRT_CLK_RATE_DIV_8  (0x3 << MSC_CLKRT_CLK_RATE_BIT)
+#define MSC_CLKRT_CLK_RATE_DIV_16  (0x4 << MSC_CLKRT_CLK_RATE_BIT)
+#define MSC_CLKRT_CLK_RATE_DIV_32  (0x5 << MSC_CLKRT_CLK_RATE_BIT)
+#define MSC_CLKRT_CLK_RATE_DIV_64  (0x6 << MSC_CLKRT_CLK_RATE_BIT)
+#define MSC_CLKRT_CLK_RATE_DIV_128 (0x7 << MSC_CLKRT_CLK_RATE_BIT)
 
 /* MSC Command Sequence Control Register (MSC_CMDAT) */
 #define MSC_CMDAT_IO_ABORT	(1 << 11)
@@ -803,168 +803,168 @@ struct jz4740_rtc {
 
 /* CPM (Clock reset and Power control Management) */
 struct jz4740_cpm {
-	uint32_t cpccr; /* 0x00 clock control reg */
-	uint32_t lcr;	/* 0x04 low power control reg */
-	uint32_t rsr;	/* 0x08 reset status reg */
+	uint32_t cpccr;		/* 0x00 clock control reg */
+	uint32_t lcr;		/* 0x04 low power control reg */
+	uint32_t rsr;		/* 0x08 reset status reg */
 	uint32_t pad00;
-	uint32_t cppcr; /* 0x10 pll control reg */
+	uint32_t cppcr;		/* 0x10 pll control reg */
 	uint32_t pad01[3];
-	uint32_t clkgr;	/* 0x20 clock gate reg */
-	uint32_t scr;	/* 0x24 sleep control reg */
+	uint32_t clkgr;		/* 0x20 clock gate reg */
+	uint32_t scr;		/* 0x24 sleep control reg */
 	uint32_t pad02[14];
-	uint32_t i2scd; /* 0x60 I2S device clock divider reg */
-	uint32_t lpcdr; /* 0x64 LCD pix clock divider reg */
-	uint32_t msccdr; /* 0x68 MSC device clock divider reg */
-	uint32_t uhccdr; /* 0x6C UHC 48M clock divider reg */
-	uint32_t uhcts; /* 0x70 UHC PHY test point reg */
-	uint32_t ssicd; /* 0x74 SSI clock divider reg */
+	uint32_t i2scd;		/* 0x60 I2S device clock divider reg */
+	uint32_t lpcdr;		/* 0x64 LCD pix clock divider reg */
+	uint32_t msccdr;	/* 0x68 MSC device clock divider reg */
+	uint32_t uhccdr;	/* 0x6C UHC 48M clock divider reg */
+	uint32_t uhcts;		/* 0x70 UHC PHY test point reg */
+	uint32_t ssicd;		/* 0x74 SSI clock divider reg */
 };
 
 /* TCU (Timer Counter Unit) */
 struct jz4740_tcu {
 	uint32_t pad00[4];
-	uint32_t ter;	/* 0x10  Timer Counter Enable Register */
-	uint32_t tesr;	/* 0x14  Timer Counter Enable Set Register */
-	uint32_t tecr;	/* 0x18  Timer Counter Enable Clear Register */
-	uint32_t tsr;	/* 0x1C  Timer Stop Register */
-	uint32_t tfr;	/* 0x20  Timer Flag Register */
-	uint32_t tfsr;	/* 0x24  Timer Flag Set Register */
-	uint32_t tfcr;	/* 0x28  Timer Flag Clear Register */
-	uint32_t tssr;	/* 0x2C  Timer Stop Set Register */
-	uint32_t tmr;	/* 0x30  Timer Mask Register */
-	uint32_t tmsr;	/* 0x34  Timer Mask Set Register */
-	uint32_t tmcr;	/* 0x38  Timer Mask Clear Register */
-	uint32_t tscr;	/* 0x3C  Timer Stop Clear Register */
-	uint32_t tdfr0;	/* 0x40  Timer Data Full Register */
-	uint32_t tdhr0;	/* 0x44  Timer Data Half Register */
-	uint32_t tcnt0;	/* 0x48  Timer Counter Register */
-	uint32_t tcsr0;	/* 0x4C  Timer Control Register */
-	uint32_t tdfr1;	/* 0x50 */
-	uint32_t tdhr1;	/* 0x54 */
-	uint32_t tcnt1;	/* 0x58 */
-	uint32_t tcsr1;	/* 0x5C */
-	uint32_t tdfr2;	/* 0x60 */
-	uint32_t tdhr2;	/* 0x64 */
-	uint32_t tcnt2;	/* 0x68 */
-	uint32_t tcsr2;	/* 0x6C */
-	uint32_t tdfr3;	/* 0x70 */
-	uint32_t tdhr3;	/* 0x74 */
-	uint32_t tcnt3;	/* 0x78 */
-	uint32_t tcsr3;	/* 0x7C */
-	uint32_t tdfr4;	/* 0x80 */
-	uint32_t tdhr4;	/* 0x84 */
-	uint32_t tcnt4;	/* 0x88 */
-	uint32_t tcsr4;	/* 0x8C */
-	uint32_t tdfr5;	/* 0x90 */
-	uint32_t tdhr5;	/* 0x94 */
-	uint32_t tcnt5;	/* 0x98 */
-	uint32_t tcsr5;	/* 0x9C */
+	uint32_t ter;		/* 0x10  Timer Counter Enable Register */
+	uint32_t tesr;		/* 0x14  Timer Counter Enable Set Register */
+	uint32_t tecr;		/* 0x18  Timer Counter Enable Clear Register */
+	uint32_t tsr;		/* 0x1C  Timer Stop Register */
+	uint32_t tfr;		/* 0x20  Timer Flag Register */
+	uint32_t tfsr;		/* 0x24  Timer Flag Set Register */
+	uint32_t tfcr;		/* 0x28  Timer Flag Clear Register */
+	uint32_t tssr;		/* 0x2C  Timer Stop Set Register */
+	uint32_t tmr;		/* 0x30  Timer Mask Register */
+	uint32_t tmsr;		/* 0x34  Timer Mask Set Register */
+	uint32_t tmcr;		/* 0x38  Timer Mask Clear Register */
+	uint32_t tscr;		/* 0x3C  Timer Stop Clear Register */
+	uint32_t tdfr0;		/* 0x40  Timer Data Full Register */
+	uint32_t tdhr0;		/* 0x44  Timer Data Half Register */
+	uint32_t tcnt0;		/* 0x48  Timer Counter Register */
+	uint32_t tcsr0;		/* 0x4C  Timer Control Register */
+	uint32_t tdfr1;		/* 0x50 */
+	uint32_t tdhr1;		/* 0x54 */
+	uint32_t tcnt1;		/* 0x58 */
+	uint32_t tcsr1;		/* 0x5C */
+	uint32_t tdfr2;		/* 0x60 */
+	uint32_t tdhr2;		/* 0x64 */
+	uint32_t tcnt2;		/* 0x68 */
+	uint32_t tcsr2;		/* 0x6C */
+	uint32_t tdfr3;		/* 0x70 */
+	uint32_t tdhr3;		/* 0x74 */
+	uint32_t tcnt3;		/* 0x78 */
+	uint32_t tcsr3;		/* 0x7C */
+	uint32_t tdfr4;		/* 0x80 */
+	uint32_t tdhr4;		/* 0x84 */
+	uint32_t tcnt4;		/* 0x88 */
+	uint32_t tcsr4;		/* 0x8C */
+	uint32_t tdfr5;		/* 0x90 */
+	uint32_t tdhr5;		/* 0x94 */
+	uint32_t tcnt5;		/* 0x98 */
+	uint32_t tcsr5;		/* 0x9C */
 };
 
 /* WDT (WatchDog Timer) */
 struct jz4740_wdt {
-	uint16_t tdr; /* 0x00 watchdog timer data reg*/
+	uint16_t tdr;		/* 0x00 watchdog timer data reg */
 	uint16_t pad00;
-	uint8_t tcer; /* 0x04 watchdog counter enable reg*/
+	uint8_t tcer;		/* 0x04 watchdog counter enable reg */
 	uint8_t pad01[3];
-	uint16_t tcnt; /* 0x08 watchdog timer counter*/
+	uint16_t tcnt;		/* 0x08 watchdog timer counter */
 	uint16_t pad02;
-	uint16_t tcsr; /* 0x0C watchdog timer control reg*/
+	uint16_t tcsr;		/* 0x0C watchdog timer control reg */
 	uint16_t pad03;
 };
 
 struct jz4740_uart {
 	uint8_t rbr_thr_dllr;
-		/* 0x00 R  8b receive buffer reg */
-		/* 0x00 W  8b transmit hold reg */
-		/* 0x00 RW 8b divisor latch low reg */
+	/* 0x00 R  8b receive buffer reg */
+	/* 0x00 W  8b transmit hold reg */
+	/* 0x00 RW 8b divisor latch low reg */
 	uint8_t pad00[3];
 	uint8_t dlhr_ier;
-		/* 0x04 RW 8b divisor latch high reg */
-		/* 0x04 RW 8b interrupt enable reg */
+	/* 0x04 RW 8b divisor latch high reg */
+	/* 0x04 RW 8b interrupt enable reg */
 	uint8_t pad01[3];
 	uint8_t iir_fcr;
-		/* 0x08 R  8b interrupt identification reg */
-		/* 0x08 W  8b FIFO control reg */
+	/* 0x08 R  8b interrupt identification reg */
+	/* 0x08 W  8b FIFO control reg */
 	uint8_t pad02[3];
-	uint8_t lcr;	/* 0x0C RW 8b Line control reg */
+	uint8_t lcr;		/* 0x0C RW 8b Line control reg */
 	uint8_t pad03[3];
-	uint8_t mcr;	/* 0x10 RW 8b modem control reg */
+	uint8_t mcr;		/* 0x10 RW 8b modem control reg */
 	uint8_t pad04[3];
-	uint8_t lsr;	/* 0x14 R  8b line status reg */
+	uint8_t lsr;		/* 0x14 R  8b line status reg */
 	uint8_t pad05[3];
-	uint8_t msr;	/* 0x18 R  8b modem status reg */
+	uint8_t msr;		/* 0x18 R  8b modem status reg */
 	uint8_t pad06[3];
-	uint8_t spr;	/* 0x1C RW 8b scratch pad reg */
+	uint8_t spr;		/* 0x1C RW 8b scratch pad reg */
 	uint8_t pad07[3];
-	uint8_t isr;	/* 0x20 RW 8b infrared selection reg */
+	uint8_t isr;		/* 0x20 RW 8b infrared selection reg */
 	uint8_t pad08[3];
-	uint8_t umr;	/* 0x24 RW 8b */
+	uint8_t umr;		/* 0x24 RW 8b */
 };
 
 /* MSC */
 struct jz4740_msc {
-	uint16_t strpcl;/* 0x00 */
-	uint32_t stat;	/* 0x04 */
-	uint16_t clkrt;	/* 0x08 */
-	uint32_t cmdat;	/* 0x0C */
-	uint16_t resto;	/* 0x10 */
-	uint16_t rdto;	/* 0x14 */
-	uint16_t blklen;/* 0x18 */
-	uint16_t nob;	/* 0x1C */
-	uint16_t snob;	/* 0x20 */
-	uint16_t imask;	/* 0x24 */
-	uint16_t ireg;	/* 0x28 */
-	uint8_t  cmd;	/* 0x2C */
-	uint32_t arg;	/* 0x30 */
-	uint16_t res;	/* 0x34 */
-	uint32_t rxfifo;/* 0x38 */
-	uint32_t txfifo;/* 0x3C */
+	uint16_t strpcl;	/* 0x00 */
+	uint32_t stat;		/* 0x04 */
+	uint16_t clkrt;		/* 0x08 */
+	uint32_t cmdat;		/* 0x0C */
+	uint16_t resto;		/* 0x10 */
+	uint16_t rdto;		/* 0x14 */
+	uint16_t blklen;	/* 0x18 */
+	uint16_t nob;		/* 0x1C */
+	uint16_t snob;		/* 0x20 */
+	uint16_t imask;		/* 0x24 */
+	uint16_t ireg;		/* 0x28 */
+	uint8_t cmd;		/* 0x2C */
+	uint32_t arg;		/* 0x30 */
+	uint16_t res;		/* 0x34 */
+	uint32_t rxfifo;	/* 0x38 */
+	uint32_t txfifo;	/* 0x3C */
 };
 
 /* External Memory Controller */
 struct jz4740_emc {
-	uint32_t bcr; /* 0x00 BCR */
+	uint32_t bcr;		/* 0x00 BCR */
 	uint32_t pad00[3];
 	uint32_t smcr[5];
-		/* x10 Static Memory Control Register 0 */
-		/* x14 Static Memory Control Register 1 */
-		/* x18 Static Memory Control Register 2 */
-		/* x1c Static Memory Control Register 3 */
-		/* x20 Static Memory Control Register 4 */
+	/* x10 Static Memory Control Register 0 */
+	/* x14 Static Memory Control Register 1 */
+	/* x18 Static Memory Control Register 2 */
+	/* x1c Static Memory Control Register 3 */
+	/* x20 Static Memory Control Register 4 */
 	uint32_t pad01[3];
 	uint32_t sacr[5];
-		/* x30 Static Memory Bank 0 Addr Config Reg */
-		/* x34 Static Memory Bank 1 Addr Config Reg */
-		/* x38 Static Memory Bank 2 Addr Config Reg */
-		/* x3c Static Memory Bank 3 Addr Config Reg */
-		/* x40 Static Memory Bank 4 Addr Config Reg */
+	/* x30 Static Memory Bank 0 Addr Config Reg */
+	/* x34 Static Memory Bank 1 Addr Config Reg */
+	/* x38 Static Memory Bank 2 Addr Config Reg */
+	/* x3c Static Memory Bank 3 Addr Config Reg */
+	/* x40 Static Memory Bank 4 Addr Config Reg */
 	uint32_t pad02[3];
-	uint32_t nfcsr; /* x050 NAND Flash Control/Status Register */
+	uint32_t nfcsr;		/* x050 NAND Flash Control/Status Register */
 
 	uint32_t pad03[11];
-	uint32_t dmcr; /* x80 DRAM Control Register */
-	uint16_t rtcsr; /* x84 Refresh Time Control/Status Register */
+	uint32_t dmcr;		/* x80 DRAM Control Register */
+	uint16_t rtcsr;		/* x84 Refresh Time Control/Status Register */
 	uint16_t pad04;
-	uint16_t rtcnt; /* x88 Refresh Timer Counter */
+	uint16_t rtcnt;		/* x88 Refresh Timer Counter */
 	uint16_t pad05;
-	uint16_t rtcor; /* x8c Refresh Time Constant Register */
+	uint16_t rtcor;		/* x8c Refresh Time Constant Register */
 	uint16_t pad06;
-	uint32_t dmar0; /* x90 SDRAM Bank 0 Addr Config Register */
+	uint32_t dmar0;		/* x90 SDRAM Bank 0 Addr Config Register */
 	uint32_t pad07[27];
-	uint32_t nfecr; /* x100 NAND Flash ECC Control Register */
-	uint32_t nfecc; /* x104 NAND Flash ECC Data Register */
+	uint32_t nfecr;		/* x100 NAND Flash ECC Control Register */
+	uint32_t nfecc;		/* x104 NAND Flash ECC Data Register */
 	uint8_t nfpar[12];
-		/* x108 NAND Flash RS Parity 0 Register */
-		/* x10c NAND Flash RS Parity 1 Register */
-		/* x110 NAND Flash RS Parity 2 Register */
-	uint32_t nfints; /* x114 NAND Flash Interrupt Status Register */
-	uint32_t nfinte; /* x118 NAND Flash Interrupt Enable Register */
+	/* x108 NAND Flash RS Parity 0 Register */
+	/* x10c NAND Flash RS Parity 1 Register */
+	/* x110 NAND Flash RS Parity 2 Register */
+	uint32_t nfints;	/* x114 NAND Flash Interrupt Status Register */
+	uint32_t nfinte;	/* x118 NAND Flash Interrupt Enable Register */
 	uint32_t nferr[4];
-		/* x11c NAND Flash RS Error Report 0 Register */
-		/* x120 NAND Flash RS Error Report 1 Register */
-		/* x124 NAND Flash RS Error Report 2 Register */
-		/* x128 NAND Flash RS Error Report 3 Register */
+	/* x11c NAND Flash RS Error Report 0 Register */
+	/* x120 NAND Flash RS Error Report 1 Register */
+	/* x124 NAND Flash RS Error Report 2 Register */
+	/* x128 NAND Flash RS Error Report 3 Register */
 };
 
 #define __gpio_as_nand()			\
@@ -1125,7 +1125,7 @@ do {						\
 static inline unsigned int __cpm_get_pllout(void)
 {
 	uint32_t m, n, no, pllout;
-	uint32_t od[4] = {1, 2, 2, 4};
+	uint32_t od[4] = { 1, 2, 2, 4 };
 
 	struct jz4740_cpm *cpm = (struct jz4740_cpm *)JZ4740_CPM_BASE;
 	uint32_t cppcr = readl(&cpm->cppcr);
@@ -1146,5 +1146,5 @@ extern void sdram_init(void);
 extern void calc_clocks(void);
 extern void rtc_init(void);
 
-#endif	/* !__ASSEMBLY__ */
-#endif	/* __JZ4740_H__ */
+#endif /* !__ASSEMBLY__ */
+#endif /* __JZ4740_H__ */

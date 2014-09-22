@@ -61,10 +61,10 @@ static int next_rx;
 /* 4 rx and 4 tx fifos */
 #define NO_OF_FIFOS 4
 
-typedef struct{
+typedef struct {
 	u32 status;
 	u32 addr;
-	u32 len; /* Only used for tx */
+	u32 len;		/* Only used for tx */
 	u32 not_used;
 } mac_fifo_t;
 
@@ -73,11 +73,12 @@ mac_fifo_t mac_fifo[NO_OF_FIFOS];
 #define MAX_WAIT 1000
 
 #if defined(CONFIG_CMD_MII)
-int  au1x00_miiphy_read(const char *devname, unsigned char addr,
-		unsigned char reg, unsigned short * value)
+int au1x00_miiphy_read(const char *devname, unsigned char addr,
+		       unsigned char reg, unsigned short *value)
 {
-	volatile u32 *mii_control_reg = (volatile u32*)(ETH0_BASE+MAC_MII_CNTRL);
-	volatile u32 *mii_data_reg = (volatile u32*)(ETH0_BASE+MAC_MII_DATA);
+	volatile u32 *mii_control_reg =
+	    (volatile u32 *)(ETH0_BASE + MAC_MII_CNTRL);
+	volatile u32 *mii_data_reg = (volatile u32 *)(ETH0_BASE + MAC_MII_DATA);
 	u32 mii_control;
 	unsigned int timedout = 20;
 
@@ -90,7 +91,7 @@ int  au1x00_miiphy_read(const char *devname, unsigned char addr,
 	}
 
 	mii_control = MAC_SET_MII_SELECT_REG(reg) |
-		MAC_SET_MII_SELECT_PHY(addr) | MAC_MII_READ;
+	    MAC_SET_MII_SELECT_PHY(addr) | MAC_MII_READ;
 
 	*mii_control_reg = mii_control;
 
@@ -106,11 +107,12 @@ int  au1x00_miiphy_read(const char *devname, unsigned char addr,
 	return 0;
 }
 
-int  au1x00_miiphy_write(const char *devname, unsigned char addr,
-		unsigned char reg, unsigned short value)
+int au1x00_miiphy_write(const char *devname, unsigned char addr,
+			unsigned char reg, unsigned short value)
 {
-	volatile u32 *mii_control_reg = (volatile u32*)(ETH0_BASE+MAC_MII_CNTRL);
-	volatile u32 *mii_data_reg = (volatile u32*)(ETH0_BASE+MAC_MII_DATA);
+	volatile u32 *mii_control_reg =
+	    (volatile u32 *)(ETH0_BASE + MAC_MII_CNTRL);
+	volatile u32 *mii_data_reg = (volatile u32 *)(ETH0_BASE + MAC_MII_DATA);
 	u32 mii_control;
 	unsigned int timedout = 20;
 
@@ -123,7 +125,7 @@ int  au1x00_miiphy_write(const char *devname, unsigned char addr,
 	}
 
 	mii_control = MAC_SET_MII_SELECT_REG(reg) |
-		MAC_SET_MII_SELECT_PHY(addr) | MAC_MII_WRITE;
+	    MAC_SET_MII_SELECT_PHY(addr) | MAC_MII_WRITE;
 
 	*mii_data_reg = value;
 	*mii_control_reg = mii_control;
@@ -134,19 +136,19 @@ int  au1x00_miiphy_write(const char *devname, unsigned char addr,
 static int au1x00_send(struct eth_device *dev, void *packet, int length)
 {
 	volatile mac_fifo_t *fifo_tx =
-		(volatile mac_fifo_t*)(MAC0_TX_DMA_ADDR+MAC_TX_BUFF0_STATUS);
+	    (volatile mac_fifo_t *)(MAC0_TX_DMA_ADDR + MAC_TX_BUFF0_STATUS);
 	int i;
 	int res;
 
 	/* tx fifo should always be idle */
 	fifo_tx[next_tx].len = length;
-	fifo_tx[next_tx].addr = (virt_to_phys(packet))|TX_DMA_ENABLE;
+	fifo_tx[next_tx].addr = (virt_to_phys(packet)) | TX_DMA_ENABLE;
 	au_sync();
 
 	udelay(1);
-	i=0;
-	while(!(fifo_tx[next_tx].addr&TX_T_DONE)){
-		if(i>MAX_WAIT){
+	i = 0;
+	while (!(fifo_tx[next_tx].addr & TX_T_DONE)) {
+		if (i > MAX_WAIT) {
 			printf("TX timeout\n");
 			break;
 		}
@@ -162,60 +164,66 @@ static int au1x00_send(struct eth_device *dev, void *packet, int length)
 	res = fifo_tx[next_tx].status;
 
 	next_tx++;
-	if(next_tx>=NO_OF_FIFOS){
-		next_tx=0;
+	if (next_tx >= NO_OF_FIFOS) {
+		next_tx = 0;
 	}
-	return(res);
+	return (res);
 }
 
-static int au1x00_recv(struct eth_device* dev){
+static int au1x00_recv(struct eth_device *dev)
+{
 	volatile mac_fifo_t *fifo_rx =
-		(volatile mac_fifo_t*)(MAC0_RX_DMA_ADDR+MAC_RX_BUFF0_STATUS);
+	    (volatile mac_fifo_t *)(MAC0_RX_DMA_ADDR + MAC_RX_BUFF0_STATUS);
 
 	int length;
 	u32 status;
 
-	for(;;){
-		if(!(fifo_rx[next_rx].addr&RX_T_DONE)){
+	for (;;) {
+		if (!(fifo_rx[next_rx].addr & RX_T_DONE)) {
 			/* Nothing has been received */
-			return(-1);
+			return (-1);
 		}
 
 		status = fifo_rx[next_rx].status;
 
-		length = status&0x3FFF;
+		length = status & 0x3FFF;
 
-		if(status&RX_ERROR){
+		if (status & RX_ERROR) {
 			printf("Rx error 0x%x\n", status);
-		}
-		else{
+		} else {
 			/* Pass the packet up to the protocol layers. */
 			NetReceive(NetRxPackets[next_rx], length - 4);
 		}
 
-		fifo_rx[next_rx].addr = (virt_to_phys(NetRxPackets[next_rx]))|RX_DMA_ENABLE;
+		fifo_rx[next_rx].addr =
+		    (virt_to_phys(NetRxPackets[next_rx])) | RX_DMA_ENABLE;
 
 		next_rx++;
-		if(next_rx>=NO_OF_FIFOS){
-			next_rx=0;
+		if (next_rx >= NO_OF_FIFOS) {
+			next_rx = 0;
 		}
-	} /* for */
+	}			/* for */
 
-	return(0); /* Does anyone use this? */
+	return (0);		/* Does anyone use this? */
 }
 
-static int au1x00_init(struct eth_device* dev, bd_t * bd){
+static int au1x00_init(struct eth_device *dev, bd_t * bd)
+{
 
-	volatile u32 *macen = (volatile u32*)MAC0_ENABLE;
-	volatile u32 *mac_ctrl = (volatile u32*)(ETH0_BASE+MAC_CONTROL);
-	volatile u32 *mac_addr_high = (volatile u32*)(ETH0_BASE+MAC_ADDRESS_HIGH);
-	volatile u32 *mac_addr_low = (volatile u32*)(ETH0_BASE+MAC_ADDRESS_LOW);
-	volatile u32 *mac_mcast_high = (volatile u32*)(ETH0_BASE+MAC_MCAST_HIGH);
-	volatile u32 *mac_mcast_low = (volatile u32*)(ETH0_BASE+MAC_MCAST_LOW);
+	volatile u32 *macen = (volatile u32 *)MAC0_ENABLE;
+	volatile u32 *mac_ctrl = (volatile u32 *)(ETH0_BASE + MAC_CONTROL);
+	volatile u32 *mac_addr_high =
+	    (volatile u32 *)(ETH0_BASE + MAC_ADDRESS_HIGH);
+	volatile u32 *mac_addr_low =
+	    (volatile u32 *)(ETH0_BASE + MAC_ADDRESS_LOW);
+	volatile u32 *mac_mcast_high =
+	    (volatile u32 *)(ETH0_BASE + MAC_MCAST_HIGH);
+	volatile u32 *mac_mcast_low =
+	    (volatile u32 *)(ETH0_BASE + MAC_MCAST_LOW);
 	volatile mac_fifo_t *fifo_tx =
-		(volatile mac_fifo_t*)(MAC0_TX_DMA_ADDR+MAC_TX_BUFF0_STATUS);
+	    (volatile mac_fifo_t *)(MAC0_TX_DMA_ADDR + MAC_TX_BUFF0_STATUS);
 	volatile mac_fifo_t *fifo_rx =
-		(volatile mac_fifo_t*)(MAC0_RX_DMA_ADDR+MAC_RX_BUFF0_STATUS);
+	    (volatile mac_fifo_t *)(MAC0_RX_DMA_ADDR + MAC_RX_BUFF0_STATUS);
 	int i;
 
 	next_tx = TX_GET_DMA_BUFFER(fifo_tx[0].addr);
@@ -227,21 +235,21 @@ static int au1x00_init(struct eth_device* dev, bd_t * bd){
 
 	/* Enable MAC0 */
 	/* We have to release reset before accessing registers */
-	*macen = MAC_EN_CLOCK_ENABLE|MAC_EN_RESET0|
-		MAC_EN_RESET1|MAC_EN_RESET2;
+	*macen = MAC_EN_CLOCK_ENABLE | MAC_EN_RESET0 |
+	    MAC_EN_RESET1 | MAC_EN_RESET2;
 	udelay(10);
 
-	for(i=0;i<NO_OF_FIFOS;i++){
+	for (i = 0; i < NO_OF_FIFOS; i++) {
 		fifo_tx[i].len = 0;
 		fifo_tx[i].addr = virt_to_phys(&txbuf[0]);
-		fifo_rx[i].addr = (virt_to_phys(NetRxPackets[i]))|RX_DMA_ENABLE;
+		fifo_rx[i].addr =
+		    (virt_to_phys(NetRxPackets[i])) | RX_DMA_ENABLE;
 	}
 
 	/* Put mac addr in little endian */
 #define ea eth_get_dev()->enetaddr
-	*mac_addr_high	=	(ea[5] <<  8) | (ea[4]	    ) ;
-	*mac_addr_low	=	(ea[3] << 24) | (ea[2] << 16) |
-		(ea[1] <<  8) | (ea[0]	    ) ;
+	*mac_addr_high = (ea[5] << 8) | (ea[4]);
+	*mac_addr_low = (ea[3] << 24) | (ea[2] << 16) | (ea[1] << 8) | (ea[0]);
 #undef ea
 	*mac_mcast_low = 0;
 	*mac_mcast_high = 0;
@@ -250,28 +258,31 @@ static int au1x00_init(struct eth_device* dev, bd_t * bd){
 #ifdef __LITTLE_ENDIAN
 	*mac_ctrl = MAC_FULL_DUPLEX;
 	udelay(1);
-	*mac_ctrl = MAC_FULL_DUPLEX|MAC_RX_ENABLE|MAC_TX_ENABLE;
+	*mac_ctrl = MAC_FULL_DUPLEX | MAC_RX_ENABLE | MAC_TX_ENABLE;
 #else
-	*mac_ctrl = MAC_BIG_ENDIAN|MAC_FULL_DUPLEX;
+	*mac_ctrl = MAC_BIG_ENDIAN | MAC_FULL_DUPLEX;
 	udelay(1);
-	*mac_ctrl = MAC_BIG_ENDIAN|MAC_FULL_DUPLEX|MAC_RX_ENABLE|MAC_TX_ENABLE;
+	*mac_ctrl =
+	    MAC_BIG_ENDIAN | MAC_FULL_DUPLEX | MAC_RX_ENABLE | MAC_TX_ENABLE;
 #endif
 
-	return(1);
+	return (1);
 }
 
-static void au1x00_halt(struct eth_device* dev){
-	volatile u32 *macen = (volatile u32*)MAC0_ENABLE;
+static void au1x00_halt(struct eth_device *dev)
+{
+	volatile u32 *macen = (volatile u32 *)MAC0_ENABLE;
 
 	/* Put MAC0 in reset */
 	*macen = 0;
 }
 
-int au1x00_enet_initialize(bd_t *bis){
-	struct eth_device* dev;
+int au1x00_enet_initialize(bd_t * bis)
+{
+	struct eth_device *dev;
 
-	if ((dev = (struct eth_device*)malloc(sizeof *dev)) == NULL) {
-		puts ("malloc failed\n");
+	if ((dev = (struct eth_device *)malloc(sizeof *dev)) == NULL) {
+		puts("malloc failed\n");
 		return -1;
 	}
 
@@ -279,17 +290,16 @@ int au1x00_enet_initialize(bd_t *bis){
 
 	sprintf(dev->name, "Au1X00 ethernet");
 	dev->iobase = 0;
-	dev->priv   = 0;
-	dev->init   = au1x00_init;
-	dev->halt   = au1x00_halt;
-	dev->send   = au1x00_send;
-	dev->recv   = au1x00_recv;
+	dev->priv = 0;
+	dev->init = au1x00_init;
+	dev->halt = au1x00_halt;
+	dev->send = au1x00_send;
+	dev->recv = au1x00_recv;
 
 	eth_register(dev);
 
 #if defined(CONFIG_CMD_MII)
-	miiphy_register(dev->name,
-		au1x00_miiphy_read, au1x00_miiphy_write);
+	miiphy_register(dev->name, au1x00_miiphy_read, au1x00_miiphy_write);
 #endif
 
 	return 1;

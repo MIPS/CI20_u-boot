@@ -28,7 +28,7 @@
 /*
  * System setup and hardware flags..
  */
-extern void (*cpu_wait)(void);
+extern void (*cpu_wait) (void);
 
 extern unsigned int vced_count, vcei_count;
 
@@ -44,8 +44,8 @@ typedef __u64 fpureg_t;
  */
 
 struct mips_fpu_struct {
-	fpureg_t	fpr[NUM_FPU_REGS];
-	unsigned int	fcr31;
+	fpureg_t fpr[NUM_FPU_REGS];
+	unsigned int fcr31;
 };
 
 #define NUM_DSP_REGS   6
@@ -53,8 +53,8 @@ struct mips_fpu_struct {
 typedef __u32 dspreg_t;
 
 struct mips_dsp_state {
-	dspreg_t        dspr[NUM_DSP_REGS];
-	unsigned int    dspcontrol;
+	dspreg_t dspr[NUM_DSP_REGS];
+	unsigned int dspcontrol;
 };
 
 typedef struct {
@@ -84,7 +84,7 @@ struct thread_struct {
 	unsigned long emulated_fp;
 	/* Saved per-thread scheduler affinity mask */
 	cpumask_t user_cpus_allowed;
-#endif /* CONFIG_MIPS_MT_FPAFF */
+#endif				/* CONFIG_MIPS_MT_FPAFF */
 
 	/* Saved state of the DSP ASE, if available. */
 	struct mips_dsp_state dsp;
@@ -94,7 +94,7 @@ struct thread_struct {
 	unsigned long cp0_baduaddr;	/* Last kernel fault accessing USEG */
 	unsigned long error_code;
 	unsigned long trap_no;
-	unsigned long irix_trampoline;  /* Wheee... */
+	unsigned long irix_trampoline;	/* Wheee... */
 	unsigned long irix_oldctx;
 	struct mips_abi *abi;
 };
@@ -129,12 +129,10 @@ struct task_struct;
 
 static inline void prefetch(const void *addr)
 {
-	__asm__ __volatile__(
-	"	.set	mips4		\n"
-	"	pref	%0, (%1)	\n"
-	"	.set	mips0		\n"
-	:
-	: "i" (Pref_Load), "r" (addr));
+	__asm__ __volatile__("	.set	mips4		\n"
+			     "	pref	%0, (%1)	\n"
+			     "	.set	mips0		\n"::"i"
+			     (Pref_Load), "r"(addr));
 }
 
 #endif

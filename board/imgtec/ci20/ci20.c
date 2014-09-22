@@ -54,7 +54,7 @@ int misc_init_r(void)
 	cpccr = readl(CPM_CPCCR);
 	ahb2_div = ((cpccr & CPM_CPCCR_H2DIV_MASK) >> CPM_CPCCR_H2DIV_BIT) + 1;
 	jz4780_efuse_init(CONFIG_SYS_MEM_SPEED / ahb2_div);
-	jz4780_efuse_read(0x18, 16, (uint8_t *)&otp);
+	jz4780_efuse_read(0x18, 16, (uint8_t *) & otp);
 
 	/* set MAC address */
 	if (!is_valid_ether_addr(otp.mac)) {
@@ -100,14 +100,14 @@ int board_nand_init(struct nand_chip *nand)
 
 #if !defined(CONFIG_SPL_BUILD) || defined(CONFIG_SPL_MMC_SUPPORT)
 
-int board_mmc_init(bd_t *bd)
+int board_mmc_init(bd_t * bd)
 {
 	uint32_t msc_cdr;
 
 	/* setup MSC1 clock */
 	msc_cdr = CONFIG_SYS_MEM_SPEED / 24000000 / 2 - 1;
 	writel(msc_cdr | CPM_MSCCDR_CE, CPM_MSCCDR1);
-	while (readl(CPM_MSCCDR1) & CPM_MSCCDR_MSC_BUSY);
+	while (readl(CPM_MSCCDR1) & CPM_MSCCDR_MSC_BUSY) ;
 
 	/* setup MSC1 pins */
 	writel(0x30f00000, GPIO_PXINTC(4));
@@ -123,7 +123,7 @@ int board_mmc_init(bd_t *bd)
 
 #ifdef CONFIG_DRIVER_DM9000
 
-int board_eth_init(bd_t *bis)
+int board_eth_init(bd_t * bis)
 {
 #ifdef CONFIG_NAND
 	/* setup pins (some already setup for NAND) */

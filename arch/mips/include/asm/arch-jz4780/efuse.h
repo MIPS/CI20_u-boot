@@ -29,7 +29,7 @@
 
 #define EFUSE_EFUSTATE_RD_DONE		(1 << 0)
 
-extern void jz4780_efuse_read(size_t addr, size_t count, uint8_t *buf);
+extern void jz4780_efuse_read(size_t addr, size_t count, uint8_t * buf);
 extern void jz4780_efuse_init(uint32_t ahb2_rate);
 
 #endif /* __JZ4780_EFUSE_H__ */

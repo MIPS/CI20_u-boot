@@ -35,7 +35,7 @@ static ulong arch_get_sp(void)
 {
 	ulong ret;
 
-	__asm__ __volatile__("move %0, $sp" : "=r"(ret) : );
+	__asm__ __volatile__("move %0, $sp":"=r"(ret):);
 
 	return ret;
 }
@@ -81,7 +81,7 @@ static void linux_cmdline_dump(void)
 		debug("   arg %03d: %s\n", i, linux_argv[i]);
 }
 
-static void boot_cmdline_linux(bootm_headers_t *images)
+static void boot_cmdline_linux(bootm_headers_t * images)
 {
 	const char *bootargs, *next, *quote;
 
@@ -154,19 +154,19 @@ static void linux_env_set(const char *env_name, const char *env_val)
 	}
 }
 
-static void boot_prep_linux(bootm_headers_t *images)
+static void boot_prep_linux(bootm_headers_t * images)
 {
 	char env_buf[12];
 	const char *cp;
 	ulong rd_start, rd_size;
 
 #ifdef CONFIG_MEMSIZE_IN_BYTES
-	sprintf(env_buf, "%lu", (ulong)gd->ram_size);
-	debug("## Giving linux memsize in bytes, %lu\n", (ulong)gd->ram_size);
+	sprintf(env_buf, "%lu", (ulong) gd->ram_size);
+	debug("## Giving linux memsize in bytes, %lu\n", (ulong) gd->ram_size);
 #else
-	sprintf(env_buf, "%lu", (ulong)(gd->ram_size >> 20));
+	sprintf(env_buf, "%lu", (ulong) (gd->ram_size >> 20));
 	debug("## Giving linux memsize in MB, %lu\n",
-	      (ulong)(gd->ram_size >> 20));
+	      (ulong) (gd->ram_size >> 20));
 #endif /* CONFIG_MEMSIZE_IN_BYTES */
 
 	rd_start = UNCACHED_SDRAM(images->initrd_start);
@@ -200,9 +200,9 @@ static void boot_prep_linux(bootm_headers_t *images)
 		linux_env_set("modetty0", "38400n8r");
 }
 
-static void boot_jump_linux(bootm_headers_t *images)
+static void boot_jump_linux(bootm_headers_t * images)
 {
-	typedef void __noreturn (*kernel_entry_t)(int, ulong, ulong, ulong);
+	typedef void __noreturn(*kernel_entry_t) (int, ulong, ulong, ulong);
 	kernel_entry_t kernel = (kernel_entry_t) images->ep;
 	ulong linux_extra = 0;
 
@@ -216,11 +216,11 @@ static void boot_jump_linux(bootm_headers_t *images)
 	/* we assume that the kernel is in place */
 	printf("\nStarting kernel ...\n\n");
 
-	kernel(linux_argc, (ulong)linux_argv, (ulong)linux_env, linux_extra);
+	kernel(linux_argc, (ulong) linux_argv, (ulong) linux_env, linux_extra);
 }
 
-int do_bootm_linux(int flag, int argc, char * const argv[],
-			bootm_headers_t *images)
+int do_bootm_linux(int flag, int argc, char *const argv[],
+		   bootm_headers_t * images)
 {
 	/* No need for those on MIPS */
 	if (flag & BOOTM_STATE_OS_BD_T)

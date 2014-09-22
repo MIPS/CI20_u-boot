@@ -24,14 +24,12 @@
    other party has been advised of the possibility of such damages.
 ******************************************************************************/
 
-
 /***********************************************************************/
 /*  Module      :  WDT register address and bits                       */
 /***********************************************************************/
 
 #define INCA_IP_WDT                          (0xB8000000)
 /***********************************************************************/
-
 
 /***Reset Status Register Power On***/
 #define INCA_IP_WDT_RST_SR                       ((volatile u32*)(INCA_IP_WDT+ 0x0014))
@@ -93,7 +91,6 @@
 #define INCA_IP_CGU                          (0xBF107000)
 /***********************************************************************/
 
-
 /***CGU PLL1 Control Register***/
 #define INCA_IP_CGU_CGU_PLL1CR                   ((volatile u32*)(INCA_IP_CGU+ 0x0008))
 #define INCA_IP_CGU_CGU_PLL1CR_SWRST                          (1 << 31)
@@ -141,7 +138,6 @@
 
 #define INCA_IP_PMU                          (0xBF102000)
 /***********************************************************************/
-
 
 /***PM Global Enable Register***/
 #define INCA_IP_PMU_PM_GEN                       ((volatile u32*)(INCA_IP_PMU+ 0x0000))
@@ -212,7 +208,6 @@
 #define INCA_IP_BCU                          (0xB8000100)
 /***********************************************************************/
 
-
 /***BCU Control Register (0010H)***/
 #define INCA_IP_BCU_BCU_CON                      ((volatile u32*)(INCA_IP_BCU+ 0x0010))
 #define INCA_IP_BCU_BCU_CON_SPC (value)                (((( 1 << 8) - 1) & (value)) << 24)
@@ -248,7 +243,6 @@
 
 #define INCA_IP_MBC                          (0xBF103000)
 /***********************************************************************/
-
 
 /***Mailbox CPU Configuration Register***/
 #define INCA_IP_MBC_MBC_CFG                      ((volatile u32*)(INCA_IP_MBC+ 0x0080))
@@ -450,7 +444,6 @@
 
 #define INCA_IP_Switch                       (0xBF104000)
 /***********************************************************************/
-
 
 /***Unknown Destination Register***/
 #define INCA_IP_Switch_UN_DEST                      ((volatile u32*)(INCA_IP_Switch+ 0x0000))
@@ -733,7 +726,6 @@
 #define INCA_IP_SSC1                         (0xB8000500)
 /***********************************************************************/
 
-
 /***Control Register (Programming Mode)***/
 #define INCA_IP_SSC1_SCC_CON_PRG                  ((volatile u32*)(INCA_IP_SSC1+ 0x0010))
 #define INCA_IP_SSC1_SCC_CON_PRG_EN                              (1 << 15)
@@ -815,7 +807,6 @@
 #define INCA_IP_SSC2                         (0xB8000600)
 /***********************************************************************/
 
-
 /***Control Register (Programming Mode)***/
 #define INCA_IP_SSC2_SCC_CON_PRG                  ((volatile u32*)(INCA_IP_SSC2+ 0x0010))
 #define INCA_IP_SSC2_SCC_CON_PRG_EN                              (1 << 15)
@@ -896,7 +887,6 @@
 
 #define INCA_IP_EBU                          (0xB8000200)
 /***********************************************************************/
-
 
 /***EBU Clock Control Register***/
 #define INCA_IP_EBU_EBU_CLC                      ((volatile u32*)(INCA_IP_EBU+ 0x0000))
@@ -991,7 +981,6 @@
 #define INCA_IP_SDRAM                        (0xBF800000)
 /***********************************************************************/
 
-
 /***MC Access Error Cause Register***/
 #define INCA_IP_SDRAM_MC_ERRCAUSE                  ((volatile u32*)(INCA_IP_SDRAM+ 0x0100))
 #define INCA_IP_SDRAM_MC_ERRCAUSE_ERR                              (1 << 31)
@@ -1066,7 +1055,6 @@
 
 #define INCA_IP_GPTU                         (0xB8000300)
 /***********************************************************************/
-
 
 /***GPT Clock Control Register***/
 #define INCA_IP_GPTU_GPT_CLC                      ((volatile u32*)(INCA_IP_GPTU+ 0x0000))
@@ -1198,7 +1186,6 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 #define INCA_IP_IOM                          (0xBF105000)
 /***********************************************************************/
 
-
 /***Receive FIFO***/
 #define INCA_IP_IOM_RFIFO                        ((volatile u32*)(INCA_IP_IOM+ 0x0000))
 #define INCA_IP_IOM_RFIFO_RXD (value)                (((( 1 << 8) - 1) & (value)) << 0)
@@ -1267,7 +1254,6 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 /***Receive Frame Byte Count Low***/
 #define INCA_IP_IOM_RBCL                         ((volatile u32*)(INCA_IP_IOM+ 0x0098))
 #define INCA_IP_IOM_RBCL_RBC(value)              (1 << value)
-
 
 /***SAPI2 Register***/
 #define INCA_IP_IOM_SAP2                         ((volatile u32*)(INCA_IP_IOM+ 0x0098))
@@ -1493,7 +1479,6 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 #define INCA_IP_ASC                          (0xB8000400)
 /***********************************************************************/
 
-
 /***ASC Port Input Select Register***/
 #define INCA_IP_ASC_ASC_PISEL                    ((volatile u32*)(INCA_IP_ASC+ 0x0004))
 #define INCA_IP_ASC_ASC_PISEL_RIS                              (1 << 0)
@@ -1615,7 +1600,6 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 
 #define INCA_IP_DMA                          (0xBF108000)
 /***********************************************************************/
-
 
 /***DMA RX Channel 0 Command Register***/
 #define INCA_IP_DMA_DMA_RXCCR0                   ((volatile u32*)(INCA_IP_DMA+ 0x0800))
@@ -1741,7 +1725,6 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 #define INCA_IP_Debug                        (0xBF106000)
 /***********************************************************************/
 
-
 /***MCD Break Bus Switch Register***/
 #define INCA_IP_Debug_MCD_BBS                      ((volatile u32*)(INCA_IP_Debug+ 0x0000))
 #define INCA_IP_Debug_MCD_BBS_BTP1                            (1 << 19)
@@ -1769,7 +1752,6 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 
 #define INCA_IP_TSF                          (0xB8000900)
 /***********************************************************************/
-
 
 /***TSF Configuration Register (0000H)***/
 #define INCA_IP_TSF_TSF_CONF                    ((volatile u32*)(INCA_IP_TSF+ 0x0000))
@@ -1836,26 +1818,21 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 #define INCA_IP_Ports                        (0xB8000A00)
 /***********************************************************************/
 
-
 /***Port 1 Data Output Register (0020H)***/
 #define INCA_IP_Ports_P1_OUT                       ((volatile u32*)(INCA_IP_Ports+ 0x0020))
 #define INCA_IP_Ports_P1_OUT_P(value)               (1 << value)
-
 
 /***Port 2 Data Output Register (0040H)***/
 #define INCA_IP_Ports_P2_OUT                       ((volatile u32*)(INCA_IP_Ports+ 0x0040))
 #define INCA_IP_Ports_P2_OUT_P(value)               (1 << value)
 
-
 /***Port 1 Data Input Register (0024H)***/
 #define INCA_IP_Ports_P1_IN                        ((volatile u32*)(INCA_IP_Ports+ 0x0024))
 #define INCA_IP_Ports_P1_IN_P(value)               (1 << value)
 
-
 /***Port 2 Data Input Register (0044H)***/
 #define INCA_IP_Ports_P2_IN                        ((volatile u32*)(INCA_IP_Ports+ 0x0044))
 #define INCA_IP_Ports_P2_IN_P(value)               (1 << value)
-
 
 /***Port 1 Direction Register (0028H)***/
 #define INCA_IP_Ports_P1_DIR                       ((volatile u32*)(INCA_IP_Ports+ 0x0028))
@@ -1874,14 +1851,12 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 #define INCA_IP_Ports_P0_ALTSEL                    ((volatile u32*)(INCA_IP_Ports+ 0x000C))
 #define INCA_IP_Ports_P0_ALTSEL_Port0P(value)         (1 << value)
 
-
 /***Port 1 Alternate Function Select Register 0 (002C H)
 ***/
 #define INCA_IP_Ports_P1_ALTSEL                    ((volatile u32*)(INCA_IP_Ports+ 0x002C))
 #define INCA_IP_Ports_P1_ALTSEL_Port1P(value)         (1 << value)
 
 #define INCA_IP_Ports_P1_ALTSEL_Port2P(value)         (1 << value)
-
 
 /***Port 2 Alternate Function Select Register 0 (004C H)
 ***/
@@ -1890,12 +1865,10 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 
 #define INCA_IP_Ports_P2_ALTSEL_Port2P(value)         (1 << value)
 
-
 /***Port 0 Input Schmitt-Trigger Off Register (0010 H)
 ***/
 #define INCA_IP_Ports_P0_STOFF                    ((volatile u32*)(INCA_IP_Ports+ 0x0010))
 #define INCA_IP_Ports_P0_STOFF_Port0P(value)         (1 << value)
-
 
 /***Port 1 Input Schmitt-Trigger Off Register (0030 H)
 ***/
@@ -1904,7 +1877,6 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 
 #define INCA_IP_Ports_P1_STOFF_Port2P(value)         (1 << value)
 
-
 /***Port 2 Input Schmitt-Trigger Off Register (0050 H)
 ***/
 #define INCA_IP_Ports_P2_STOFF                    ((volatile u32*)(INCA_IP_Ports+ 0x0050))
@@ -1912,16 +1884,13 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 
 #define INCA_IP_Ports_P2_STOFF_Port2P(value)         (1 << value)
 
-
 /***Port 2 Open Drain Control Register (0054H)***/
 #define INCA_IP_Ports_P2_OD                        ((volatile u32*)(INCA_IP_Ports+ 0x0054))
 #define INCA_IP_Ports_P2_OD_Port2P(value)         (1 << value)
 
-
 /***Port 0 Pull Up Device Enable Register (0018 H)***/
 #define INCA_IP_Ports_P0_PUDEN                    ((volatile u32*)(INCA_IP_Ports+ 0x0018))
 #define INCA_IP_Ports_P0_PUDEN_Port0P(value)         (1 << value)
-
 
 /***Port 2 Pull Up Device Enable Register (0058 H)***/
 #define INCA_IP_Ports_P2_PUDEN                    ((volatile u32*)(INCA_IP_Ports+ 0x0058))
@@ -1929,18 +1898,15 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 
 #define INCA_IP_Ports_P2_PUDEN_Port2P(value)         (1 << value)
 
-
 /***Port 0 Pull Up/Pull Down Select Register (001C H)***/
 #define INCA_IP_Ports_P0_PUDSEL                    ((volatile u32*)(INCA_IP_Ports+ 0x001C))
 #define INCA_IP_Ports_P0_PUDSEL_Port0P(value)         (1 << value)
-
 
 /***Port 2 Pull Up/Pull Down Select Register (005C H)***/
 #define INCA_IP_Ports_P2_PUDSEL                    ((volatile u32*)(INCA_IP_Ports+ 0x005C))
 #define INCA_IP_Ports_P2_PUDSEL_Port2P(value)         (1 << value)
 
 #define INCA_IP_Ports_P2_PUDSEL_Port2P(value)         (1 << value)
-
 
 /***********************************************************************/
 /*  Module      :  DES/3DES register address and bits                 */
@@ -1949,56 +1915,45 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 #define INCA_IP_DES_3DES                    (0xB8000800)
 /***********************************************************************/
 
-
 /***DES Input Data High Register***/
 #define INCA_IP_DES_3DES_DES_IHR                      ((volatile u32*)(INCA_IP_DES_3DES+ 0x0000))
 #define INCA_IP_DES_3DES_DES_IHR_IH(value)               (1 << value)
-
 
 /***DES Input Data Low Register***/
 #define INCA_IP_DES_3DES_DES_ILR                      ((volatile u32*)(INCA_IP_DES_3DES+ 0x0004))
 #define INCA_IP_DES_3DES_DES_ILR_IL(value)               (1 << value)
 
-
 /***DES Key #1 High Register***/
 #define INCA_IP_DES_3DES_DES_K1HR                    ((volatile u32*)(INCA_IP_DES_3DES+ 0x0008))
 #define INCA_IP_DES_3DES_DES_K1HR_K1H(value)              (1 << value)
-
 
 /***DES Key #1 Low Register***/
 #define INCA_IP_DES_3DES_DES_K1LR                    ((volatile u32*)(INCA_IP_DES_3DES+ 0x000C))
 #define INCA_IP_DES_3DES_DES_K1LR_K1L(value)              (1 << value)
 
-
 /***DES Key #2 High Register***/
 #define INCA_IP_DES_3DES_DES_K2HR                    ((volatile u32*)(INCA_IP_DES_3DES+ 0x0010))
 #define INCA_IP_DES_3DES_DES_K2HR_K2H(value)              (1 << value)
-
 
 /***DES Key #2 Low Register***/
 #define INCA_IP_DES_3DES_DES_K2LR                    ((volatile u32*)(INCA_IP_DES_3DES+ 0x0014))
 #define INCA_IP_DES_3DES_DES_K2LR_K2L(value)              (1 << value)
 
-
 /***DES Key #3 High Register***/
 #define INCA_IP_DES_3DES_DES_K3HR                    ((volatile u32*)(INCA_IP_DES_3DES+ 0x0018))
 #define INCA_IP_DES_3DES_DES_K3HR_K3H(value)              (1 << value)
-
 
 /***DES Key #3 Low Register***/
 #define INCA_IP_DES_3DES_DES_K3LR                    ((volatile u32*)(INCA_IP_DES_3DES+ 0x001C))
 #define INCA_IP_DES_3DES_DES_K3LR_K3L(value)              (1 << value)
 
-
 /***DES Initialization Vector High Register***/
 #define INCA_IP_DES_3DES_DES_IVHR                    ((volatile u32*)(INCA_IP_DES_3DES+ 0x0020))
 #define INCA_IP_DES_3DES_DES_IVHR_IVH(value)              (1 << value)
 
-
 /***DES Initialization Vector Low Register***/
 #define INCA_IP_DES_3DES_DES_IVLR                    ((volatile u32*)(INCA_IP_DES_3DES+ 0x0024))
 #define INCA_IP_DES_3DES_DES_IVLR_IVL(value)              (1 << value)
-
 
 /***DES Control Register***/
 #define INCA_IP_DES_3DES_DES_CONTROLR                 ((volatile u32*)(INCA_IP_DES_3DES+ 0x0028))
@@ -2016,16 +1971,13 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 #define INCA_IP_DES_3DES_DES_CONTROLR_E_D                              (1 << 3)
 #define INCA_IP_DES_3DES_DES_CONTROLR_M(value)               (1 << value)
 
-
 /***DES Output Data High Register***/
 #define INCA_IP_DES_3DES_DES_OHR                      ((volatile u32*)(INCA_IP_DES_3DES+ 0x002C))
 #define INCA_IP_DES_3DES_DES_OHR_OH(value)               (1 << value)
 
-
 /***DES Output Data Low Register***/
 #define INCA_IP_DES_3DES_DES_OLR                      ((volatile u32*)(INCA_IP_DES_3DES+ 0x0030))
 #define INCA_IP_DES_3DES_DES_OLR_OL(value)               (1 << value)
-
 
 /***********************************************************************/
 /*  Module      :  AES register address and bits                       */
@@ -2034,101 +1986,81 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 #define INCA_IP_AES                          (0xB8000880)
 /***********************************************************************/
 
-
 /***AES Input Data 3 Register***/
 #define INCA_IP_AES_AES_ID3R                    ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_ID3R_I(value)               (1 << value)
-
 
 /***AES Input Data 2 Register***/
 #define INCA_IP_AES_AES_ID2R                    ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_ID2R_I(value)               (1 << value)
 
-
 /***AES Input Data 1 Register***/
 #define INCA_IP_AES_AES_ID1R                    ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_ID1R_I(value)               (1 << value)
-
 
 /***AES Input Data 0 Register***/
 #define INCA_IP_AES_AES_ID0R                    ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_ID0R_I(value)               (1 << value)
 
-
 /***AES Output Data 3 Register***/
 #define INCA_IP_AES_AES_OD3R                    ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_OD3R_O(value)               (1 << value)
-
 
 /***AES Output Data 2 Register***/
 #define INCA_IP_AES_AES_OD2R                    ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_OD2R_O(value)               (1 << value)
 
-
 /***AES Output Data 1 Register***/
 #define INCA_IP_AES_AES_OD1R                    ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_OD1R_O(value)               (1 << value)
-
 
 /***AES Output Data 0 Register***/
 #define INCA_IP_AES_AES_OD0R                    ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_OD0R_O(value)               (1 << value)
 
-
 /***AES Key 7 Register***/
 #define INCA_IP_AES_AES_K7R                      ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_K7R_K(value)               (1 << value)
-
 
 /***AES Key 6 Register***/
 #define INCA_IP_AES_AES_K6R                      ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_K6R_K(value)               (1 << value)
 
-
 /***AES Key 5 Register***/
 #define INCA_IP_AES_AES_K5R                      ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_K5R_K(value)               (1 << value)
-
 
 /***AES Key 4 Register***/
 #define INCA_IP_AES_AES_K4R                      ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_K4R_K(value)               (1 << value)
 
-
 /***AES Key 3 Register***/
 #define INCA_IP_AES_AES_K3R                      ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_K3R_K(value)               (1 << value)
-
 
 /***AES Key 2 Register***/
 #define INCA_IP_AES_AES_K2R                      ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_K2R_K(value)               (1 << value)
 
-
 /***AES Key 1 Register***/
 #define INCA_IP_AES_AES_K1R                      ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_K1R_K(value)               (1 << value)
-
 
 /***AES Key 0 Register***/
 #define INCA_IP_AES_AES_K0R                      ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_K0R_K(value)               (1 << value)
 
-
 /***AES Initialization Vector 3 Register***/
 #define INCA_IP_AES_AES_IV3R                    ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_IV3R_IV(value)               (1 << value)
-
 
 /***AES Initialization Vector 2 Register***/
 #define INCA_IP_AES_AES_IV2R                    ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_IV2R_IV(value)               (1 << value)
 
-
 /***AES Initialization Vector 1 Register***/
 #define INCA_IP_AES_AES_IV1R                    ((volatile u32*)(INCA_IP_AES+ 0x0000))
 #define INCA_IP_AES_AES_IV1R_IV(value)               (1 << value)
-
 
 /***AES Initialization Vector 0 Register***/
 #define INCA_IP_AES_AES_IV0R                    ((volatile u32*)(INCA_IP_AES+ 0x0000))
@@ -2152,7 +2084,6 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 #define INCA_IP_AES_AES_CONTROLR_KV                              (1 << 2)
 #define INCA_IP_AES_AES_CONTROLR_K(value)               (1 << value)
 
-
 /***********************************************************************/
 /*  Module      :  I²C register address and bits                       */
 /***********************************************************************/
@@ -2160,13 +2091,11 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 #define INCA_IP_IIC                          (0xB8000700)
 /***********************************************************************/
 
-
 /***I²C Port Input Select Register***/
 #define INCA_IP_IIC_IIC_PISEL                    ((volatile u32*)(INCA_IP_IIC+ 0x0004))
 #define INCA_IP_IIC_IIC_PISEL_SDAIS(value)            (1 << value)
 
 #define INCA_IP_IIC_IIC_PISEL_SCLIS(value)            (1 << value)
-
 
 /***I²C Clock Control Register***/
 #define INCA_IP_IIC_IIC_CLC                      ((volatile u32*)(INCA_IP_IIC+ 0x0000))
@@ -2278,7 +2207,6 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 
 #define INCA_IP_IIC_IIC_BUSCON_0_SDAEN(value)            (1 << value)
 
-
 /***I²C Bus Control Register***/
 #define INCA_IP_IIC_IIC_BUSCON_1                 ((volatile u32*)(INCA_IP_IIC+ 0x0014))
 #define INCA_IP_IIC_IIC_BUSCON_1_BRPMOD                        (1 << 31)
@@ -2289,11 +2217,9 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 
 #define INCA_IP_IIC_IIC_BUSCON_1_SDAEN(value)            (1 << value)
 
-
 /***I²C Receive Transmit Buffer***/
 #define INCA_IP_IIC_IIC_RTB                      ((volatile u32*)(INCA_IP_IIC+ 0x0018))
 #define INCA_IP_IIC_IIC_RTB_RTB(value)              (1 << value)
-
 
 /***********************************************************************/
 /*  Module      :  FB register address and bits                       */
@@ -2301,7 +2227,6 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 
 #define INCA_IP_FB                          (0xBF880000)
 /***********************************************************************/
-
 
 /***FB Access Error Cause Register***/
 #define INCA_IP_FB_FB_ERRCAUSE                  ((volatile u32*)(INCA_IP_FB+ 0x0100))
@@ -2324,7 +2249,6 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 #define INCA_IP_SRAM                         (0xBF980000)
 /***********************************************************************/
 
-
 /***SRAM Size Register***/
 #define INCA_IP_SRAM_SRAM_SIZE                    ((volatile u32*)(INCA_IP_SRAM+ 0x0800))
 #define INCA_IP_SRAM_SRAM_SIZE_SIZE (value)               (((( 1 << 23) - 1) & (value)) << 0)
@@ -2335,7 +2259,6 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 
 #define INCA_IP_BIU                          (0xBFA80000)
 /***********************************************************************/
-
 
 /***BIU Identification Register***/
 #define INCA_IP_BIU_BIU_ID                       ((volatile u32*)(INCA_IP_BIU+ 0x0000))
@@ -2360,66 +2283,53 @@ If set and clear bit are written concurrently with 1, the associated bit is not 
 #define INCA_IP_ICU                          (0xBF101000)
 /***********************************************************************/
 
-
 /***IM0 Interrupt Status Register***/
 #define INCA_IP_ICU_IM0_ISR                      ((volatile u32*)(INCA_IP_ICU+ 0x0000))
 #define INCA_IP_ICU_IM0_ISR_IR(value)               (1 << value)
-
 
 /***IM1 Interrupt Status Register***/
 #define INCA_IP_ICU_IM1_ISR                      ((volatile u32*)(INCA_IP_ICU+ 0x0200))
 #define INCA_IP_ICU_IM1_ISR_IR(value)               (1 << value)
 
-
 /***IM2 Interrupt Status Register***/
 #define INCA_IP_ICU_IM2_ISR                      ((volatile u32*)(INCA_IP_ICU+ 0x0400))
 #define INCA_IP_ICU_IM2_ISR_IR(value)               (1 << value)
-
 
 /***IM0 Interrupt Enable Register***/
 #define INCA_IP_ICU_IM0_IER                      ((volatile u32*)(INCA_IP_ICU+ 0x0008))
 #define INCA_IP_ICU_IM0_IER_IR(value)               (1 << value)
 
-
 /***IM1 Interrupt Enable Register***/
 #define INCA_IP_ICU_IM1_IER                      ((volatile u32*)(INCA_IP_ICU+ 0x0208))
 #define INCA_IP_ICU_IM1_IER_IR(value)               (1 << value)
-
 
 /***IM2 Interrupt Enable Register***/
 #define INCA_IP_ICU_IM2_IER                      ((volatile u32*)(INCA_IP_ICU+ 0x0408))
 #define INCA_IP_ICU_IM2_IER_IR(value)               (1 << value)
 
-
 /***IM0 Interrupt Output Status Register***/
 #define INCA_IP_ICU_IM0_IOSR                    ((volatile u32*)(INCA_IP_ICU+ 0x0010))
 #define INCA_IP_ICU_IM0_IOSR_IR(value)               (1 << value)
-
 
 /***IM1 Interrupt Output Status Register***/
 #define INCA_IP_ICU_IM1_IOSR                    ((volatile u32*)(INCA_IP_ICU+ 0x0210))
 #define INCA_IP_ICU_IM1_IOSR_IR(value)               (1 << value)
 
-
 /***IM2 Interrupt Output Status Register***/
 #define INCA_IP_ICU_IM2_IOSR                    ((volatile u32*)(INCA_IP_ICU+ 0x0410))
 #define INCA_IP_ICU_IM2_IOSR_IR(value)               (1 << value)
-
 
 /***IM0 Interrupt Request Set Register***/
 #define INCA_IP_ICU_IM0_IRSR                    ((volatile u32*)(INCA_IP_ICU+ 0x0018))
 #define INCA_IP_ICU_IM0_IRSR_IR(value)               (1 << value)
 
-
 /***IM1 Interrupt Request Set Register***/
 #define INCA_IP_ICU_IM1_IRSR                    ((volatile u32*)(INCA_IP_ICU+ 0x0218))
 #define INCA_IP_ICU_IM1_IRSR_IR(value)               (1 << value)
 
-
 /***IM2 Interrupt Request Set Register***/
 #define INCA_IP_ICU_IM2_IRSR                    ((volatile u32*)(INCA_IP_ICU+ 0x0418))
 #define INCA_IP_ICU_IM2_IRSR_IR(value)               (1 << value)
-
 
 /***External Interrupt Control Register***/
 #define INCA_IP_ICU_ICU_EICR                    ((volatile u32*)(INCA_IP_ICU+ 0x0B00))

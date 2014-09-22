@@ -18,7 +18,7 @@
 #define MMLO		68
 #define FPC_CSR		69
 #define FPC_EIR		70
-#define DSP_BASE	71		/* 3 more hi / lo register pairs */
+#define DSP_BASE	71	/* 3 more hi / lo register pairs */
 #define DSP_CONTROL	77
 #define ACX		78
 
@@ -47,8 +47,8 @@ struct pt_regs {
 	unsigned long cp0_epc;
 #ifdef CONFIG_MIPS_MT_SMTC
 	unsigned long cp0_tcstatus;
-#endif /* CONFIG_MIPS_MT_SMTC */
-} __attribute__ ((aligned (8)));
+#endif				/* CONFIG_MIPS_MT_SMTC */
+} __attribute__ ((aligned(8)));
 
 /* Arbitrarily choose the same ptrace numbers as used by the Sparc code. */
 #define PTRACE_GETREGS		12

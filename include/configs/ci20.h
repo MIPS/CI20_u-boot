@@ -31,7 +31,7 @@
 
 #define CONFIG_SYS_CPU_SPEED	1200000000	/* CPU clock: 1.2 GHz */
 #define CONFIG_SYS_EXTAL	48000000	/* EXTAL freq: 48 MHz */
-#define CONFIG_SYS_HZ		(CONFIG_SYS_EXTAL / 16) /* incrementer freq */
+#define CONFIG_SYS_HZ		(CONFIG_SYS_EXTAL / 16)	/* incrementer freq */
 #define CONFIG_SYS_MIPS_TIMER_FREQ	CONFIG_SYS_CPU_SPEED
 
 #define CONFIG_SYS_DDR3_H5TQ2G83CFR
@@ -50,10 +50,10 @@
 #define CONFIG_SYS_NS16550_SERIAL
 #define CONFIG_SYS_NS16550_REG_SIZE	(-4)
 #define CONFIG_SYS_NS16550_CLK		CONFIG_SYS_EXTAL
-#define CONFIG_SYS_NS16550_COM1		0xb0030000 /* uart0 */
-#define CONFIG_SYS_NS16550_COM2		0xb0031000 /* uart1 */
-#define CONFIG_SYS_NS16550_COM4		0xb0033000 /* uart3 */
-#define CONFIG_SYS_NS16550_COM5		0xb0034000 /* uart4 */
+#define CONFIG_SYS_NS16550_COM1		0xb0030000	/* uart0 */
+#define CONFIG_SYS_NS16550_COM2		0xb0031000	/* uart1 */
+#define CONFIG_SYS_NS16550_COM4		0xb0033000	/* uart3 */
+#define CONFIG_SYS_NS16550_COM5		0xb0034000	/* uart4 */
 #define CONFIG_SYS_CONSOLE_IS_IN_ENV
 #define CONFIG_CONSOLE_MUX
 #define CONFIG_CONS_INDEX		1
@@ -64,7 +64,7 @@
 #define CONFIG_SKIP_LOWLEVEL_INIT
 #define CONFIG_BOARD_EARLY_INIT_F
 #define CONFIG_SYS_NO_FLASH
-#define CONFIG_SYS_FLASH_BASE	0 /* init flash_base as 0 */
+#define CONFIG_SYS_FLASH_BASE	0	/* init flash_base as 0 */
 #define CONFIG_ENV_OVERWRITE
 #define CONFIG_MISC_INIT_R 1
 
@@ -187,27 +187,27 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_BDI		/* bdinfo			*/
-#define CONFIG_CMD_BOOTD	/* bootd			*/
-#define CONFIG_CMD_CONSOLE	/* coninfo			*/
-#define CONFIG_CMD_DHCP 	/* DHCP support			*/
-#define CONFIG_CMD_ECHO		/* echo arguments		*/
-#define CONFIG_CMD_EXT4 	/* ext4 support			*/
-#define CONFIG_CMD_FAT		/* FAT support			*/
-#define CONFIG_CMD_LOADB	/* loadb			*/
-#define CONFIG_CMD_LOADS	/* loads			*/
+#define CONFIG_CMD_BDI		/* bdinfo                       */
+#define CONFIG_CMD_BOOTD	/* bootd                        */
+#define CONFIG_CMD_CONSOLE	/* coninfo                      */
+#define CONFIG_CMD_DHCP		/* DHCP support                 */
+#define CONFIG_CMD_ECHO		/* echo arguments               */
+#define CONFIG_CMD_EXT4		/* ext4 support                 */
+#define CONFIG_CMD_FAT		/* FAT support                  */
+#define CONFIG_CMD_LOADB	/* loadb                        */
+#define CONFIG_CMD_LOADS	/* loads                        */
 #define CONFIG_CMD_MEMORY	/* md mm nm mw cp cmp crc base loop mtest */
-#define CONFIG_CMD_MISC		/* Misc functions like sleep etc*/
-#define CONFIG_CMD_MMC 	    /* MMC/SD support			*/
+#define CONFIG_CMD_MISC		/* Misc functions like sleep etc */
+#define CONFIG_CMD_MMC		/* MMC/SD support                   */
 #define CONFIG_CMD_MTDPARTS
 #define CONFIG_CMD_NAND
 #define CONFIG_CMD_NAND_LOCK_UNLOCK
-#define CONFIG_CMD_NET 	    /* networking support			*/
+#define CONFIG_CMD_NET		/* networking support                       */
 #define CONFIG_CMD_PING
-#define CONFIG_CMD_RUN		/* run command in env variable	*/
-#define CONFIG_CMD_SAVEENV	/* saveenv			*/
-#define CONFIG_CMD_SETGETDCR	/* DCR support on 4xx		*/
-#define CONFIG_CMD_SOURCE	/* "source" command support	*/
+#define CONFIG_CMD_RUN		/* run command in env variable  */
+#define CONFIG_CMD_SAVEENV	/* saveenv                      */
+#define CONFIG_CMD_SETGETDCR	/* DCR support on 4xx           */
+#define CONFIG_CMD_SOURCE	/* "source" command support     */
 #define CONFIG_CMD_UBI
 #define CONFIG_CMD_UBIFS
 
@@ -227,15 +227,15 @@
 #define CONFIG_SYS_MAXARGS 16
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_SYS_PROMPT "ci20# "
-#define CONFIG_SYS_CBSIZE 1024 /* Console I/O Buffer Size */
+#define CONFIG_SYS_CBSIZE 1024	/* Console I/O Buffer Size */
 #define CONFIG_SYS_PBSIZE (CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
 
 #define CONFIG_SYS_MONITOR_LEN		(512 * 1024)
 #define CONFIG_SYS_MALLOC_LEN		(64 * 1024 * 1024)
 #define CONFIG_SYS_BOOTPARAMS_LEN	(128 * 1024)
 
-#define CONFIG_SYS_SDRAM_BASE		0x80000000 /* cached (KSEG0) address */
-#define CONFIG_SYS_SDRAM_MAX_TOP	0x90000000 /* don't run into IO space */
+#define CONFIG_SYS_SDRAM_BASE		0x80000000	/* cached (KSEG0) address */
+#define CONFIG_SYS_SDRAM_MAX_TOP	0x90000000	/* don't run into IO space */
 #define CONFIG_SYS_INIT_SP_OFFSET	0x400000
 #define CONFIG_SYS_LOAD_ADDR		0x88000000
 #define CONFIG_SYS_MEMTEST_START	0x80000000
@@ -276,15 +276,15 @@
 /* SPL */
 #define CONFIG_SPL
 #define CONFIG_SPL_FRAMEWORK
-#define CONFIG_SPL_STACK		0xf4004000 /* only max. 2KB spare! */
+#define CONFIG_SPL_STACK		0xf4004000	/* only max. 2KB spare! */
 
 #define CONFIG_SPL_BSS_START_ADDR	0x8f000000
-#define CONFIG_SPL_BSS_MAX_SIZE		0x00080000 /* 512KB, arbitrary */
+#define CONFIG_SPL_BSS_MAX_SIZE		0x00080000	/* 512KB, arbitrary */
 
 #define CONFIG_SPL_LDSCRIPT		"$(CPUDIR)/jz4780/u-boot-spl.lds"
 
-#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR	0x1c /* 14KB offset */
-#define CONFIG_SYS_U_BOOT_MAX_SIZE_SECTORS	0x400 /* 512 KB */
+#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR	0x1c	/* 14KB offset */
+#define CONFIG_SYS_U_BOOT_MAX_SIZE_SECTORS	0x400	/* 512 KB */
 #define CONFIG_SYS_NAND_U_BOOT_OFFS	(CONFIG_SYS_NAND_BLOCK_SIZE * 4)
 #define CONFIG_SYS_NAND_U_BOOT_DST	CONFIG_SYS_TEXT_BASE
 #define CONFIG_SYS_NAND_U_BOOT_START	CONFIG_SYS_NAND_U_BOOT_DST

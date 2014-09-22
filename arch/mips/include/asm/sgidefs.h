@@ -14,7 +14,7 @@
  * Using a Linux compiler for building Linux seems logic but not to
  * everybody.
  */
-#if 0 /* ndef __linux__ */
+#if 0				/* ndef __linux__ */
 #error Use a Linux compiler or give up.
 #endif
 

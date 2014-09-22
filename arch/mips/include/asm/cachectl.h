@@ -23,4 +23,4 @@
 #define CACHEABLE	0	/* make pages cacheable */
 #define UNCACHEABLE	1	/* make pages uncacheable */
 
-#endif	/* _ASM_CACHECTL */
+#endif /* _ASM_CACHECTL */

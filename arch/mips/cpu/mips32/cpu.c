@@ -22,11 +22,11 @@
 	:								\
 	: "i" (op), "R" (*(unsigned char *)(addr)))
 
-void __attribute__((weak)) _machine_restart(void)
+void __attribute__ ((weak)) _machine_restart(void)
 {
 }
 
-int do_reset(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+int do_reset(cmd_tbl_t * cmdtp, int flag, int argc, char *const argv[])
 {
 	_machine_restart();
 
@@ -91,7 +91,7 @@ void write_one_tlb(int index, u32 pagemask, u32 hi, u32 low0, u32 low1)
 	tlb_write_indexed();
 }
 
-int cpu_eth_init(bd_t *bis)
+int cpu_eth_init(bd_t * bis)
 {
 #ifdef CONFIG_SOC_AU1X00
 	au1x00_enet_initialize(bis);

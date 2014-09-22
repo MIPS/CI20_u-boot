@@ -37,7 +37,7 @@
 #define _ACAST64_
 #else
 #define _ACAST32_		(_ATYPE_)(_ATYPE32_)	/* widen if necessary */
-#define _ACAST64_		(_ATYPE64_)		/* do _not_ narrow */
+#define _ACAST64_		(_ATYPE64_)	/* do _not_ narrow */
 #endif
 
 /*
@@ -135,10 +135,10 @@
 /* We use a 36 bit physical address map here and
    cannot access physical memory directly from core */
 #define UNCACHED_SDRAM(a) (((unsigned long)(a)) | 0x20000000)
-#else	/* !CONFIG_SOC_AU1X00 */
+#else /* !CONFIG_SOC_AU1X00 */
 #define UNCACHED_SDRAM(a) CKSEG1ADDR(a)
-#endif	/* CONFIG_SOC_AU1X00 */
-#endif	/* __ASSEMBLY__ */
+#endif /* CONFIG_SOC_AU1X00 */
+#endif /* __ASSEMBLY__ */
 
 /*
  * The ultimate limited of the 64-bit MIPS architecture:  2 bits for selecting
@@ -155,7 +155,7 @@
  */
 
 #define COMPAT_K1BASE32		_CONST64_(0xffffffffa0000000)
-#define PHYS_TO_COMPATK1(x)	((x) | COMPAT_K1BASE32) /* 32-bit compat k1 */
+#define PHYS_TO_COMPATK1(x)	((x) | COMPAT_K1BASE32)	/* 32-bit compat k1 */
 
 #endif
 

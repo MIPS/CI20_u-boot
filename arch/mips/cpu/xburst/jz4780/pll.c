@@ -54,7 +54,7 @@ static void pll_init_one(int pll, int m, int n, int od)
 
 	writel(readl(pll_reg) | M_N_OD(m, n, od) | XPLLEN, pll_reg);
 
-	while (!(readl(pll_reg) & XPLL_ON));
+	while (!(readl(pll_reg) & XPLL_ON)) ;
 }
 
 static void cpu_mux_select(int pll)
@@ -81,7 +81,9 @@ static void cpu_mux_select(int pll)
 	clk_ctrl |= (1 - 1) << CPM_CPCCR_CDIV_BIT;
 	writel(clk_ctrl, CPM_CPCCR);
 
-	while (readl(CPM_CPCSR) & (CPM_CPCSR_CDIV_BUSY | CPM_CPCSR_H0DIV_BUSY | CPM_CPCSR_H2DIV_BUSY));
+	while (readl(CPM_CPCSR) &
+	       (CPM_CPCSR_CDIV_BUSY | CPM_CPCSR_H0DIV_BUSY |
+		CPM_CPCSR_H2DIV_BUSY)) ;
 
 	clk_ctrl = readl(CPM_CPCCR);
 	clk_ctrl &= ~(0xff << 24);
@@ -98,11 +100,13 @@ static void cpu_mux_select(int pll)
 static void ddr_mux_select(int pll)
 {
 	int selectplls[] = { CPM_DDRCDR_DCS_STOP,
-			     CPM_DDRCDR_DCS_SRC,
-			     CPM_DDRCDR_DCS_MPLL};
+		CPM_DDRCDR_DCS_SRC,
+		CPM_DDRCDR_DCS_MPLL
+	};
 
-	writel(selectplls[pll] | CPM_DDRCDR_CE_DDR | (CONFIG_SYS_MEM_DIV - 1), CPM_DDCDR);
-	while (readl(CPM_DDCDR) & CPM_DDRCDR_DDR_BUSY);
+	writel(selectplls[pll] | CPM_DDRCDR_CE_DDR | (CONFIG_SYS_MEM_DIV - 1),
+	       CPM_DDCDR);
+	while (readl(CPM_DDCDR) & CPM_DDRCDR_DDR_BUSY) ;
 
 	writel(readl(CPM_CLKGR0) & ~CPM_CLKGR0_DDR0, CPM_CLKGR0);
 
@@ -112,7 +116,7 @@ static void ddr_mux_select(int pll)
 static void cgu_mux_init(struct cgu_pll_select *cgu, unsigned int num)
 {
 	int i;
-	unsigned int selectplls[] = {0, 1, 2, 3, 2, 6};
+	unsigned int selectplls[] = { 0, 1, 2, 3, 2, 6 };
 
 	for (i = 0; i < num; i++)
 		writel(selectplls[cgu[i].pll] << cgu[i].pll_shift, cgu[i].reg);
@@ -122,23 +126,23 @@ void pll_init(void)
 {
 	uint32_t cppcr;
 	struct cgu_pll_select cgu_mux[] = {
-		{ CPM_MSCCDR,  MPLL, 30 },
-		{ CPM_LPCDR,   VPLL, 30 },
-		{ CPM_LPCDR1,  VPLL, 30 },
-		{ CPM_GPUCDR,  MPLL, 30 },
-		{ CPM_HDMICDR, VPLL, 30 },
-		{ CPM_I2SCDR,  EPLL, 30 },
-		{ CPM_BCHCDR,  MPLL, 30 },
-		{ CPM_VPUCDR,  0x1,  30 },
-		{ CPM_UHCCDR,  0x3,  30 },
-		{ CPM_CIMCDR,  0x1,  31 },
-		{ CPM_PCMCDR,  0x5,  29 },
-		{ CPM_SSICDR,  0x3,  30 },
+		{CPM_MSCCDR, MPLL, 30},
+		{CPM_LPCDR, VPLL, 30},
+		{CPM_LPCDR1, VPLL, 30},
+		{CPM_GPUCDR, MPLL, 30},
+		{CPM_HDMICDR, VPLL, 30},
+		{CPM_I2SCDR, EPLL, 30},
+		{CPM_BCHCDR, MPLL, 30},
+		{CPM_VPUCDR, 0x1, 30},
+		{CPM_UHCCDR, 0x3, 30},
+		{CPM_CIMCDR, 0x1, 31},
+		{CPM_PCMCDR, 0x5, 29},
+		{CPM_SSICDR, 0x3, 30},
 	};
 
 	cppcr = readl(CPM_CPPCR);
 	cppcr &= ~0xfffff;
-	cppcr |= 16 << 8 | 0x20;  //pll stable time set to default--1ms
+	cppcr |= 16 << 8 | 0x20;	//pll stable time set to default--1ms
 	writel(cppcr, CPM_CPPCR);
 
 	pll_init_one(APLL, JZ4780_APLL_M, JZ4780_APLL_N, JZ4780_APLL_OD);

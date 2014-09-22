@@ -8,7 +8,6 @@
 #include <common.h>
 #include <asm/inca-ip.h>
 
-
 /*******************************************************************************
 *
 * get_cpuclk - returns the frequency of the CPU.
@@ -24,19 +23,19 @@
 *   frequency of the CPU. Don't use the macros, which are set to init the CPU
 *   frequency in the ROM code.
 */
-uint incaip_get_cpuclk (void)
+uint incaip_get_cpuclk(void)
 {
 	/*-------------------------------------------------------------------------*/
 	/* CPU Clock Input Multiplexer (MUX I)                                     */
 	/* Multiplexer MUX I selects the maximum input clock to the CPU.           */
 	/*-------------------------------------------------------------------------*/
-	if (*((volatile ulong *) INCA_IP_CGU_CGU_MUXCR) &
+	if (*((volatile ulong *)INCA_IP_CGU_CGU_MUXCR) &
 	    INCA_IP_CGU_CGU_MUXCR_MUXI) {
 		/* MUX I set to 150 MHz clock */
 		return 150000000;
 	} else {
 		/* MUX I set to 100/133 MHz clock */
-		if (*((volatile ulong *) INCA_IP_CGU_CGU_DIVCR) & 0x40) {
+		if (*((volatile ulong *)INCA_IP_CGU_CGU_DIVCR) & 0x40) {
 			/* Division value is 1/3, maximum CPU operating */
 			/* frequency is 133.3 MHz                       */
 			return 133333333;
@@ -62,13 +61,13 @@ uint incaip_get_cpuclk (void)
 *   frequency in the ROM code.
 *   The calculation for the
 */
-uint incaip_get_fpiclk (void)
+uint incaip_get_fpiclk(void)
 {
 	uint clkCPU;
 
-	clkCPU = incaip_get_cpuclk ();
+	clkCPU = incaip_get_cpuclk();
 
-	switch (*((volatile ulong *) INCA_IP_CGU_CGU_DIVCR) & 0xC) {
+	switch (*((volatile ulong *)INCA_IP_CGU_CGU_DIVCR) & 0xC) {
 	case 0x4:
 		return clkCPU >> 1;	/* devided by 2 */
 		break;
@@ -81,7 +80,7 @@ uint incaip_get_fpiclk (void)
 	}
 }
 
-int incaip_set_cpuclk (void)
+int incaip_set_cpuclk(void)
 {
 	extern void ebu_init(long);
 	extern void cgu_init(long);
@@ -89,11 +88,11 @@ int incaip_set_cpuclk (void)
 	char tmp[64];
 	ulong cpuclk;
 
-	if (getenv_f("cpuclk", tmp, sizeof (tmp)) > 0) {
-		cpuclk = simple_strtoul (tmp, NULL, 10) * 1000000;
-		cgu_init (cpuclk);
-		ebu_init (cpuclk);
-		sdram_init (cpuclk);
+	if (getenv_f("cpuclk", tmp, sizeof(tmp)) > 0) {
+		cpuclk = simple_strtoul(tmp, NULL, 10) * 1000000;
+		cgu_init(cpuclk);
+		ebu_init(cpuclk);
+		sdram_init(cpuclk);
 	}
 
 	return 0;

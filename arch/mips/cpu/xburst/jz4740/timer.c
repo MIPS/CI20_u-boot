@@ -12,7 +12,7 @@
 #include <asm/arch/jz4740.h>
 
 #define TIMER_CHAN  0
-#define TIMER_FDATA 0xffff  /* Timer full data value */
+#define TIMER_FDATA 0xffff	/* Timer full data value */
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -30,7 +30,7 @@ ulong get_timer_masked(void)
 	ulong now = readl(&tcu->tcnt0);
 
 	if (gd->arch.lastinc <= now)
-		gd->arch.tbl += now - gd->arch.lastinc; /* normal mode */
+		gd->arch.tbl += now - gd->arch.lastinc;	/* normal mode */
 	else {
 		/* we have an overflow ... */
 		gd->arch.tbl += TIMER_FDATA + now - gd->arch.lastinc;
@@ -55,7 +55,7 @@ void udelay_masked(unsigned long usec)
 	} else {
 		if (usec > 1) {
 			tmo = usec * CONFIG_SYS_HZ;
-			tmo /= 1000*1000;
+			tmo /= 1000 * 1000;
 		} else
 			tmo = 1;
 	}
@@ -78,8 +78,8 @@ int timer_init(void)
 
 	/* mask irqs */
 	writel((1 << TIMER_CHAN) | (1 << (TIMER_CHAN + 16)), &tcu->tmsr);
-	writel(1 << TIMER_CHAN, &tcu->tscr); /* enable timer clock */
-	writeb(1 << TIMER_CHAN, &tcu->tesr); /* start counting up */
+	writel(1 << TIMER_CHAN, &tcu->tscr);	/* enable timer clock */
+	writeb(1 << TIMER_CHAN, &tcu->tesr);	/* start counting up */
 
 	gd->arch.lastinc = 0;
 	gd->arch.tbl = 0;
@@ -122,12 +122,11 @@ void __udelay(unsigned long usec)
 	/* check for rollover during this delay */
 	tmp = get_timer(0);
 	if ((tmp + tmo) < tmp)
-		reset_timer_masked();  /* timer would roll over */
+		reset_timer_masked();	/* timer would roll over */
 	else
 		tmo += tmp;
 
-	while (get_timer_masked() < tmo)
-		;
+	while (get_timer_masked() < tmo) ;
 }
 
 /*

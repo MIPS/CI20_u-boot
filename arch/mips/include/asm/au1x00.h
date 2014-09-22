@@ -70,16 +70,12 @@ static __inline__ int __ilog2(unsigned int x)
 {
 	int lz;
 
-	asm volatile (
-		".set\tnoreorder\n\t"
-		".set\tnoat\n\t"
-		".set\tmips32\n\t"
-		"clz\t%0,%1\n\t"
-		".set\tmips0\n\t"
-		".set\tat\n\t"
-		".set\treorder"
-		: "=r" (lz)
-		: "r" (x));
+	asm volatile (".set\tnoreorder\n\t"
+		      ".set\tnoat\n\t"
+		      ".set\tmips32\n\t"
+		      "clz\t%0,%1\n\t"
+		      ".set\tmips0\n\t" ".set\tat\n\t" ".set\treorder":"=r" (lz)
+		      :"r"(x));
 
 	return 31 - lz;
 }
@@ -265,19 +261,19 @@ static __inline__ int au_ffs(int x)
 
 /* Interrupt Numbers */
 #define AU1X00_UART0_INT          0
-#define AU1000_UART1_INT          1 /* au1000 */
-#define AU1000_UART2_INT          2 /* au1000 */
+#define AU1000_UART1_INT          1	/* au1000 */
+#define AU1000_UART2_INT          2	/* au1000 */
 
-#define AU1500_PCI_INTA           1 /* au1500 */
-#define AU1500_PCI_INTB           2 /* au1500 */
+#define AU1500_PCI_INTA           1	/* au1500 */
+#define AU1500_PCI_INTB           2	/* au1500 */
 
 #define AU1X00_UART3_INT          3
 
-#define AU1000_SSI0_INT           4 /* au1000 */
-#define AU1000_SSI1_INT           5 /* au1000 */
+#define AU1000_SSI0_INT           4	/* au1000 */
+#define AU1000_SSI1_INT           5	/* au1000 */
 
-#define AU1500_PCI_INTC           4 /* au1500 */
-#define AU1500_PCI_INTD           5 /* au1500 */
+#define AU1500_PCI_INTC           4	/* au1500 */
+#define AU1500_PCI_INTD           5	/* au1500 */
 
 #define AU1X00_DMA_INT_BASE       6
 #define AU1X00_TOY_INT            14
@@ -288,8 +284,8 @@ static __inline__ int au_ffs(int x)
 #define AU1X00_RTC_MATCH0_INT     19
 #define AU1X00_RTC_MATCH1_INT     20
 #define AU1X00_RTC_MATCH2_INT     21
-#define AU1000_IRDA_TX_INT        22 /* au1000 */
-#define AU1000_IRDA_RX_INT        23 /* au1000 */
+#define AU1000_IRDA_TX_INT        22	/* au1000 */
+#define AU1000_IRDA_RX_INT        23	/* au1000 */
 #define AU1X00_USB_DEV_REQ_INT    24
 #define AU1X00_USB_DEV_SUS_INT    25
 #define AU1X00_USB_HOST_INT       26
@@ -298,7 +294,7 @@ static __inline__ int au_ffs(int x)
 #define AU1X00_MAC1_DMA_INT       29
 #define AU1X00_ETH0_IRQ           AU1X00_MAC0_DMA_INT
 #define AU1X00_ETH1_IRQ           AU1X00_MAC1_DMA_INT
-#define AU1000_I2S_UO_INT         30 /* au1000 */
+#define AU1000_I2S_UO_INT         30	/* au1000 */
 #define AU1X00_AC97C_INT          31
 #define AU1X00_LAST_INTC0_INT     AU1X00_AC97C_INT
 #define AU1X00_GPIO_0             32
@@ -618,7 +614,6 @@ static __inline__ int au_ffs(int x)
 #define MAC_RX_BUFF3_STATUS              0x30
 #define MAC_RX_BUFF3_ADDR                0x34
 
-
 /* UARTS 0-3 */
 #define UART0_ADDR                0xB1100000
 #define UART1_ADDR                0xB1200000
@@ -639,22 +634,22 @@ static __inline__ int au_ffs(int x)
 #define UART_CLK	0x28	/* Baud Rate Clock Divider */
 #define UART_ENABLE	0x100	/* Uart enable */
 
-#define UART_EN_CE      1       /* Clock enable */
-#define UART_EN_E       2       /* Enable */
+#define UART_EN_CE      1	/* Clock enable */
+#define UART_EN_E       2	/* Enable */
 
-#define UART_FCR_ENABLE_FIFO	0x01 /* Enable the FIFO */
-#define UART_FCR_CLEAR_RCVR	0x02 /* Clear the RCVR FIFO */
-#define UART_FCR_CLEAR_XMIT	0x04 /* Clear the XMIT FIFO */
-#define UART_FCR_DMA_SELECT	0x08 /* For DMA applications */
-#define UART_FCR_TRIGGER_MASK	0xF0 /* Mask for the FIFO trigger range */
-#define UART_FCR_R_TRIGGER_1	0x00 /* Mask for receive trigger set at 1 */
-#define UART_FCR_R_TRIGGER_4	0x40 /* Mask for receive trigger set at 4 */
-#define UART_FCR_R_TRIGGER_8	0x80 /* Mask for receive trigger set at 8 */
-#define UART_FCR_R_TRIGGER_14   0xA0 /* Mask for receive trigger set at 14 */
-#define UART_FCR_T_TRIGGER_0	0x00 /* Mask for transmit trigger set at 0 */
-#define UART_FCR_T_TRIGGER_4	0x10 /* Mask for transmit trigger set at 4 */
-#define UART_FCR_T_TRIGGER_8    0x20 /* Mask for transmit trigger set at 8 */
-#define UART_FCR_T_TRIGGER_12	0x30 /* Mask for transmit trigger set at 12 */
+#define UART_FCR_ENABLE_FIFO	0x01	/* Enable the FIFO */
+#define UART_FCR_CLEAR_RCVR	0x02	/* Clear the RCVR FIFO */
+#define UART_FCR_CLEAR_XMIT	0x04	/* Clear the XMIT FIFO */
+#define UART_FCR_DMA_SELECT	0x08	/* For DMA applications */
+#define UART_FCR_TRIGGER_MASK	0xF0	/* Mask for the FIFO trigger range */
+#define UART_FCR_R_TRIGGER_1	0x00	/* Mask for receive trigger set at 1 */
+#define UART_FCR_R_TRIGGER_4	0x40	/* Mask for receive trigger set at 4 */
+#define UART_FCR_R_TRIGGER_8	0x80	/* Mask for receive trigger set at 8 */
+#define UART_FCR_R_TRIGGER_14   0xA0	/* Mask for receive trigger set at 14 */
+#define UART_FCR_T_TRIGGER_0	0x00	/* Mask for transmit trigger set at 0 */
+#define UART_FCR_T_TRIGGER_4	0x10	/* Mask for transmit trigger set at 4 */
+#define UART_FCR_T_TRIGGER_8    0x20	/* Mask for transmit trigger set at 8 */
+#define UART_FCR_T_TRIGGER_12	0x30	/* Mask for transmit trigger set at 12 */
 
 /*
  * These are the definitions for the Line Control Register
@@ -719,7 +714,6 @@ static __inline__ int au_ffs(int x)
 #define UART_MSR_DDSR	0x02	/* Delta DSR */
 #define UART_MSR_DCTS	0x01	/* Delta CTS */
 #define UART_MSR_ANY_DELTA 0x0F	/* Any of the delta bits! */
-
 
 /* SSIO */
 #define SSI0_STATUS                0xB1600000
@@ -815,7 +809,6 @@ static __inline__ int au_ffs(int x)
 #define SSI_ENABLE_CD				(1<<1)
 #define SSI_ENABLE_E				(1<<0)
 
-
 /* IrDA Controller */
 #define IRDA_BASE                 0xB0300000
 #define IR_RING_PTR_STATUS        (IRDA_BASE+0x00)
@@ -859,8 +852,8 @@ static __inline__ int au_ffs(int x)
 #define SYS_PINFUNC               0xB190002C
 #define SYS_PF_USB			(1<<15)	/* 2nd USB device/host */
 #define SYS_PF_U3			(1<<14)	/* GPIO23/U3TXD */
-#define SYS_PF_U2			(1<<13) /* GPIO22/U2TXD */
-#define SYS_PF_U1			(1<<12) /* GPIO21/U1TXD */
+#define SYS_PF_U2			(1<<13)	/* GPIO22/U2TXD */
+#define SYS_PF_U1			(1<<12)	/* GPIO21/U1TXD */
 #define SYS_PF_SRC			(1<<11)	/* GPIO6/SROMCKE */
 #define SYS_PF_CK5			(1<<10)	/* GPIO3/CLK5 */
 #define SYS_PF_CK4			(1<<9)	/* GPIO2/CLK4 */
@@ -1004,7 +997,7 @@ static __inline__ int au_ffs(int x)
 
 #ifdef CONFIG_SOC_AU1500
 /* Au1500 PCI Controller */
-#define Au1500_CFG_BASE           0xB4005000 /* virtual, kseg0 addr */
+#define Au1500_CFG_BASE           0xB4005000	/* virtual, kseg0 addr */
 #define Au1500_PCI_CMEM           (Au1500_CFG_BASE + 0)
 #define Au1500_PCI_CFG            (Au1500_CFG_BASE + 4)
 #define PCI_ERROR ((1<<22) | (1<<23) | (1<<24) | (1<<25) | (1<<26) | (1<<27))
@@ -1021,7 +1014,7 @@ static __inline__ int au_ffs(int x)
 #define Au1500_PCI_HDRTYPE        (Au1500_CFG_BASE + 0x10C)
 #define Au1500_PCI_MBAR           (Au1500_CFG_BASE + 0x110)
 
-#define Au1500_PCI_HDR            0xB4005100 /* virtual, kseg0 addr */
+#define Au1500_PCI_HDR            0xB4005100	/* virtual, kseg0 addr */
 
 /* All of our structures, like pci resource, have 32 bit members.
  * Drivers are expected to do an ioremap on the PCI MEM resource, but it's

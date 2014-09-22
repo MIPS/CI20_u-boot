@@ -23,21 +23,11 @@
 #include <linux/kernel.h>
 #endif
 
-extern __inline__ void
-__sti(void)
+extern __inline__ void __sti(void)
 {
-	__asm__ __volatile__(
-		".set\tpush\n\t"
-		".set\treorder\n\t"
-		".set\tnoat\n\t"
-		"mfc0\t$1,$12\n\t"
-		"ori\t$1,0x1f\n\t"
-		"xori\t$1,0x1e\n\t"
-		"mtc0\t$1,$12\n\t"
-		".set\tpop\n\t"
-		: /* no outputs */
-		: /* no inputs */
-		: "$1", "memory");
+	__asm__ __volatile__(".set\tpush\n\t" ".set\treorder\n\t" ".set\tnoat\n\t" "mfc0\t$1,$12\n\t" "ori\t$1,0x1f\n\t" "xori\t$1,0x1e\n\t" "mtc0\t$1,$12\n\t" ".set\tpop\n\t":	/* no outputs */
+			     :	/* no inputs */
+			     :"$1", "memory");
 }
 
 /*
@@ -47,25 +37,11 @@ __sti(void)
  * R4000/R4400 need three nops, the R4600 two nops and the R10000 needs
  * no nops at all.
  */
-extern __inline__ void
-__cli(void)
+extern __inline__ void __cli(void)
 {
-	__asm__ __volatile__(
-		".set\tpush\n\t"
-		".set\treorder\n\t"
-		".set\tnoat\n\t"
-		"mfc0\t$1,$12\n\t"
-		"ori\t$1,1\n\t"
-		"xori\t$1,1\n\t"
-		".set\tnoreorder\n\t"
-		"mtc0\t$1,$12\n\t"
-		"nop\n\t"
-		"nop\n\t"
-		"nop\n\t"
-		".set\tpop\n\t"
-		: /* no outputs */
-		: /* no inputs */
-		: "$1", "memory");
+	__asm__ __volatile__(".set\tpush\n\t" ".set\treorder\n\t" ".set\tnoat\n\t" "mfc0\t$1,$12\n\t" "ori\t$1,1\n\t" "xori\t$1,1\n\t" ".set\tnoreorder\n\t" "mtc0\t$1,$12\n\t" "nop\n\t" "nop\n\t" "nop\n\t" ".set\tpop\n\t":	/* no outputs */
+			     :	/* no inputs */
+			     :"$1", "memory");
 }
 
 #define __save_flags(x)							\
@@ -123,19 +99,19 @@ extern void __global_sti(void);
 extern void __global_cli(void);
 extern unsigned long __global_save_flags(void);
 extern void __global_restore_flags(unsigned long);
-#  define sti() __global_sti()
-#  define cli() __global_cli()
-#  define save_flags(x) do { x = __global_save_flags(); } while (0)
-#  define restore_flags(x) __global_restore_flags(x)
-#  define save_and_cli(x) do { save_flags(x); cli(); } while(0)
+#define sti() __global_sti()
+#define cli() __global_cli()
+#define save_flags(x) do { x = __global_save_flags(); } while (0)
+#define restore_flags(x) __global_restore_flags(x)
+#define save_and_cli(x) do { save_flags(x); cli(); } while(0)
 
 #else /* Single processor */
 
-#  define sti() __sti()
-#  define cli() __cli()
-#  define save_flags(x) __save_flags(x)
-#  define save_and_cli(x) __save_and_cli(x)
-#  define restore_flags(x) __restore_flags(x)
+#define sti() __sti()
+#define cli() __cli()
+#define save_flags(x) __save_flags(x)
+#define save_and_cli(x) __save_and_cli(x)
+#define restore_flags(x) __restore_flags(x)
 
 #endif /* SMP */
 
@@ -208,24 +184,22 @@ do { \
  * For 32 and 64 bit operands we can take advantage of ll and sc.
  * FIXME: This doesn't work for R3000 machines.
  */
-extern __inline__ unsigned long xchg_u32(volatile int * m, unsigned long val)
+extern __inline__ unsigned long xchg_u32(volatile int *m, unsigned long val)
 {
 #ifdef CONFIG_CPU_HAS_LLSC
 	unsigned long dummy;
 
-	__asm__ __volatile__(
-		".set\tnoreorder\t\t\t# xchg_u32\n\t"
-		".set\tnoat\n\t"
-		"ll\t%0, %3\n"
-		"1:\tmove\t$1, %2\n\t"
-		"sc\t$1, %1\n\t"
-		"beqzl\t$1, 1b\n\t"
-		" ll\t%0, %3\n\t"
-		".set\tat\n\t"
-		".set\treorder"
-		: "=r" (val), "=o" (*m), "=r" (dummy)
-		: "o" (*m), "2" (val)
-		: "memory");
+	__asm__ __volatile__(".set\tnoreorder\t\t\t# xchg_u32\n\t"
+			     ".set\tnoat\n\t"
+			     "ll\t%0, %3\n"
+			     "1:\tmove\t$1, %2\n\t"
+			     "sc\t$1, %1\n\t"
+			     "beqzl\t$1, 1b\n\t"
+			     " ll\t%0, %3\n\t"
+			     ".set\tat\n\t"
+			     ".set\treorder":"=r"(val), "=o"(*m), "=r"(dummy)
+			     :"o"(*m), "2"(val)
+			     :"memory");
 
 	return val;
 #else
@@ -244,11 +218,11 @@ extern __inline__ unsigned long xchg_u32(volatile int * m, unsigned long val)
 #define tas(ptr) (xchg((ptr),1))
 
 static __inline__ unsigned long
-__xchg(unsigned long x, volatile void * ptr, int size)
+__xchg(unsigned long x, volatile void *ptr, int size)
 {
 	switch (size) {
-		case 4:
-			return xchg_u32(ptr, x);
+	case 4:
+		return xchg_u32(ptr, x);
 	}
 	return x;
 }
@@ -256,9 +230,9 @@ __xchg(unsigned long x, volatile void * ptr, int size)
 extern void *set_except_vector(int n, void *addr);
 
 extern void __die(const char *, struct pt_regs *, const char *where,
-	unsigned long line) __attribute__((noreturn));
+		  unsigned long line) __attribute__ ((noreturn));
 extern void __die_if_kernel(const char *, struct pt_regs *, const char *where,
-	unsigned long line);
+			    unsigned long line);
 
 #define die(msg, regs)							\
 	__die(msg, regs, __FILE__ ":"__FUNCTION__, __LINE__)

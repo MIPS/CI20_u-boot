@@ -34,29 +34,29 @@ void pll_init(void)
 		7, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0,
 		9
 	};
-	int div[5] = {1, 3, 3, 3, 3}; /* divisors of I:S:P:L:M */
+	int div[5] = { 1, 3, 3, 3, 3 };	/* divisors of I:S:P:L:M */
 	int nf, pllout2;
 
-	cfcr =	CPM_CPCCR_CLKOEN |
-		CPM_CPCCR_PCS |
-		(n2FR[div[0]] << CPM_CPCCR_CDIV_BIT) |
-		(n2FR[div[1]] << CPM_CPCCR_HDIV_BIT) |
-		(n2FR[div[2]] << CPM_CPCCR_PDIV_BIT) |
-		(n2FR[div[3]] << CPM_CPCCR_MDIV_BIT) |
-		(n2FR[div[4]] << CPM_CPCCR_LDIV_BIT);
+	cfcr = CPM_CPCCR_CLKOEN |
+	    CPM_CPCCR_PCS |
+	    (n2FR[div[0]] << CPM_CPCCR_CDIV_BIT) |
+	    (n2FR[div[1]] << CPM_CPCCR_HDIV_BIT) |
+	    (n2FR[div[2]] << CPM_CPCCR_PDIV_BIT) |
+	    (n2FR[div[3]] << CPM_CPCCR_MDIV_BIT) |
+	    (n2FR[div[4]] << CPM_CPCCR_LDIV_BIT);
 
 	pllout2 = (cfcr & CPM_CPCCR_PCS) ?
-		CONFIG_SYS_CPU_SPEED : (CONFIG_SYS_CPU_SPEED / 2);
+	    CONFIG_SYS_CPU_SPEED : (CONFIG_SYS_CPU_SPEED / 2);
 
 	/* Init USB Host clock, pllout2 must be n*48MHz */
 	writel(pllout2 / 48000000 - 1, &cpm->uhccdr);
 
 	nf = CONFIG_SYS_CPU_SPEED * 2 / CONFIG_SYS_EXTAL;
-	plcr1 = ((nf - 2) << CPM_CPPCR_PLLM_BIT) | /* FD */
-		(0 << CPM_CPPCR_PLLN_BIT) |	/* RD=0, NR=2 */
-		(0 << CPM_CPPCR_PLLOD_BIT) |	/* OD=0, NO=1 */
-		(0x20 << CPM_CPPCR_PLLST_BIT) |	/* PLL stable time */
-		CPM_CPPCR_PLLEN;		/* enable PLL */
+	plcr1 = ((nf - 2) << CPM_CPPCR_PLLM_BIT) |	/* FD */
+	    (0 << CPM_CPPCR_PLLN_BIT) |	/* RD=0, NR=2 */
+	    (0 << CPM_CPPCR_PLLOD_BIT) |	/* OD=0, NO=1 */
+	    (0x20 << CPM_CPPCR_PLLST_BIT) |	/* PLL stable time */
+	    CPM_CPPCR_PLLEN;	/* enable PLL */
 
 	/* init PLL */
 	writel(cfcr, &cpm->cpccr);
@@ -79,7 +79,7 @@ void sdram_init(void)
 		2 << EMC_DMCR_TCL_BIT	/* CAS latency is 3 */
 	};
 
-	int div[] = {1, 2, 3, 4, 6, 8, 12, 16, 24, 32};
+	int div[] = { 1, 2, 3, 4, 6, 8, 12, 16, 24, 32 };
 
 	cpu_clk = CONFIG_SYS_CPU_SPEED;
 	mem_clk = cpu_clk * div[__cpm_get_cdiv()] / div[__cpm_get_mdiv()];
@@ -87,25 +87,23 @@ void sdram_init(void)
 	writel(0, &emc->bcr);	/* Disable bus release */
 	writew(0, &emc->rtcsr);	/* Disable clock for counting */
 
-	/* Fault DMCR value for mode register setting*/
+	/* Fault DMCR value for mode register setting */
 #define SDRAM_ROW0	11
 #define SDRAM_COL0	8
 #define SDRAM_BANK40	0
 
 	dmcr0 = ((SDRAM_ROW0 - 11) << EMC_DMCR_RA_BIT) |
-		((SDRAM_COL0 - 8) << EMC_DMCR_CA_BIT) |
-		(SDRAM_BANK40 << EMC_DMCR_BA_BIT) |
-		(SDRAM_BW16 << EMC_DMCR_BW_BIT) |
-		EMC_DMCR_EPIN |
-		cas_latency_dmcr[((SDRAM_CASL == 3) ? 1 : 0)];
+	    ((SDRAM_COL0 - 8) << EMC_DMCR_CA_BIT) |
+	    (SDRAM_BANK40 << EMC_DMCR_BA_BIT) |
+	    (SDRAM_BW16 << EMC_DMCR_BW_BIT) |
+	    EMC_DMCR_EPIN | cas_latency_dmcr[((SDRAM_CASL == 3) ? 1 : 0)];
 
 	/* Basic DMCR value */
 	dmcr = ((SDRAM_ROW - 11) << EMC_DMCR_RA_BIT) |
-		((SDRAM_COL - 8) << EMC_DMCR_CA_BIT) |
-		(SDRAM_BANK4 << EMC_DMCR_BA_BIT) |
-		(SDRAM_BW16 << EMC_DMCR_BW_BIT) |
-		EMC_DMCR_EPIN |
-		cas_latency_dmcr[((SDRAM_CASL == 3) ? 1 : 0)];
+	    ((SDRAM_COL - 8) << EMC_DMCR_CA_BIT) |
+	    (SDRAM_BANK4 << EMC_DMCR_BA_BIT) |
+	    (SDRAM_BW16 << EMC_DMCR_BW_BIT) |
+	    EMC_DMCR_EPIN | cas_latency_dmcr[((SDRAM_CASL == 3) ? 1 : 0)];
 
 	/* SDRAM timimg */
 	ns = 1000000000 / mem_clk;
@@ -138,9 +136,8 @@ void sdram_init(void)
 
 	/* SDRAM mode value */
 	sdmode = EMC_SDMR_BT_SEQ |
-		 EMC_SDMR_OM_NORMAL |
-		 EMC_SDMR_BL_4 |
-		 cas_latency_sdmr[((SDRAM_CASL == 3) ? 1 : 0)];
+	    EMC_SDMR_OM_NORMAL |
+	    EMC_SDMR_BL_4 | cas_latency_sdmr[((SDRAM_CASL == 3) ? 1 : 0)];
 
 	/* Stage 1. Precharge all banks by writing SDMR with DMCR.MRSET=0 */
 	writel(dmcr, &emc->dmcr);
@@ -148,8 +145,7 @@ void sdram_init(void)
 
 	/* Wait for precharge, > 200us */
 	tmp = (cpu_clk / 1000000) * 1000;
-	while (tmp--)
-		;
+	while (tmp--) ;
 
 	/* Stage 2. Enable auto-refresh */
 	writel(dmcr | EMC_DMCR_RFSH, &emc->dmcr);
@@ -165,8 +161,7 @@ void sdram_init(void)
 
 	/* Wait for number of auto-refresh cycles */
 	tmp = (cpu_clk / 1000000) * 1000;
-	while (tmp--)
-		;
+	while (tmp--) ;
 
 	/* Stage 3. Mode Register Set */
 	writel(dmcr0 | EMC_DMCR_RFSH | EMC_DMCR_MRSET, &emc->dmcr);
@@ -183,7 +178,7 @@ DECLARE_GLOBAL_DATA_PTR;
 void calc_clocks(void)
 {
 	unsigned int pllout;
-	unsigned int div[10] = {1, 2, 3, 4, 6, 8, 12, 16, 24, 32};
+	unsigned int div[10] = { 1, 2, 3, 4, 6, 8, 12, 16, 24, 32 };
 
 	pllout = __cpm_get_pllout();
 
@@ -198,21 +193,17 @@ void rtc_init(void)
 {
 	struct jz4740_rtc *rtc = (struct jz4740_rtc *)JZ4740_RTC_BASE;
 
-	while (!(readl(&rtc->rcr) & RTC_RCR_WRDY))
-		;
-	writel(readl(&rtc->rcr) | RTC_RCR_AE, &rtc->rcr); /* enable alarm */
+	while (!(readl(&rtc->rcr) & RTC_RCR_WRDY)) ;
+	writel(readl(&rtc->rcr) | RTC_RCR_AE, &rtc->rcr);	/* enable alarm */
 
-	while (!(readl(&rtc->rcr) & RTC_RCR_WRDY))
-		;
-	writel(0x00007fff, &rtc->rgr); /* type value */
+	while (!(readl(&rtc->rcr) & RTC_RCR_WRDY)) ;
+	writel(0x00007fff, &rtc->rgr);	/* type value */
 
-	while (!(readl(&rtc->rcr) & RTC_RCR_WRDY))
-		;
-	writel(0x0000ffe0, &rtc->hwfcr); /* Power on delay 2s */
+	while (!(readl(&rtc->rcr) & RTC_RCR_WRDY)) ;
+	writel(0x0000ffe0, &rtc->hwfcr);	/* Power on delay 2s */
 
-	while (!(readl(&rtc->rcr) & RTC_RCR_WRDY))
-		;
-	writel(0x00000fe0, &rtc->hrcr); /* reset delay 125ms */
+	while (!(readl(&rtc->rcr) & RTC_RCR_WRDY)) ;
+	writel(0x00000fe0, &rtc->hrcr);	/* reset delay 125ms */
 }
 
 /* U-Boot common routines */

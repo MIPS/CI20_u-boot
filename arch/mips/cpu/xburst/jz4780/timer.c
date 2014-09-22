@@ -74,7 +74,7 @@ static uint64_t get_timer64(void)
 {
 	uint32_t low = tcu_readl(TCU_OSTCNTL);
 	uint32_t high = tcu_readl(TCU_OSTCNTHBUF);
-	return ((uint64_t)high << 32) | low;
+	return ((uint64_t) high << 32) | low;
 }
 
 ulong get_timer(ulong base)
@@ -85,8 +85,8 @@ ulong get_timer(ulong base)
 void __udelay(unsigned long usec)
 {
 	/* OST count increments at 3MHz */
-	uint64_t end = get_timer64() + ((uint64_t)usec * 3);
-	while (get_timer64() < end);
+	uint64_t end = get_timer64() + ((uint64_t) usec * 3);
+	while (get_timer64() < end) ;
 }
 
 unsigned long long get_ticks(void)

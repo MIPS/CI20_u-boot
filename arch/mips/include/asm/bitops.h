@@ -10,7 +10,7 @@
 #define _ASM_BITOPS_H
 
 #include <linux/types.h>
-#include <asm/byteorder.h>		/* sigh ... */
+#include <asm/byteorder.h>	/* sigh ... */
 
 #ifdef __KERNEL__
 
@@ -60,19 +60,16 @@
  * Note that @nr may be almost arbitrarily large; this function is not
  * restricted to acting on a single-word quantity.
  */
-static __inline__ void
-set_bit(int nr, volatile void *addr)
+static __inline__ void set_bit(int nr, volatile void *addr)
 {
-	unsigned long *m = ((unsigned long *) addr) + (nr >> 5);
+	unsigned long *m = ((unsigned long *)addr) + (nr >> 5);
 	unsigned long temp;
 
-	__asm__ __volatile__(
-		"1:\tll\t%0, %1\t\t# set_bit\n\t"
-		"or\t%0, %2\n\t"
-		"sc\t%0, %1\n\t"
-		"beqz\t%0, 1b"
-		: "=&r" (temp), "=m" (*m)
-		: "ir" (1UL << (nr & 0x1f)), "m" (*m));
+	__asm__ __volatile__("1:\tll\t%0, %1\t\t# set_bit\n\t"
+			     "or\t%0, %2\n\t"
+			     "sc\t%0, %1\n\t"
+			     "beqz\t%0, 1b":"=&r"(temp), "=m"(*m)
+			     :"ir"(1UL << (nr & 0x1f)), "m"(*m));
 }
 
 /*
@@ -84,12 +81,13 @@ set_bit(int nr, volatile void *addr)
  * If it's called on the same region of memory simultaneously, the effect
  * may be that only one operation succeeds.
  */
-static __inline__ void __set_bit(int nr, volatile void * addr)
+static __inline__ void __set_bit(int nr, volatile void *addr)
 {
-	unsigned long * m = ((unsigned long *) addr) + (nr >> 5);
+	unsigned long *m = ((unsigned long *)addr) + (nr >> 5);
 
 	*m |= 1UL << (nr & 31);
 }
+
 #define PLATFORM__SET_BIT
 
 /*
@@ -102,19 +100,16 @@ static __inline__ void __set_bit(int nr, volatile void * addr)
  * you should call smp_mb__before_clear_bit() and/or smp_mb__after_clear_bit()
  * in order to ensure changes are visible on other processors.
  */
-static __inline__ void
-clear_bit(int nr, volatile void *addr)
+static __inline__ void clear_bit(int nr, volatile void *addr)
 {
-	unsigned long *m = ((unsigned long *) addr) + (nr >> 5);
+	unsigned long *m = ((unsigned long *)addr) + (nr >> 5);
 	unsigned long temp;
 
-	__asm__ __volatile__(
-		"1:\tll\t%0, %1\t\t# clear_bit\n\t"
-		"and\t%0, %2\n\t"
-		"sc\t%0, %1\n\t"
-		"beqz\t%0, 1b\n\t"
-		: "=&r" (temp), "=m" (*m)
-		: "ir" (~(1UL << (nr & 0x1f))), "m" (*m));
+	__asm__ __volatile__("1:\tll\t%0, %1\t\t# clear_bit\n\t"
+			     "and\t%0, %2\n\t"
+			     "sc\t%0, %1\n\t"
+			     "beqz\t%0, 1b\n\t":"=&r"(temp), "=m"(*m)
+			     :"ir"(~(1UL << (nr & 0x1f))), "m"(*m));
 }
 
 /*
@@ -126,19 +121,16 @@ clear_bit(int nr, volatile void *addr)
  * Note that @nr may be almost arbitrarily large; this function is not
  * restricted to acting on a single-word quantity.
  */
-static __inline__ void
-change_bit(int nr, volatile void *addr)
+static __inline__ void change_bit(int nr, volatile void *addr)
 {
-	unsigned long *m = ((unsigned long *) addr) + (nr >> 5);
+	unsigned long *m = ((unsigned long *)addr) + (nr >> 5);
 	unsigned long temp;
 
-	__asm__ __volatile__(
-		"1:\tll\t%0, %1\t\t# change_bit\n\t"
-		"xor\t%0, %2\n\t"
-		"sc\t%0, %1\n\t"
-		"beqz\t%0, 1b"
-		: "=&r" (temp), "=m" (*m)
-		: "ir" (1UL << (nr & 0x1f)), "m" (*m));
+	__asm__ __volatile__("1:\tll\t%0, %1\t\t# change_bit\n\t"
+			     "xor\t%0, %2\n\t"
+			     "sc\t%0, %1\n\t"
+			     "beqz\t%0, 1b":"=&r"(temp), "=m"(*m)
+			     :"ir"(1UL << (nr & 0x1f)), "m"(*m));
 }
 
 /*
@@ -150,9 +142,9 @@ change_bit(int nr, volatile void *addr)
  * If it's called on the same region of memory simultaneously, the effect
  * may be that only one operation succeeds.
  */
-static __inline__ void __change_bit(int nr, volatile void * addr)
+static __inline__ void __change_bit(int nr, volatile void *addr)
 {
-	unsigned long * m = ((unsigned long *) addr) + (nr >> 5);
+	unsigned long *m = ((unsigned long *)addr) + (nr >> 5);
 
 	*m ^= 1UL << (nr & 31);
 }
@@ -165,23 +157,20 @@ static __inline__ void __change_bit(int nr, volatile void * addr)
  * This operation is atomic and cannot be reordered.
  * It also implies a memory barrier.
  */
-static __inline__ int
-test_and_set_bit(int nr, volatile void *addr)
+static __inline__ int test_and_set_bit(int nr, volatile void *addr)
 {
-	unsigned long *m = ((unsigned long *) addr) + (nr >> 5);
+	unsigned long *m = ((unsigned long *)addr) + (nr >> 5);
 	unsigned long temp, res;
 
-	__asm__ __volatile__(
-		".set\tnoreorder\t\t# test_and_set_bit\n"
-		"1:\tll\t%0, %1\n\t"
-		"or\t%2, %0, %3\n\t"
-		"sc\t%2, %1\n\t"
-		"beqz\t%2, 1b\n\t"
-		" and\t%2, %0, %3\n\t"
-		".set\treorder"
-		: "=&r" (temp), "=m" (*m), "=&r" (res)
-		: "r" (1UL << (nr & 0x1f)), "m" (*m)
-		: "memory");
+	__asm__ __volatile__(".set\tnoreorder\t\t# test_and_set_bit\n"
+			     "1:\tll\t%0, %1\n\t"
+			     "or\t%2, %0, %3\n\t"
+			     "sc\t%2, %1\n\t"
+			     "beqz\t%2, 1b\n\t"
+			     " and\t%2, %0, %3\n\t"
+			     ".set\treorder":"=&r"(temp), "=m"(*m), "=&r"(res)
+			     :"r"(1UL << (nr & 0x1f)), "m"(*m)
+			     :"memory");
 
 	return res != 0;
 }
@@ -195,7 +184,7 @@ test_and_set_bit(int nr, volatile void *addr)
  * If two examples of this operation race, one can appear to succeed
  * but actually fail.  You must protect multiple accesses with a lock.
  */
-static __inline__ int __test_and_set_bit(int nr, volatile void * addr)
+static __inline__ int __test_and_set_bit(int nr, volatile void *addr)
 {
 	int mask, retval;
 	volatile int *a = addr;
@@ -216,24 +205,21 @@ static __inline__ int __test_and_set_bit(int nr, volatile void * addr)
  * This operation is atomic and cannot be reordered.
  * It also implies a memory barrier.
  */
-static __inline__ int
-test_and_clear_bit(int nr, volatile void *addr)
+static __inline__ int test_and_clear_bit(int nr, volatile void *addr)
 {
-	unsigned long *m = ((unsigned long *) addr) + (nr >> 5);
+	unsigned long *m = ((unsigned long *)addr) + (nr >> 5);
 	unsigned long temp, res;
 
-	__asm__ __volatile__(
-		".set\tnoreorder\t\t# test_and_clear_bit\n"
-		"1:\tll\t%0, %1\n\t"
-		"or\t%2, %0, %3\n\t"
-		"xor\t%2, %3\n\t"
-		"sc\t%2, %1\n\t"
-		"beqz\t%2, 1b\n\t"
-		" and\t%2, %0, %3\n\t"
-		".set\treorder"
-		: "=&r" (temp), "=m" (*m), "=&r" (res)
-		: "r" (1UL << (nr & 0x1f)), "m" (*m)
-		: "memory");
+	__asm__ __volatile__(".set\tnoreorder\t\t# test_and_clear_bit\n"
+			     "1:\tll\t%0, %1\n\t"
+			     "or\t%2, %0, %3\n\t"
+			     "xor\t%2, %3\n\t"
+			     "sc\t%2, %1\n\t"
+			     "beqz\t%2, 1b\n\t"
+			     " and\t%2, %0, %3\n\t"
+			     ".set\treorder":"=&r"(temp), "=m"(*m), "=&r"(res)
+			     :"r"(1UL << (nr & 0x1f)), "m"(*m)
+			     :"memory");
 
 	return res != 0;
 }
@@ -247,10 +233,10 @@ test_and_clear_bit(int nr, volatile void *addr)
  * If two examples of this operation race, one can appear to succeed
  * but actually fail.  You must protect multiple accesses with a lock.
  */
-static __inline__ int __test_and_clear_bit(int nr, volatile void * addr)
+static __inline__ int __test_and_clear_bit(int nr, volatile void *addr)
 {
-	int	mask, retval;
-	volatile int	*a = addr;
+	int mask, retval;
+	volatile int *a = addr;
 
 	a += nr >> 5;
 	mask = 1 << (nr & 0x1f);
@@ -268,23 +254,20 @@ static __inline__ int __test_and_clear_bit(int nr, volatile void * addr)
  * This operation is atomic and cannot be reordered.
  * It also implies a memory barrier.
  */
-static __inline__ int
-test_and_change_bit(int nr, volatile void *addr)
+static __inline__ int test_and_change_bit(int nr, volatile void *addr)
 {
-	unsigned long *m = ((unsigned long *) addr) + (nr >> 5);
+	unsigned long *m = ((unsigned long *)addr) + (nr >> 5);
 	unsigned long temp, res;
 
-	__asm__ __volatile__(
-		".set\tnoreorder\t\t# test_and_change_bit\n"
-		"1:\tll\t%0, %1\n\t"
-		"xor\t%2, %0, %3\n\t"
-		"sc\t%2, %1\n\t"
-		"beqz\t%2, 1b\n\t"
-		" and\t%2, %0, %3\n\t"
-		".set\treorder"
-		: "=&r" (temp), "=m" (*m), "=&r" (res)
-		: "r" (1UL << (nr & 0x1f)), "m" (*m)
-		: "memory");
+	__asm__ __volatile__(".set\tnoreorder\t\t# test_and_change_bit\n"
+			     "1:\tll\t%0, %1\n\t"
+			     "xor\t%2, %0, %3\n\t"
+			     "sc\t%2, %1\n\t"
+			     "beqz\t%2, 1b\n\t"
+			     " and\t%2, %0, %3\n\t"
+			     ".set\treorder":"=&r"(temp), "=m"(*m), "=&r"(res)
+			     :"r"(1UL << (nr & 0x1f)), "m"(*m)
+			     :"memory");
 
 	return res != 0;
 }
@@ -298,10 +281,10 @@ test_and_change_bit(int nr, volatile void *addr)
  * If two examples of this operation race, one can appear to succeed
  * but actually fail.  You must protect multiple accesses with a lock.
  */
-static __inline__ int __test_and_change_bit(int nr, volatile void * addr)
+static __inline__ int __test_and_change_bit(int nr, volatile void *addr)
 {
-	int	mask, retval;
-	volatile int	*a = addr;
+	int mask, retval;
+	volatile int *a = addr;
 
 	a += nr >> 5;
 	mask = 1 << (nr & 0x1f);
@@ -323,10 +306,10 @@ static __inline__ int __test_and_change_bit(int nr, volatile void * addr)
  * Note that @nr may be almost arbitrarily large; this function is not
  * restricted to acting on a single-word quantity.
  */
-static __inline__ void set_bit(int nr, volatile void * addr)
+static __inline__ void set_bit(int nr, volatile void *addr)
 {
-	int	mask;
-	volatile int	*a = addr;
+	int mask;
+	volatile int *a = addr;
 	__bi_flags;
 
 	a += nr >> 5;
@@ -345,10 +328,10 @@ static __inline__ void set_bit(int nr, volatile void * addr)
  * If it's called on the same region of memory simultaneously, the effect
  * may be that only one operation succeeds.
  */
-static __inline__ void __set_bit(int nr, volatile void * addr)
+static __inline__ void __set_bit(int nr, volatile void *addr)
 {
-	int	mask;
-	volatile int	*a = addr;
+	int mask;
+	volatile int *a = addr;
 
 	a += nr >> 5;
 	mask = 1 << (nr & 0x1f);
@@ -365,10 +348,10 @@ static __inline__ void __set_bit(int nr, volatile void * addr)
  * you should call smp_mb__before_clear_bit() and/or smp_mb__after_clear_bit()
  * in order to ensure changes are visible on other processors.
  */
-static __inline__ void clear_bit(int nr, volatile void * addr)
+static __inline__ void clear_bit(int nr, volatile void *addr)
 {
-	int	mask;
-	volatile int	*a = addr;
+	int mask;
+	volatile int *a = addr;
 	__bi_flags;
 
 	a += nr >> 5;
@@ -387,10 +370,10 @@ static __inline__ void clear_bit(int nr, volatile void * addr)
  * Note that @nr may be almost arbitrarily large; this function is not
  * restricted to acting on a single-word quantity.
  */
-static __inline__ void change_bit(int nr, volatile void * addr)
+static __inline__ void change_bit(int nr, volatile void *addr)
 {
-	int	mask;
-	volatile int	*a = addr;
+	int mask;
+	volatile int *a = addr;
 	__bi_flags;
 
 	a += nr >> 5;
@@ -409,9 +392,9 @@ static __inline__ void change_bit(int nr, volatile void * addr)
  * If it's called on the same region of memory simultaneously, the effect
  * may be that only one operation succeeds.
  */
-static __inline__ void __change_bit(int nr, volatile void * addr)
+static __inline__ void __change_bit(int nr, volatile void *addr)
 {
-	unsigned long * m = ((unsigned long *) addr) + (nr >> 5);
+	unsigned long *m = ((unsigned long *)addr) + (nr >> 5);
 
 	*m ^= 1UL << (nr & 31);
 }
@@ -424,10 +407,10 @@ static __inline__ void __change_bit(int nr, volatile void * addr)
  * This operation is atomic and cannot be reordered.
  * It also implies a memory barrier.
  */
-static __inline__ int test_and_set_bit(int nr, volatile void * addr)
+static __inline__ int test_and_set_bit(int nr, volatile void *addr)
 {
-	int	mask, retval;
-	volatile int	*a = addr;
+	int mask, retval;
+	volatile int *a = addr;
 	__bi_flags;
 
 	a += nr >> 5;
@@ -449,10 +432,10 @@ static __inline__ int test_and_set_bit(int nr, volatile void * addr)
  * If two examples of this operation race, one can appear to succeed
  * but actually fail.  You must protect multiple accesses with a lock.
  */
-static __inline__ int __test_and_set_bit(int nr, volatile void * addr)
+static __inline__ int __test_and_set_bit(int nr, volatile void *addr)
 {
-	int	mask, retval;
-	volatile int	*a = addr;
+	int mask, retval;
+	volatile int *a = addr;
 
 	a += nr >> 5;
 	mask = 1 << (nr & 0x1f);
@@ -470,10 +453,10 @@ static __inline__ int __test_and_set_bit(int nr, volatile void * addr)
  * This operation is atomic and cannot be reordered.
  * It also implies a memory barrier.
  */
-static __inline__ int test_and_clear_bit(int nr, volatile void * addr)
+static __inline__ int test_and_clear_bit(int nr, volatile void *addr)
 {
-	int	mask, retval;
-	volatile int	*a = addr;
+	int mask, retval;
+	volatile int *a = addr;
 	__bi_flags;
 
 	a += nr >> 5;
@@ -495,10 +478,10 @@ static __inline__ int test_and_clear_bit(int nr, volatile void * addr)
  * If two examples of this operation race, one can appear to succeed
  * but actually fail.  You must protect multiple accesses with a lock.
  */
-static __inline__ int __test_and_clear_bit(int nr, volatile void * addr)
+static __inline__ int __test_and_clear_bit(int nr, volatile void *addr)
 {
-	int	mask, retval;
-	volatile int	*a = addr;
+	int mask, retval;
+	volatile int *a = addr;
 
 	a += nr >> 5;
 	mask = 1 << (nr & 0x1f);
@@ -516,10 +499,10 @@ static __inline__ int __test_and_clear_bit(int nr, volatile void * addr)
  * This operation is atomic and cannot be reordered.
  * It also implies a memory barrier.
  */
-static __inline__ int test_and_change_bit(int nr, volatile void * addr)
+static __inline__ int test_and_change_bit(int nr, volatile void *addr)
 {
-	int	mask, retval;
-	volatile int	*a = addr;
+	int mask, retval;
+	volatile int *a = addr;
 	__bi_flags;
 
 	a += nr >> 5;
@@ -541,10 +524,10 @@ static __inline__ int test_and_change_bit(int nr, volatile void * addr)
  * If two examples of this operation race, one can appear to succeed
  * but actually fail.  You must protect multiple accesses with a lock.
  */
-static __inline__ int __test_and_change_bit(int nr, volatile void * addr)
+static __inline__ int __test_and_change_bit(int nr, volatile void *addr)
 {
-	int	mask, retval;
-	volatile int	*a = addr;
+	int mask, retval;
+	volatile int *a = addr;
 
 	a += nr >> 5;
 	mask = 1 << (nr & 0x1f);
@@ -568,7 +551,8 @@ static __inline__ int __test_and_change_bit(int nr, volatile void * addr)
  */
 static __inline__ int test_bit(int nr, const volatile void *addr)
 {
-	return ((1UL << (nr & 31)) & (((const unsigned int *) addr)[nr >> 5])) != 0;
+	return ((1UL << (nr & 31)) & (((const unsigned int *)addr)[nr >> 5])) !=
+	    0;
 }
 
 #ifndef __MIPSEB__
@@ -583,7 +567,7 @@ static __inline__ int test_bit(int nr, const volatile void *addr)
  * Returns the bit-number of the first zero bit, not the number of the byte
  * containing a bit.
  */
-static __inline__ int find_first_zero_bit (void *addr, unsigned size)
+static __inline__ int find_first_zero_bit(void *addr, unsigned size)
 {
 	unsigned long dummy;
 	int res;
@@ -591,39 +575,27 @@ static __inline__ int find_first_zero_bit (void *addr, unsigned size)
 	if (!size)
 		return 0;
 
-	__asm__ (".set\tnoreorder\n\t"
+	__asm__(".set\tnoreorder\n\t"
 		".set\tnoat\n"
 		"1:\tsubu\t$1,%6,%0\n\t"
-		"blez\t$1,2f\n\t"
-		"lw\t$1,(%5)\n\t"
-		"addiu\t%5,4\n\t"
+		"blez\t$1,2f\n\t" "lw\t$1,(%5)\n\t" "addiu\t%5,4\n\t"
 #if (_MIPS_ISA == _MIPS_ISA_MIPS2 ) || (_MIPS_ISA == _MIPS_ISA_MIPS3 ) || \
     (_MIPS_ISA == _MIPS_ISA_MIPS4 ) || (_MIPS_ISA == _MIPS_ISA_MIPS5 ) || \
     (_MIPS_ISA == _MIPS_ISA_MIPS32) || (_MIPS_ISA == _MIPS_ISA_MIPS64)
-		"beql\t%1,$1,1b\n\t"
-		"addiu\t%0,32\n\t"
+		"beql\t%1,$1,1b\n\t" "addiu\t%0,32\n\t"
 #else
 		"addiu\t%0,32\n\t"
-		"beq\t%1,$1,1b\n\t"
-		"nop\n\t"
-		"subu\t%0,32\n\t"
+		"beq\t%1,$1,1b\n\t" "nop\n\t" "subu\t%0,32\n\t"
 #endif
 #ifdef __MIPSEB__
 #error "Fix this for big endian"
 #endif /* __MIPSEB__ */
-		"li\t%1,1\n"
-		"1:\tand\t%2,$1,%1\n\t"
-		"beqz\t%2,2f\n\t"
-		"sll\t%1,%1,1\n\t"
-		"bnez\t%1,1b\n\t"
-		"add\t%0,%0,1\n\t"
-		".set\tat\n\t"
-		".set\treorder\n"
-		"2:"
-		: "=r" (res), "=r" (dummy), "=r" (addr)
-		: "0" ((signed int) 0), "1" ((unsigned int) 0xffffffff),
-		  "2" (addr), "r" (size)
-		: "$1");
+"li\t%1,1\n" "1:\tand\t%2,$1,%1\n\t" "beqz\t%2,2f\n\t" "sll\t%1,%1,1\n\t" "bnez\t%1,1b\n\t" "add\t%0,%0,1\n\t" ".set\tat\n\t" ".set\treorder\n" "2:":"=r"(res), "=r"(dummy),
+		"=r"
+		(addr)
+:		"0"((signed int)0), "1"((unsigned int)0xffffffff), "2"(addr),
+		"r"(size)
+:		"$1");
 
 	return res;
 }
@@ -634,9 +606,9 @@ static __inline__ int find_first_zero_bit (void *addr, unsigned size)
  * @offset: The bitnumber to start searching at
  * @size: The maximum size to search
  */
-static __inline__ int find_next_zero_bit (void * addr, int size, int offset)
+static __inline__ int find_next_zero_bit(void *addr, int size, int offset)
 {
-	unsigned int *p = ((unsigned int *) addr) + (offset >> 5);
+	unsigned int *p = ((unsigned int *)addr) + (offset >> 5);
 	int set = 0, bit = offset & 31, res;
 	unsigned long dummy;
 
@@ -647,19 +619,11 @@ static __inline__ int find_next_zero_bit (void * addr, int size, int offset)
 #ifdef __MIPSEB__
 #error "Fix this for big endian byte order"
 #endif
-		__asm__(".set\tnoreorder\n\t"
-			".set\tnoat\n"
-			"1:\tand\t$1,%4,%1\n\t"
-			"beqz\t$1,1f\n\t"
-			"sll\t%1,%1,1\n\t"
-			"bnez\t%1,1b\n\t"
-			"addiu\t%0,1\n\t"
-			".set\tat\n\t"
-			".set\treorder\n"
-			"1:"
-			: "=r" (set), "=r" (dummy)
-			: "0" (0), "1" (1 << bit), "r" (*p)
-			: "$1");
+__asm__(".set\tnoreorder\n\t" ".set\tnoat\n" "1:\tand\t$1,%4,%1\n\t" "beqz\t$1,1f\n\t" "sll\t%1,%1,1\n\t" "bnez\t%1,1b\n\t" "addiu\t%0,1\n\t" ".set\tat\n\t" ".set\treorder\n" "1:":"=r"(set),
+			"=r"
+			(dummy)
+:			"0"(0), "1"(1 << bit), "r"(*p)
+:			"$1");
 		if (set < (32 - bit))
 			return set + offset;
 		set = 32 - bit;
@@ -668,7 +632,7 @@ static __inline__ int find_next_zero_bit (void * addr, int size, int offset)
 	/*
 	 * No zero yet, search remaining full bytes for a zero
 	 */
-	res = find_first_zero_bit(p, size - 32 * (p - (unsigned int *) addr));
+	res = find_first_zero_bit(p, size - 32 * (p - (unsigned int *)addr));
 	return offset + set + res;
 }
 
@@ -682,24 +646,14 @@ static __inline__ int find_next_zero_bit (void * addr, int size, int offset)
  */
 static __inline__ unsigned long ffz(unsigned long word)
 {
-	unsigned int	__res;
-	unsigned int	mask = 1;
+	unsigned int __res;
+	unsigned int mask = 1;
 
-	__asm__ (
-		".set\tnoreorder\n\t"
-		".set\tnoat\n\t"
-		"move\t%0,$0\n"
-		"1:\tand\t$1,%2,%1\n\t"
-		"beqz\t$1,2f\n\t"
-		"sll\t%1,1\n\t"
-		"bnez\t%1,1b\n\t"
-		"addiu\t%0,1\n\t"
-		".set\tat\n\t"
-		".set\treorder\n"
-		"2:\n\t"
-		: "=&r" (__res), "=r" (mask)
-		: "r" (word), "1" (mask)
-		: "$1");
+__asm__(".set\tnoreorder\n\t" ".set\tnoat\n\t" "move\t%0,$0\n" "1:\tand\t$1,%2,%1\n\t" "beqz\t$1,2f\n\t" "sll\t%1,1\n\t" "bnez\t%1,1b\n\t" "addiu\t%0,1\n\t" ".set\tat\n\t" ".set\treorder\n" "2:\n\t":"=&r"(__res),
+		"=r"
+		(mask)
+:		"r"(word), "1"(mask)
+:		"$1");
 
 	return __res;
 }
@@ -728,7 +682,7 @@ static __inline__ unsigned long ffz(unsigned long word)
  */
 static __inline__ int find_next_zero_bit(void *addr, int size, int offset)
 {
-	unsigned long *p = ((unsigned long *) addr) + (offset >> 5);
+	unsigned long *p = ((unsigned long *)addr) + (offset >> 5);
 	unsigned long result = offset & ~31UL;
 	unsigned long tmp;
 
@@ -738,7 +692,7 @@ static __inline__ int find_next_zero_bit(void *addr, int size, int offset)
 	offset &= 31UL;
 	if (offset) {
 		tmp = *(p++);
-		tmp |= ~0UL >> (32-offset);
+		tmp |= ~0UL >> (32 - offset);
 		if (size < 32)
 			goto found_first;
 		if (~tmp)
@@ -766,7 +720,7 @@ found_middle:
  * holds on the Sparc as it does for the ALPHA.
  */
 
-#if 0 /* Fool kernel-doc since it doesn't do macros yet */
+#if 0				/* Fool kernel-doc since it doesn't do macros yet */
 /*
  * find_first_zero_bit - find the first zero bit in a memory region
  * @addr: The address to start the search at
@@ -775,7 +729,7 @@ found_middle:
  * Returns the bit-number of the first zero bit, not the number of the byte
  * containing a bit.
  */
-static int find_first_zero_bit (void *addr, unsigned size);
+static int find_first_zero_bit(void *addr, unsigned size);
 #endif
 
 #define find_first_zero_bit(addr, size) \
@@ -786,10 +740,10 @@ static int find_first_zero_bit (void *addr, unsigned size);
 /* Now for the ext2 filesystem bit operations and helper routines. */
 
 #ifdef __MIPSEB__
-static __inline__ int ext2_set_bit(int nr, void * addr)
+static __inline__ int ext2_set_bit(int nr, void *addr)
 {
-	int		mask, retval, flags;
-	unsigned char	*ADDR = (unsigned char *) addr;
+	int mask, retval, flags;
+	unsigned char *ADDR = (unsigned char *)addr;
 
 	ADDR += nr >> 3;
 	mask = 1 << (nr & 0x07);
@@ -800,10 +754,10 @@ static __inline__ int ext2_set_bit(int nr, void * addr)
 	return retval;
 }
 
-static __inline__ int ext2_clear_bit(int nr, void * addr)
+static __inline__ int ext2_clear_bit(int nr, void *addr)
 {
-	int		mask, retval, flags;
-	unsigned char	*ADDR = (unsigned char *) addr;
+	int mask, retval, flags;
+	unsigned char *ADDR = (unsigned char *)addr;
 
 	ADDR += nr >> 3;
 	mask = 1 << (nr & 0x07);
@@ -814,10 +768,10 @@ static __inline__ int ext2_clear_bit(int nr, void * addr)
 	return retval;
 }
 
-static __inline__ int ext2_test_bit(int nr, const void * addr)
+static __inline__ int ext2_test_bit(int nr, const void *addr)
 {
-	int			mask;
-	const unsigned char	*ADDR = (const unsigned char *) addr;
+	int mask;
+	const unsigned char *ADDR = (const unsigned char *)addr;
 
 	ADDR += nr >> 3;
 	mask = 1 << (nr & 0x07);
@@ -827,9 +781,11 @@ static __inline__ int ext2_test_bit(int nr, const void * addr)
 #define ext2_find_first_zero_bit(addr, size) \
 	ext2_find_next_zero_bit((addr), (size), 0)
 
-static __inline__ unsigned long ext2_find_next_zero_bit(void *addr, unsigned long size, unsigned long offset)
+static __inline__ unsigned long ext2_find_next_zero_bit(void *addr,
+							unsigned long size,
+							unsigned long offset)
 {
-	unsigned long *p = ((unsigned long *) addr) + (offset >> 5);
+	unsigned long *p = ((unsigned long *)addr) + (offset >> 5);
 	unsigned long result = offset & ~31UL;
 	unsigned long tmp;
 
@@ -837,7 +793,7 @@ static __inline__ unsigned long ext2_find_next_zero_bit(void *addr, unsigned lon
 		return size;
 	size -= result;
 	offset &= 31UL;
-	if(offset) {
+	if (offset) {
 		/* We hold the little endian value in tmp, but then the
 		 * shift is illegal. So we could keep a big endian value
 		 * in tmp, like this:
@@ -849,21 +805,21 @@ static __inline__ unsigned long ext2_find_next_zero_bit(void *addr, unsigned lon
 		 * shift:
 		 */
 		tmp = *(p++);
-		tmp |= __swab32(~0UL >> (32-offset));
-		if(size < 32)
+		tmp |= __swab32(~0UL >> (32 - offset));
+		if (size < 32)
 			goto found_first;
-		if(~tmp)
+		if (~tmp)
 			goto found_middle;
 		size -= 32;
 		result += 32;
 	}
-	while(size & ~31UL) {
-		if(~(tmp = *(p++)))
+	while (size & ~31UL) {
+		if (~(tmp = *(p++)))
 			goto found_middle;
 		result += 32;
 		size -= 32;
 	}
-	if(!size)
+	if (!size)
 		return result;
 	tmp = *p;
 

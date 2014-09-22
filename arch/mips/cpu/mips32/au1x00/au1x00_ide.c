@@ -9,7 +9,7 @@
 #include <ide.h>
 
 /* AU1X00 swaps data in big-endian mode, enforce little-endian function */
-void ide_input_swap_data(int dev, ulong *sect_buf, int words)
+void ide_input_swap_data(int dev, ulong * sect_buf, int words)
 {
 	ide_input_data(dev, sect_buf, words);
 }

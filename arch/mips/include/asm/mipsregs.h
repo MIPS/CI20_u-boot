@@ -238,9 +238,9 @@
 #define ST0_EXL			0x00000002
 #define ST0_ERL			0x00000004
 #define ST0_KSU			0x00000018
-#  define KSU_USER		0x00000010
-#  define KSU_SUPERVISOR	0x00000008
-#  define KSU_KERNEL		0x00000000
+#define KSU_USER		0x00000010
+#define KSU_SUPERVISOR	0x00000008
+#define KSU_KERNEL		0x00000000
 #define ST0_UX			0x00000020
 #define ST0_SX			0x00000040
 #define ST0_KX			0x00000080
@@ -474,7 +474,7 @@
 
 /* Bits specific to the TX49.  */
 #define TX49_CONF_DC		(_ULCAST_(1) << 16)
-#define TX49_CONF_IC		(_ULCAST_(1) << 17)  /* conflict with CONF_SC */
+#define TX49_CONF_IC		(_ULCAST_(1) << 17)	/* conflict with CONF_SC */
 #define TX49_CONF_HALT		(_ULCAST_(1) << 18)
 #define TX49_CONF_CWFON		(_ULCAST_(1) << 27)
 
@@ -780,10 +780,10 @@ do {									\
 #define read_c0_count()		__read_32bit_c0_register($9, 0)
 #define write_c0_count(val)	__write_32bit_c0_register($9, 0, val)
 
-#define read_c0_count2()	__read_32bit_c0_register($9, 6) /* pnx8550 */
+#define read_c0_count2()	__read_32bit_c0_register($9, 6)	/* pnx8550 */
 #define write_c0_count2(val)	__write_32bit_c0_register($9, 6, val)
 
-#define read_c0_count3()	__read_32bit_c0_register($9, 7) /* pnx8550 */
+#define read_c0_count3()	__read_32bit_c0_register($9, 7)	/* pnx8550 */
 #define write_c0_count3(val)	__write_32bit_c0_register($9, 7, val)
 
 #define read_c0_entryhi()	__read_ulong_c0_register($10, 0)
@@ -792,10 +792,10 @@ do {									\
 #define read_c0_compare()	__read_32bit_c0_register($11, 0)
 #define write_c0_compare(val)	__write_32bit_c0_register($11, 0, val)
 
-#define read_c0_compare2()	__read_32bit_c0_register($11, 6) /* pnx8550 */
+#define read_c0_compare2()	__read_32bit_c0_register($11, 6)	/* pnx8550 */
 #define write_c0_compare2(val)	__write_32bit_c0_register($11, 6, val)
 
-#define read_c0_compare3()	__read_32bit_c0_register($11, 7) /* pnx8550 */
+#define read_c0_compare3()	__read_32bit_c0_register($11, 7)	/* pnx8550 */
 #define write_c0_compare3(val)	__write_32bit_c0_register($11, 7, val)
 
 #define read_c0_status()	__read_32bit_c0_register($12, 0)
@@ -1252,10 +1252,7 @@ do {									\
  */
 static inline void tlb_probe(void)
 {
-	__asm__ __volatile__(
-		".set noreorder\n\t"
-		"tlbp\n\t"
-		".set reorder");
+	__asm__ __volatile__(".set noreorder\n\t" "tlbp\n\t" ".set reorder");
 }
 
 static inline void tlb_read(void)
@@ -1263,52 +1260,43 @@ static inline void tlb_read(void)
 #if MIPS34K_MISSED_ITLB_WAR
 	int res = 0;
 
-	__asm__ __volatile__(
-	"	.set	push					\n"
-	"	.set	noreorder				\n"
-	"	.set	noat					\n"
-	"	.set	mips32r2				\n"
-	"	.word	0x41610001		# dvpe $1	\n"
-	"	move	%0, $1					\n"
-	"	ehb						\n"
-	"	.set	pop					\n"
-	: "=r" (res));
+	__asm__
+	    __volatile__("	.set	push					\n"
+			 "	.set	noreorder				\n"
+			 "	.set	noat					\n"
+			 "	.set	mips32r2				\n"
+			 "	.word	0x41610001		# dvpe $1	\n"
+			 "	move	%0, $1					\n"
+			 "	ehb						\n"
+			 "	.set	pop					\n":"=r"
+			 (res));
 
 	instruction_hazard();
 #endif
 
-	__asm__ __volatile__(
-		".set noreorder\n\t"
-		"tlbr\n\t"
-		".set reorder");
+	__asm__ __volatile__(".set noreorder\n\t" "tlbr\n\t" ".set reorder");
 
 #if MIPS34K_MISSED_ITLB_WAR
 	if ((res & _ULCAST_(1)))
-		__asm__ __volatile__(
-		"	.set	push				\n"
-		"	.set	noreorder			\n"
-		"	.set	noat				\n"
-		"	.set	mips32r2			\n"
-		"	.word	0x41600021	# evpe		\n"
-		"	ehb					\n"
-		"	.set	pop				\n");
+		__asm__
+		    __volatile__("	.set	push				\n"
+				 "	.set	noreorder			\n"
+				 "	.set	noat				\n"
+				 "	.set	mips32r2			\n"
+				 "	.word	0x41600021	# evpe		\n"
+				 "	ehb					\n"
+				 "	.set	pop				\n");
 #endif
 }
 
 static inline void tlb_write_indexed(void)
 {
-	__asm__ __volatile__(
-		".set noreorder\n\t"
-		"tlbwi\n\t"
-		".set reorder");
+	__asm__ __volatile__(".set noreorder\n\t" "tlbwi\n\t" ".set reorder");
 }
 
 static inline void tlb_write_random(void)
 {
-	__asm__ __volatile__(
-		".set noreorder\n\t"
-		"tlbwr\n\t"
-		".set reorder");
+	__asm__ __volatile__(".set noreorder\n\t" "tlbwr\n\t" ".set reorder");
 }
 
 /*
@@ -1353,12 +1341,10 @@ change_c0_##name(unsigned int change, unsigned int new)		\
 }
 
 __BUILD_SET_C0(status)
-__BUILD_SET_C0(cause)
-__BUILD_SET_C0(config)
-__BUILD_SET_C0(intcontrol)
-__BUILD_SET_C0(intctl)
-__BUILD_SET_C0(srsmap)
-
+    __BUILD_SET_C0(cause)
+    __BUILD_SET_C0(config)
+    __BUILD_SET_C0(intcontrol)
+    __BUILD_SET_C0(intctl)
+    __BUILD_SET_C0(srsmap)
 #endif /* !__ASSEMBLY__ */
-
 #endif /* _ASM_MIPSREGS_H */

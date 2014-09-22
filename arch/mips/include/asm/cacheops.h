@@ -82,4 +82,4 @@
 #define INDEX_STORE_DATA_D	0x1d
 #define INDEX_STORE_DATA_S	0x1f
 
-#endif	/* __ASM_CACHEOPS_H */
+#endif /* __ASM_CACHEOPS_H */

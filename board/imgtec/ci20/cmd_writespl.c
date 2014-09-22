@@ -33,14 +33,13 @@
 #define SPL_ECCSIZE 112
 #define SPL_BLOCKSPERPAGE (CONFIG_SYS_NAND_PAGE_SIZE / SPL_BLOCKSIZE)
 
-static void calculate_bch64(uint8_t *data, uint8_t *ecc)
+static void calculate_bch64(uint8_t * data, uint8_t * ecc)
 {
 	uint32_t reg;
 	int i;
 
 	/* clear & completion & error interrupts */
-	reg = BCH_BHINT_ENCF | BCH_BHINT_DECF |
-		  BCH_BHINT_ERR | BCH_BHINT_UNCOR;
+	reg = BCH_BHINT_ENCF | BCH_BHINT_DECF | BCH_BHINT_ERR | BCH_BHINT_UNCOR;
 	writel(reg, BCH_BASE + BCH_BHINT);
 
 	/* setup BCH count register */
@@ -58,7 +57,7 @@ static void calculate_bch64(uint8_t *data, uint8_t *ecc)
 		writeb(data[i], BCH_BASE + BCH_BHDR);
 
 	/* wait for completion */
-	while (!(readl(BCH_BASE + BCH_BHINT) & BCH_BHINT_ENCF));
+	while (!(readl(BCH_BASE + BCH_BHINT) & BCH_BHINT_ENCF)) ;
 
 	/* clear interrupts */
 	writel(readl(BCH_BASE + BCH_BHINT), BCH_BASE + BCH_BHINT);
@@ -71,7 +70,8 @@ static void calculate_bch64(uint8_t *data, uint8_t *ecc)
 	writel(BCH_BHCR_BCHE, BCH_BASE + BCH_BHCCR);
 }
 
-static int raw_nand_write(nand_info_t *nand, uint32_t off, uint8_t *data, size_t size)
+static int raw_nand_write(nand_info_t * nand, uint32_t off, uint8_t * data,
+			  size_t size)
 {
 	mtd_oob_ops_t ops = {
 		.datbuf = data,
@@ -84,7 +84,8 @@ static int raw_nand_write(nand_info_t *nand, uint32_t off, uint8_t *data, size_t
 	return mtd_write_oob(nand, off, &ops);
 }
 
-static int do_writespl(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+static int do_writespl(cmd_tbl_t * cmdtp, int flag, int argc,
+		       char *const argv[])
 {
 	nand_info_t *nand = &nand_info[nand_curr_device];
 	int page, block, err, copies = 8, ret = CMD_RET_FAILURE;
@@ -94,7 +95,7 @@ static int do_writespl(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]
 	if (argc < 2)
 		return CMD_RET_USAGE;
 
-	input = (uint8_t *)simple_strtoul(argv[1], NULL, 16);
+	input = (uint8_t *) simple_strtoul(argv[1], NULL, 16);
 
 	if (argc > 2)
 		copies = (int)simple_strtoul(argv[2], NULL, 10);
@@ -110,11 +111,14 @@ static int do_writespl(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]
 	for (in_ptr = input; copies--; in_ptr = input) {
 		for (page = 0; page < SPL_PAGES; page++) {
 			printf("writing code page %d to 0x%x from 0x%p\n",
-				   page, nand_off, in_ptr);
+			       page, nand_off, in_ptr);
 
 			/* write code */
-			jz4780_nand_set_pn(nand, CONFIG_SYS_NAND_PAGE_SIZE, 256, page ? 0 : 1);
-			err = raw_nand_write(nand, nand_off, in_ptr, CONFIG_SYS_NAND_PAGE_SIZE);
+			jz4780_nand_set_pn(nand, CONFIG_SYS_NAND_PAGE_SIZE, 256,
+					   page ? 0 : 1);
+			err =
+			    raw_nand_write(nand, nand_off, in_ptr,
+					   CONFIG_SYS_NAND_PAGE_SIZE);
 			if (err) {
 				printf("error %d writing code\n", err);
 				goto out;
@@ -123,15 +127,20 @@ static int do_writespl(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[]
 
 			/* calculate ECC */
 			for (block = 0; block < SPL_BLOCKSPERPAGE; block++) {
-				calculate_bch64(in_ptr, &ecc_buf[block * SPL_ECCSIZE]);
+				calculate_bch64(in_ptr,
+						&ecc_buf[block * SPL_ECCSIZE]);
 				in_ptr += SPL_BLOCKSIZE;
 			}
 			memset(&ecc_buf[SPL_BLOCKSPERPAGE * SPL_ECCSIZE], 0,
-				   CONFIG_SYS_NAND_PAGE_SIZE - (SPL_BLOCKSPERPAGE * SPL_ECCSIZE));
+			       CONFIG_SYS_NAND_PAGE_SIZE -
+			       (SPL_BLOCKSPERPAGE * SPL_ECCSIZE));
 
 			/* write ECC */
-			jz4780_nand_set_pn(nand, CONFIG_SYS_NAND_PAGE_SIZE, 0, 0);
-			err = raw_nand_write(nand, nand_off, ecc_buf, CONFIG_SYS_NAND_PAGE_SIZE);
+			jz4780_nand_set_pn(nand, CONFIG_SYS_NAND_PAGE_SIZE, 0,
+					   0);
+			err =
+			    raw_nand_write(nand, nand_off, ecc_buf,
+					   CONFIG_SYS_NAND_PAGE_SIZE);
 			if (err) {
 				printf("error %d writing ECC\n", err);
 				goto out;
@@ -150,8 +159,5 @@ out:
 	return ret;
 }
 
-U_BOOT_CMD(
-	writespl, 3, 1, do_writespl,
-	"write a new SPL to NAND flash",
-	"address [copies=2]"
-);
+U_BOOT_CMD(writespl, 3, 1, do_writespl,
+	   "write a new SPL to NAND flash", "address [copies=2]");

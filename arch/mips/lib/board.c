@@ -41,8 +41,9 @@ int __board_early_init_f(void)
 	 */
 	return 0;
 }
+
 int board_early_init_f(void)
-	__attribute__((weak, alias("__board_early_init_f")));
+    __attribute__ ((weak, alias("__board_early_init_f")));
 
 static int init_func_ram(void)
 {
@@ -83,7 +84,6 @@ static int init_baudrate(void)
 	return 0;
 }
 
-
 /*
  * Breath some life into the board...
  *
@@ -104,7 +104,7 @@ static int init_baudrate(void)
  * argument, and returns an integer return code, where 0 means
  * "continue" and != 0 means "fatal error, hang the system".
  */
-typedef int (init_fnc_t)(void);
+typedef int (init_fnc_t) (void);
 
 init_fnc_t *init_sequence[] = {
 	board_early_init_f,
@@ -122,7 +122,6 @@ init_fnc_t *init_sequence[] = {
 	NULL,
 };
 
-
 void board_init_f(ulong bootflag)
 {
 	gd_t gd_data, *id;
@@ -135,12 +134,12 @@ void board_init_f(ulong bootflag)
 	 */
 	gd = &gd_data;
 	/* compiler optimization barrier needed for GCC >= 3.4 */
-	__asm__ __volatile__("" : : : "memory");
+	__asm__ __volatile__("":::"memory");
 
 	memset((void *)gd, 0, sizeof(gd_t));
 
 	for (init_fnc_ptr = init_sequence; *init_fnc_ptr; ++init_fnc_ptr) {
-		if ((*init_fnc_ptr)() != 0)
+		if ((*init_fnc_ptr) () != 0)
 			hang();
 	}
 
@@ -170,33 +169,33 @@ void board_init_f(ulong bootflag)
 
 	debug("Reserving %ldk for U-Boot at: %08lx\n", len >> 10, addr);
 
-	 /* Reserve memory for malloc() arena.
+	/* Reserve memory for malloc() arena.
 	 */
 	addr_sp = addr - TOTAL_MALLOC_LEN;
 	debug("Reserving %dk for malloc() at: %08lx\n",
-			TOTAL_MALLOC_LEN >> 10, addr_sp);
+	      TOTAL_MALLOC_LEN >> 10, addr_sp);
 
 	/*
 	 * (permanently) allocate a Board Info struct
 	 * and a permanent copy of the "global" data
 	 */
 	addr_sp -= sizeof(bd_t);
-	bd = (bd_t *)addr_sp;
+	bd = (bd_t *) addr_sp;
 	gd->bd = bd;
 	debug("Reserving %zu Bytes for Board Info at: %08lx\n",
-			sizeof(bd_t), addr_sp);
+	      sizeof(bd_t), addr_sp);
 
 	addr_sp -= sizeof(gd_t);
-	id = (gd_t *)addr_sp;
+	id = (gd_t *) addr_sp;
 	debug("Reserving %zu Bytes for Global Data at: %08lx\n",
-			sizeof(gd_t), addr_sp);
+	      sizeof(gd_t), addr_sp);
 
 	/* Reserve memory for boot params.
 	 */
 	addr_sp -= CONFIG_SYS_BOOTPARAMS_LEN;
 	bd->bi_boot_params = addr_sp;
 	debug("Reserving %dk for boot params() at: %08lx\n",
-			CONFIG_SYS_BOOTPARAMS_LEN >> 10, addr_sp);
+	      CONFIG_SYS_BOOTPARAMS_LEN >> 10, addr_sp);
 
 	/*
 	 * Finally, we set up a new (bigger) stack.
@@ -206,18 +205,18 @@ void board_init_f(ulong bootflag)
 	 */
 	addr_sp -= 16;
 	addr_sp &= ~0xF;
-	s = (ulong *)addr_sp;
+	s = (ulong *) addr_sp;
 	*s-- = 0;
 	*s-- = 0;
-	addr_sp = (ulong)s;
+	addr_sp = (ulong) s;
 	debug("Stack Pointer at: %08lx\n", addr_sp);
 
 	/*
 	 * Save local variables to board info struct
 	 */
-	bd->bi_memstart	= CONFIG_SYS_SDRAM_BASE;	/* start of DRAM */
-	bd->bi_memsize	= gd->ram_size;		/* size of DRAM in bytes */
-	bd->bi_baudrate	= gd->baudrate;		/* Console Baudrate */
+	bd->bi_memstart = CONFIG_SYS_SDRAM_BASE;	/* start of DRAM */
+	bd->bi_memsize = gd->ram_size;	/* size of DRAM in bytes */
+	bd->bi_baudrate = gd->baudrate;	/* Console Baudrate */
 
 	memcpy(id, (void *)gd, sizeof(gd_t));
 
@@ -233,7 +232,7 @@ void board_init_f(ulong bootflag)
  * that critical any more, etc.
  */
 
-void board_init_r(gd_t *id, ulong dest_addr)
+void board_init_r(gd_t * id, ulong dest_addr)
 {
 #ifndef CONFIG_SYS_NO_FLASH
 	ulong size;

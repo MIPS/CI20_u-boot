@@ -13,12 +13,12 @@ long long __ashldi3(long long u, word_type b)
 
 	if (bm <= 0) {
 		w.s.low = 0;
-		w.s.high = (unsigned int) uu.s.low << -bm;
+		w.s.high = (unsigned int)uu.s.low << -bm;
 	} else {
-		const unsigned int carries = (unsigned int) uu.s.low >> bm;
+		const unsigned int carries = (unsigned int)uu.s.low >> bm;
 
-		w.s.low = (unsigned int) uu.s.low << b;
-		w.s.high = ((unsigned int) uu.s.high << b) | carries;
+		w.s.low = (unsigned int)uu.s.low << b;
+		w.s.high = ((unsigned int)uu.s.high << b) | carries;
 	}
 
 	return w.ll;

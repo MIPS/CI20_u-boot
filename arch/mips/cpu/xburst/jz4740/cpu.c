@@ -42,14 +42,12 @@ void _machine_restart(void)
 	/* wdt_select_clk_div64() */
 	tmp = readw(&wdt->tcsr);
 	tmp &= ~WDT_TCSR_PRESCALE_MASK;
-	tmp |= WDT_TCSR_PRESCALE64,
-	writew(tmp, &wdt->tcsr);
+	tmp |= WDT_TCSR_PRESCALE64, writew(tmp, &wdt->tcsr);
 
-	writew(100, &wdt->tdr); /* wdt_set_data(100) */
-	writew(0, &wdt->tcnt); /* wdt_set_count(0); */
-	writel(TCU_TSSR_WDTSC, &tcu->tscr); /* tcu_start_wdt_clock */
-	writeb(readb(&wdt->tcer) | WDT_TCER_TCEN, &wdt->tcer); /* wdt start */
+	writew(100, &wdt->tdr);	/* wdt_set_data(100) */
+	writew(0, &wdt->tcnt);	/* wdt_set_count(0); */
+	writel(TCU_TSSR_WDTSC, &tcu->tscr);	/* tcu_start_wdt_clock */
+	writeb(readb(&wdt->tcer) | WDT_TCER_TCEN, &wdt->tcer);	/* wdt start */
 
-	while (1)
-		;
+	while (1) ;
 }

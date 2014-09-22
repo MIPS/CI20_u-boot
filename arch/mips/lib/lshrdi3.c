@@ -13,12 +13,12 @@ long long __lshrdi3(long long u, word_type b)
 
 	if (bm <= 0) {
 		w.s.high = 0;
-		w.s.low = (unsigned int) uu.s.high >> -bm;
+		w.s.low = (unsigned int)uu.s.high >> -bm;
 	} else {
-		const unsigned int carries = (unsigned int) uu.s.high << bm;
+		const unsigned int carries = (unsigned int)uu.s.high << bm;
 
-		w.s.high = (unsigned int) uu.s.high >> b;
-		w.s.low = ((unsigned int) uu.s.low >> b) | carries;
+		w.s.high = (unsigned int)uu.s.high >> b;
+		w.s.low = ((unsigned int)uu.s.low >> b) | carries;
 	}
 
 	return w.ll;
