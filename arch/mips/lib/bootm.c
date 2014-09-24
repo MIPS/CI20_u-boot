@@ -81,13 +81,9 @@ static void linux_cmdline_dump(void)
 		debug("   arg %03d: %s\n", i, linux_argv[i]);
 }
 
-static void boot_cmdline_linux(bootm_headers_t * images)
+static void linux_cmdline_parse(const char *bootargs)
 {
-	const char *bootargs, *next, *quote;
-
-	linux_cmdline_init();
-
-	bootargs = getenv("bootargs");
+	const char *next, *quote;
 	if (!bootargs)
 		return;
 
@@ -119,7 +115,13 @@ static void boot_cmdline_linux(bootm_headers_t * images)
 
 		bootargs = next;
 	}
+}
 
+static void boot_cmdline_linux(bootm_headers_t * images, const char *baseargs)
+{
+	linux_cmdline_init();
+	linux_cmdline_parse(baseargs);
+	linux_cmdline_parse(getenv("bootargs"));
 	linux_cmdline_dump();
 }
 
@@ -227,7 +229,7 @@ int do_bootm_linux(int flag, int argc, char *const argv[],
 		return -1;
 
 	if (flag & BOOTM_STATE_OS_CMDLINE) {
-		boot_cmdline_linux(images);
+		boot_cmdline_linux(images, NULL);
 		return 0;
 	}
 
@@ -241,7 +243,7 @@ int do_bootm_linux(int flag, int argc, char *const argv[],
 		return 0;
 	}
 
-	boot_cmdline_linux(images);
+	boot_cmdline_linux(images, NULL);
 	boot_prep_linux(images);
 	boot_jump_linux(images);
 
@@ -303,11 +305,8 @@ void do_boota_linux(bootm_headers_t * images,
 	memcpy(kernel_dst_addr, kernel_src_addr, fb_hdr->kernel_size);
 	memcpy(ramdisk_dst_addr, ramdisk_src_addr, fb_hdr->ramdisk_size);
 
-	boot_cmdline_linux(NULL);
-
 	// Include any kernel command line options from boot.img
-	const char *bcmdline = (const char *)fb_hdr->cmdline;
-	linux_cmdline_set(bcmdline, strlen(bcmdline));
+	boot_cmdline_linux(images, (const char *)fb_hdr->cmdline);
 
 	// TODO:  These extra lines are being added to support old
 	// kernels which expect these two parameters to be included
