@@ -269,7 +269,8 @@ void do_boota_linux(bootm_headers_t * images,
 	unsigned kernel_actual;
 	const void *kernel_src_addr, *ramdisk_src_addr;
 	void *kernel_dst_addr, *ramdisk_dst_addr;
-	char cmdline[256];
+	char arg[256];
+	const char *s;
 
 	/* init kernel, ramdisk and prepare parameters */
 	page_mask = fb_hdr->page_size - 1;
@@ -308,13 +309,20 @@ void do_boota_linux(bootm_headers_t * images,
 	// Include any kernel command line options from boot.img
 	boot_cmdline_linux(images, (const char *)fb_hdr->cmdline);
 
+	// Add board serial number for Android boot
+	s = getenv("serial#");
+	if (s) {
+		snprintf(arg, sizeof(arg), "androidboot.serialno=%s", s);
+		linux_cmdline_set(arg, strlen(arg));
+	}
 	// TODO:  These extra lines are being added to support old
 	// kernels which expect these two parameters to be included
 	// on the command line.
-	sprintf(cmdline, "rd_start=0x%0X", (unsigned int)ramdisk_dst_addr);
-	linux_cmdline_set(cmdline, strlen(cmdline));
-	sprintf(cmdline, "rd_size=0x%X", fb_hdr->ramdisk_size);
-	linux_cmdline_set(cmdline, strlen(cmdline));
+	snprintf(arg, sizeof(arg), "rd_start=0x%0X",
+		 (unsigned int)ramdisk_dst_addr);
+	linux_cmdline_set(arg, strlen(arg));
+	snprintf(arg, sizeof(arg), "rd_size=0x%X", fb_hdr->ramdisk_size);
+	linux_cmdline_set(arg, strlen(arg));
 #ifdef	DEBUG
 	printf("rd_start=0x%X rd_size=0x%X\n",
 	       (unsigned int)ramdisk_dst_addr, fb_hdr->ramdisk_size);
