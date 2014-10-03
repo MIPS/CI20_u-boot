@@ -29,6 +29,7 @@ COBJS-y	= $(SOC).o
 COBJS-y += pll.o
 COBJS-y += sdram.o
 COBJS-y += timer.o
+COBJS-y += cpu.o
 
 SRCS	:= $(START:.o=.S) $(SOBJS-y:.o=.S) $(COBJS-y:.o=.c)
 OBJS	:= $(addprefix $(obj),$(SOBJS-y) $(COBJS-y))
