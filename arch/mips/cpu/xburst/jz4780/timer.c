@@ -49,7 +49,8 @@ static void tcu_writew(uint16_t val, uint32_t off)
 	writew(val, (void __iomem *)TCU_BASE + off);
 }
 
-static void tcu_writel(uint32_t val, uint32_t off)
+// This is needed by the WDT code
+void tcu_writel(uint32_t val, uint32_t off)
 {
 	writel(val, (void __iomem *)TCU_BASE + off);
 }
