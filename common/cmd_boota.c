@@ -39,7 +39,7 @@ DECLARE_GLOBAL_DATA_PTR;
 
 #include <fastboot.h>
 
-void do_boota_linux(bootm_headers_t *, struct fastboot_boot_img_hdr *);
+void do_boota_linux(bootm_headers_t *, struct boot_img_hdr *);
 
 /*
  * If everything is successful, this function will never return because
@@ -49,14 +49,14 @@ void do_boota_linux(bootm_headers_t *, struct fastboot_boot_img_hdr *);
 int do_boota(cmd_tbl_t * cmdtp, int flag, int argc, char *const argv[])
 {
 	ulong addr;
-	struct fastboot_boot_img_hdr *fb_hdr;
+	struct boot_img_hdr *fb_hdr;
 
 	if (argc < 2)
 		return cmd_usage(cmdtp);
 
 	addr = simple_strtoul(argv[1], NULL, 16);
 
-	fb_hdr = (struct fastboot_boot_img_hdr *)addr;
+	fb_hdr = (struct boot_img_hdr *)addr;
 
 	if (memcmp(fb_hdr->magic, FASTBOOT_BOOT_MAGIC, 8)) {
 		puts("boota: bad boot image magic, maybe not a boot.img?\n");

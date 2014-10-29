@@ -262,8 +262,7 @@ int do_bootm_linux(int flag, int argc, char * const argv[],
 
 extern void flush_cache_all(void);
 
-void do_boota_linux(bootm_headers_t * images,
-		    struct fastboot_boot_img_hdr *fb_hdr)
+void do_boota_linux(bootm_headers_t * images, struct boot_img_hdr *fb_hdr)
 {
 	unsigned page_mask;
 	unsigned kernel_actual;

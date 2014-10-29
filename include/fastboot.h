@@ -81,7 +81,38 @@
 #define FASTBOOT_INTERFACE_SUB_CLASS 0x42
 #define FASTBOOT_INTERFACE_PROTOCOL  0x03
 
-#define FASTBOOT_VERSION "0.5"
+#define FASTBOOT_VERSION "0.4"
+
+#define	FASTBOOT_CMD_GETVAR	"getvar:"
+#define	FB_GETVAR_VERSION	"version"
+#define	FB_GETVAR_VERSION_BOOTLOADER	"version-bootloader"
+#define	FB_GETVAR_VERSION_BASEBAND	"version-baseband"
+#define	FB_GETVAR_PRODUCT	"product"
+#define	FB_GETVAR_SERIALNO	"serialno"
+#define	FB_GETVAR_SECURE	"secure"
+#define	FB_GETVAR_DOWNLOADSIZE	"downloadsize"
+#define	FB_GETVAR_PARTITION_TYPE	"partition-type:"
+#define	FB_PARTITION_BOOT	"boot"
+#define	FB_PARTITION_CACHE	"cache"
+#define	FB_PARTITION_MISC	"misc"
+#define	FB_PARTITION_RECOVERY	"recovery"
+#define	FB_PARTITION_STORAGE	"storage"
+#define	FB_PARTITION_SYSTEM	"system"
+#define	FB_PARTITION_USERDATA	"userdata"
+#define	FASTBOOT_CMD_DOWNLOAD	"download:"
+#define	FASTBOOT_CMD_VERIFY	"verify:"
+#define	FASTBOOT_CMD_FLASH	"flash:"
+#define	FASTBOOT_CMD_ERASE	"erase:"
+#define	FASTBOOT_CMD_BOOT	"boot"
+#define	FASTBOOT_CMD_CONTINUE	"continue"
+#define	FASTBOOT_CMD_REBOOT	"reboot"
+#define	FASTBOOT_CMD_REBOOT_BOOTLOADER	"reboot-bootloader"
+#define	FASTBOOT_CMD_POWERDOWN	"powerdown"
+
+#define	FASTBOOT_REPLY_INFO	"INFO"
+#define	FASTBOOT_REPLY_FAIL	"FAIL"
+#define	FASTBOOT_REPLY_OKAY	"OKAY"
+#define	FASTBOOT_REPLY_DATA	"DATA"
 
 /* The fastboot client uses a value of 2048 for the 
    page size of it boot.img file format. 
@@ -212,7 +243,7 @@ struct fastboot_ptentry {
 #define FASTBOOT_BOOT_NAME_SIZE 16
 #define FASTBOOT_BOOT_ARGS_SIZE 512
 
-struct fastboot_boot_img_hdr {
+struct boot_img_hdr {
 	unsigned char magic[FASTBOOT_BOOT_MAGIC_SIZE];
 
 	unsigned kernel_size;	/* size in bytes */

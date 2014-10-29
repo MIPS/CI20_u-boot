@@ -1918,6 +1918,16 @@ static int do_chpart(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	return 0;
 }
 
+int do_mtdparts_default(void)
+{
+	setenv("mtdids", (char *)mtdids_default);
+	setenv("mtdparts", (char *)mtdparts_default);
+	setenv("partition", NULL);
+
+	mtdparts_init();
+	return 0;
+}
+
 /**
  * Routine implementing u-boot mtdparts command. Initialize/update default global
  * partition list and process user partition request (list, add, del).
@@ -1933,12 +1943,7 @@ static int do_mtdparts(cmd_tbl_t *cmdtp, int flag, int argc,
 {
 	if (argc == 2) {
 		if (strcmp(argv[1], "default") == 0) {
-			setenv("mtdids", (char *)mtdids_default);
-			setenv("mtdparts", (char *)mtdparts_default);
-			setenv("partition", NULL);
-
-			mtdparts_init();
-			return 0;
+			return do_mtdparts_default();
 		} else if (strcmp(argv[1], "delall") == 0) {
 			/* this may be the first run, initialize lists if needed */
 			mtdparts_init();

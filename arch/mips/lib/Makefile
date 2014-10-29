@@ -21,6 +21,7 @@ SOBJS-y	+=
 ifndef CONFIG_SPL_BUILD
 COBJS-y	+= board.o
 COBJS-$(CONFIG_CMD_BOOTM) += bootm.o
+COBJS-$(CONFIG_CMD_FASTBOOT) += fastboot.o
 else
 COBJS-$(CONFIG_SPL_FRAMEWORK) += spl.o
 endif

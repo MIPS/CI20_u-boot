@@ -88,6 +88,40 @@ static void display_volume_info(struct ubi_device *ubi)
 	}
 }
 
+void dump_ubi_volume_table(void)
+{
+	int i;
+	int j;
+	int nameMax;
+
+	if (!ubi) {
+		printf("%s, line %d:  ubi not initialized\n", __FILE__,
+		       __LINE__);
+		return;
+	}
+
+	printf("            UBI Partition \"system\" Volume Table\n");
+	printf("            ===================================\n");
+	printf("Volume Name      Volume ID      Size (PEBs)    Size (Bytes)\n");
+	printf("-------------    -----------    -----------    ------------\n");
+	for (i = 0; i < (ubi->vtbl_slots + 1); i++) {
+		if (!ubi->volumes[i])
+			continue;	/* Empty record */
+		nameMax = 13 < ubi->volumes[i]->name_len ?
+			  13 : ubi->volumes[i]->name_len;
+		for (j = 0; j < nameMax; ++j)
+			printf("%c", ubi->volumes[i]->name[j]);
+		// If necessary pad name field.
+		for (; j < 13; ++j)
+			printf(" ");
+		printf("    %11d", ubi->volumes[i]->vol_id);
+		printf("    %11d", ubi->volumes[i]->reserved_pebs);
+		printf("    %12d\n", ubi->volumes[i]->reserved_pebs *
+		       ubi->volumes[i]->usable_leb_size);
+	}
+	printf("\n");
+}
+
 static void display_ubi_info(struct ubi_device *ubi)
 {
 	ubi_msg("MTD device name:            \"%s\"", ubi->mtd->name);
@@ -210,6 +244,11 @@ static struct ubi_volume *ubi_find_volume(char *volume)
 
 	printf("Volume %s not found!\n", volume);
 	return NULL;
+}
+
+int ubi_volume_exists(char *volume)
+{
+	return ubi_find_volume(volume) ? 1 : 0;
 }
 
 static int ubi_remove_vol(char *volume)
@@ -473,6 +512,12 @@ int ubi_part(char *part_name, const char *vid_header_offset)
 
 	/* todo: get dev number for NAND... */
 	ubi_dev.nr = 0;
+
+	// If the UBI partition has already been selected there's no
+	// need to do so again.
+	if (ubi_dev.selected && !strcmp(ubi_dev.part_name, part_name)) {
+		return 0;
+	}
 
 	/*
 	 * Call ubi_exit() before re-initializing the UBI subsystem

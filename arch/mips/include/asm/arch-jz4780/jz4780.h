@@ -23,7 +23,47 @@
 #ifndef __JZ4780_H__
 #define __JZ4780_H__
 
-/* AHB0 BUS Devices */
+/*
+ * Define the bit field macro to avoid the bit mistake
+ */
+#define BIT0            (1 << 0)
+#define BIT1            (1 << 1)
+#define BIT2            (1 << 2)
+#define BIT3            (1 << 3)
+#define BIT4            (1 << 4)
+#define BIT5            (1 << 5)
+#define BIT6            (1 << 6)
+#define BIT7            (1 << 7)
+#define BIT8            (1 << 8)
+#define BIT9            (1 << 9)
+#define BIT10           (1 << 10)
+#define BIT11           (1 << 11)
+#define BIT12           (1 << 12)
+#define BIT13           (1 << 13)
+#define BIT14           (1 << 14)
+#define BIT15           (1 << 15)
+#define BIT16           (1 << 16)
+#define BIT17           (1 << 17)
+#define BIT18           (1 << 18)
+#define BIT19           (1 << 19)
+#define BIT20           (1 << 20)
+#define BIT21           (1 << 21)
+#define BIT22           (1 << 22)
+#define BIT23           (1 << 23)
+#define BIT24           (1 << 24)
+#define BIT25           (1 << 25)
+#define BIT26           (1 << 26)
+#define BIT27           (1 << 27)
+#define BIT28           (1 << 28)
+#define BIT29           (1 << 29)
+#define BIT30           (1 << 30)
+#define BIT31           (1 << 31)
+
+//----------------------------------------------------------------------
+// Register Definitions
+//
+/* AHB0 BUS Devices Base */
+#define HARB0_BASE      0xB3000000
 #define	DDRC_BASE	0xb3010000
 
 /* AHB2 BUS Devices */
@@ -84,6 +124,14 @@
 #define CPM_CLKGR0		(CPM_BASE+0x20) /* Clock Gate Register0 */
 #define CPM_CLKGR1		(CPM_BASE+0x28) /* Clock Gate Register1 */
 #define CPM_OPCR		(CPM_BASE+0x24) /* Oscillator and Power Control Register */
+#define	__cpm_suspend_otg_phy()			\
+		writel((readl(CPM_OPCR) &	\
+			~OPCR_OTGPHY_ENABLE),	\
+		       CPM_OPCR)
+#define	__cpm_enable_otg_phy()			\
+		writel((readl(CPM_OPCR) |	\
+			OPCR_OTGPHY_ENABLE),	\
+		       CPM_OPCR)
 
 #define CPM_RSR			(CPM_BASE+0x08)
 
@@ -170,6 +218,12 @@
 #define CPM_USBPCR_TXRISETUNE_MASK	(0x03 << TXRISETUNE_BIT)
 #define CPM_USBPCR_TXVREFTUNE_BIT	0
 #define CPM_USBPCR_TXVREFTUNE_MASK	(0x0f << TXVREFTUNE_BIT)
+
+#define	CPM_USBPCR1_USB_SEL	(1 << 28)	/* 1: Synopsis OTG,
+						 * 0: Mentor OTG
+						 */
+#define	CPM_USBPCR1_WORD_IF0	(1 << 19)
+#define	CPM_USBPCR1_WORD_IF1	(1 << 18)
 
 /* DDR memory clock divider register */
 #define CPM_DDRCDR_DCS_BIT		30
@@ -380,6 +434,16 @@
 
 #define REBOOT_SIGNATURE		(0x3535) /* means reboot*/
 
+
+#define cpm_get_scrpad()        readl(CPM_CPSPR)
+#define	cpm_set_scrpad(data)				\
+do {							\
+	volatile int i = 0x3fff;			\
+	writel(CPSPPR_CPSPR_WRITABLE, CPM_CPSPPR);	\
+	while(i--);					\
+	writel(data, CPM_CPSPR);			\
+	writel(0x0000a5a5, CPM_CPSPPR);			\
+} while (0)
 
 /*************************************************************************
  * TCU (Timer Counter Unit)
@@ -614,6 +678,9 @@
 #define GPIO_PXDS(n)	(GPIO_BASE + (0x80 + (n)*0x100)) /* Port Drive Strength Register */
 #define GPIO_PXDSS(n)	(GPIO_BASE + (0x84 + (n)*0x100)) /* Port Drive Strength set Register */
 #define GPIO_PXDSC(n)	(GPIO_BASE + (0x88 + (n)*0x100)) /* Port Drive Strength clear Register */
+
+#define	GPIO_USB_DETECT		(32 * 5 + 13)	/* GPF13 */
+#define	GPIO_DC_DETE_N		(32*3 + 8)	/* GPC31 UART2_RTS_N */
 
 #define DDR_MEM_PHY_BASE	0x20000000
 #define DDR_PHY_OFFSET	0x1000
@@ -1115,6 +1182,42 @@ static inline void gpio_direction_output(int gpio, int value)
 	int port = gpio / 32;
 	int pin = gpio % 32;
 	gpio_port_direction_output(port, pin, value);
+}
+
+static inline void gpio_disable_pull(int n)
+{
+	unsigned int p, o;
+	p = (n) / 32;
+	o = (n) % 32;
+	writel((1 << (o)), GPIO_PXPENS(p));
+}
+
+static inline unsigned int gpio_get_port(int p)
+{
+	return readl(GPIO_PXPIN(p));
+}
+
+static inline unsigned int gpio_get_pin(int n)
+{
+	unsigned int p, o;
+	p = (n) / 32;
+	o = (n) % 32;
+	return (gpio_get_port(p) & (1 << o)) ? 1u : 0u;
+}
+
+#define	UNKNOWN_0		0
+#define	UNKNOWN_1		1
+#define	UNKNOWN_2		2
+#define	UNKNOWN_3		3
+#define	BOOT_FROM_SDCARD	4
+#define	BOOT_FROM_NAND_AT_MSC0	5
+#define	BOOT_FROM_NAND_AT_CS1	6
+#define	BOOT_FROM_USB		7
+
+static inline unsigned int gpio_get_bootsel()
+{
+	// Read from PDPIN and extract pins 17-19.
+	return (gpio_get_port(3) >> 17) & 0x7;
 }
 
 extern uint32_t sdram_size(int bank);

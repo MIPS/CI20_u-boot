@@ -29,7 +29,10 @@ COBJS-y	= $(SOC).o
 COBJS-y += pll.o
 COBJS-y += sdram.o
 COBJS-y += timer.o
+ifndef CONFIG_SPL_BUILD
 COBJS-y += cpu.o
+COBJS-$(CONFIG_CMD_FASTBOOT) += usb.o
+endif
 
 SRCS	:= $(START:.o=.S) $(SOBJS-y:.o=.S) $(COBJS-y:.o=.c)
 OBJS	:= $(addprefix $(obj),$(SOBJS-y) $(COBJS-y))

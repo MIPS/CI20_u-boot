@@ -31,12 +31,12 @@ extern void tcu_writel(uint32_t, uint32_t);
 
 static void wdt_writew(uint16_t val, uint32_t off)
 {
-        writew(val, (void __iomem *)WDT_BASE + off);
+	writew(val, (void __iomem *)WDT_BASE + off);
 }
 
 static void wdt_writeb(uint8_t val, uint32_t off)
 {
-        writeb(val, (void __iomem *)WDT_BASE + off);
+	writeb(val, (void __iomem *)WDT_BASE + off);
 }
 
 void _machine_restart(void)

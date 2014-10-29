@@ -1,0 +1,29 @@
+U-Boot for CI20 has been modified to support the Android Fastboot
+protocol.  The NAND on the CI20, as it comes from the factory, has a
+U-Boot image which boots the Debian distribution.  This image can be
+replaced by reflashing the NAND by booting from an SD card.  To create
+an SD card which will load the new U-Boot image with Fastboot support,
+and the Android kernel follow the directions found at
+http://elinux.org/CI20_Dev_Zone#NAND_Flashing_SD_card.  The only
+difference when creating an SD card to flash the Android image is to
+replace the Debian image file (debian6-20130815.img) with the Android
+image name (android-20141009.img).
+
+After loading this new image, remove power from the CI20.  Then
+reconfigure the CI20 board to boot from NAND by moving the jumper from
+pins 2 & 3 to pins 1 & 2.  This jumper header is near the silk screened
+table describing BOOT_SEL.  Install a USB cable in the CI20's mini-USB
+connector; the other end of the cable needs to be connected to the host
+machine on which you'll run the fastboot utility.  Now power the board
+back on.  The firmware will print a message which says "Hit any key to
+stop autoboot:".  Interrupting autoboot will place you into the
+built-in U-Boot shell.  Enter the command "fastboot".  It will take a
+few moments for the firmware to initialize the state of the UBI file
+system found on the NAND.  While this is happening you can launch the
+fastboot utility on the host computer.  When the CI20 firmware is
+finished initializing UBI the firmware will begin processing the
+commands sent by the fastboot utility sent from the host computer.  In
+many cases, the fastboot utility will conclude by sending the "reboot"
+command to the CI20.  This will cause a reset on the CI20 and board
+will automatically boot with the new Android image(s), unless, as
+before, you interrupt the autoboot procedure.

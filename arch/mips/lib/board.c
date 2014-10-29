@@ -17,6 +17,9 @@
 #include <onenand_uboot.h>
 #include <spi.h>
 #include <mmc.h>
+#ifdef	CONFIG_CMD_FASTBOOT
+#include <asm/arch/jz4780.h>
+#endif /* CONFIG_CMD_FASTBOOT */
 
 #ifdef CONFIG_BITBANGMII
 #include <miiphy.h>
@@ -330,6 +333,15 @@ void board_init_r(gd_t *id, ulong dest_addr)
 	puts("Net:   ");
 	eth_initialize(gd->bd);
 #endif
+
+#ifdef CONFIG_CMD_FASTBOOT
+	printf("\nBOOTSEL = %x\n", gpio_get_bootsel());
+
+	if (gpio_get_bootsel() == BOOT_FROM_USB) {
+		printf("\nWaiting for connection from fastboot utility\n");
+		do_fastboot(NULL, 0, 0, NULL);
+	}
+#endif	/* CONFIG_CMD_FASTBOOT */
 
 	/* main_loop() can return to retry autoboot, if so just run it again. */
 	for (;;)
