@@ -70,7 +70,7 @@ int misc_init_r(void)
 	setenv_ulong("board_date", otp.date);
 	memcpy(manufacturer, otp.manufacturer, 2);
 	manufacturer[2] = 0;
-	setenv("board_mfr", otp.manufacturer);
+	setenv("board_mfr", manufacturer);
 
 	return 0;
 }
