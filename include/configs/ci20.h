@@ -74,33 +74,35 @@
 
 #define CONFIG_BOOTDELAY 2
 #define CONFIG_SYS_BOOTM_LEN (64 << 20)
-#define BOOTARGS_COMMON "console=ttyS4,115200 console=tty0 mem=256M@0x0 mem=768M@0x30000000"
+#define BOOTARGS_COMMON \
+	"console=ttyS4,115200 console=tty0 mem=256M@0x0 mem=768M@0x30000000 rootwait"
 
 #ifdef CONFIG_SPL_MMC_SUPPORT
 
 /* SD/MMC card defaults */
 
 #define CONFIG_BOOTARGS \
-    BOOTARGS_COMMON " root=/dev/mmcblk0p1"
+	BOOTARGS_COMMON " root=/dev/mmcblk0p1"
 #define CONFIG_BOOTCOMMAND \
-    "ext4load mmc 0:1 0x88000000 /boot/vmlinux.img; bootm 0x88000000"
+	"run ethargs; ext4load mmc 0:1 0x88000000 /boot/uImage; bootm 0x88000000"
 
 #else /* !CONFIG_SPL_MMC_SUPPORT */
 
 /* NAND defaults */
 
 #define CONFIG_BOOTARGS \
-    BOOTARGS_COMMON " ubi.mtd=1 root=ubi0:root rootfstype=ubifs rw"
+	BOOTARGS_COMMON " ubi.mtd=3 root=ubi0:root rootfstype=ubifs rw"
 #define CONFIG_BOOTCOMMAND \
-    "mtdparts default; ubi part system; ubifsmount ubi:boot; " \
-    "ubifsload 0x88000000 vmlinux.img; bootm 0x88000000"
+	"run ethargs; mtdparts default; ubi part system; ubifsmount ubi:boot; " \
+	"ubifsload 0x88000000 uImage; bootm 0x88000000"
 
 #endif /* !CONFIG_SPL_MMC_SUPPORT */
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"stdin=eserial0,eserial4\0" \
 	"stdout=eserial0,eserial4\0" \
-	"stderr=eserial0,eserial4\0"
+	"stderr=eserial0,eserial4\0" \
+	"ethargs=env set bootargs ${bootargs} dm9000.mac_addr=${ethaddr}\0"
 
 #define CONFIG_SYS_HUSH_PARSER
 
