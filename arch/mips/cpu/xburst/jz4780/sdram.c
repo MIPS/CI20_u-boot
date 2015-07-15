@@ -27,6 +27,11 @@
 #include <asm/io.h>
 #include <asm/arch/jz4780.h>
 
+#ifdef __CONFIG_CI20_H__
+/* Configured for Ci20 - we can get the board revision from here */
+extern int ci20_revision;
+#endif /* ci20 */
+
 #ifdef CONFIG_SYS_DDR3_H5TQ2G83CFR
 #include "sdram/H5TQ2G83CFR.h"
 #endif
