@@ -29,6 +29,13 @@
 #include <asm/arch/nand.h>
 #include <asm/jz_mmc.h>
 
+#define CI20_GPIO_REV_PORT	(2)	/* Port C */
+#define CI20_GPIO_REV_SHIFT	(18)	/* Bit 18 */
+#define CI20_GPIO_REV_BITS	(3)	/* 2 bits */
+#define CI20_GPIO_REV_MASK	(CI20_GPIO_REV_BITS << CI20_GPIO_REV_SHIFT)
+
+int ci20_revision = 0;
+
 struct ci20_otp {
 	uint32_t serial_number;
 	uint32_t date;
@@ -167,7 +174,27 @@ int board_eth_init(bd_t *bis)
 /* U-Boot common routines */
 int checkboard(void)
 {
-	puts("Board: ci20 (Ingenic XBurst JZ4780 SoC)\n");
+	int val;
+
+	gpio_port_direction_input(CI20_GPIO_REV_PORT, CI20_GPIO_REV_SHIFT);
+	gpio_port_direction_input(CI20_GPIO_REV_PORT, CI20_GPIO_REV_SHIFT+1);
+
+	/* Re-enable pullups (gpio_port_direction_input turns them off) */
+	writel(CI20_GPIO_REV_MASK, GPIO_PXPENC(CI20_GPIO_REV_PORT));
+
+	/* Read PC18/19 for version */
+	val = readl(GPIO_PXPIN(CI20_GPIO_REV_PORT));
+	val = (val & CI20_GPIO_REV_MASK) >> CI20_GPIO_REV_SHIFT;
+
+	/* pulldowns invert the revision number */
+	switch (val) {
+#define CI20_REV(a, b) case(b): ci20_revision = a; break
+	CI20_REV(1, 3); /* Rev 1 boards had no pulldowns - giving 3 */
+	CI20_REV(2, 1); /* Rev 2 boards pulldown port C bit 18 giving 1 */
+#undef CI20_REV
+	}
+
+	printf("Board: ci20 (r%d) (Ingenic XBurst JZ4780 SoC)\n", ci20_revision);
 	return 0;
 }
 
