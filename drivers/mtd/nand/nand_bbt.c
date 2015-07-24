@@ -438,7 +438,7 @@ static int scan_block_fast(struct mtd_info *mtd, struct nand_bbt_descr *bd,
 		if (ret && !mtd_is_bitflip_or_eccerr(ret))
 			return ret;
 
-		if (check_short_pattern(buf, bd))
+		if (!check_short_pattern(buf, bd))
 			return 1;
 
 		offs += mtd->writesize;
@@ -1233,6 +1233,7 @@ int nand_update_bbt(struct mtd_info *mtd, loff_t offs)
  * while scanning a device for factory marked good / bad blocks.
  */
 static uint8_t scan_ff_pattern[] = { 0xff, 0xff };
+static uint8_t scan_00_pattern[] = { 0x00, 0x00 };
 
 static uint8_t scan_agand_pattern[] = { 0x1C, 0x71, 0xC7, 0x1C, 0x71, 0xC7 };
 
@@ -1310,7 +1311,7 @@ static int nand_create_badblock_pattern(struct nand_chip *this)
 	bd->options = this->bbt_options & BADBLOCK_SCAN_MASK;
 	bd->offs = this->badblockpos;
 	bd->len = (this->options & NAND_BUSWIDTH_16) ? 2 : 1;
-	bd->pattern = scan_ff_pattern;
+	bd->pattern = scan_00_pattern;
 	bd->options |= NAND_BBT_DYNAMICSTRUCT;
 	this->badblock_pattern = bd;
 	return 0;
