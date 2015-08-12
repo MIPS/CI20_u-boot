@@ -35,6 +35,9 @@ extern int ci20_revision;
 #ifdef CONFIG_SYS_DDR3_H5TQ2G83CFR
 #include "sdram/H5TQ2G83CFR.h"
 #endif
+#ifdef CONFIG_SYS_DDR3_K4B2G0846Q
+#include "sdram/K4B2G0846Q.h"
+#endif
 
 static uint32_t get_mem_clk(void)
 {
