@@ -187,6 +187,19 @@ static void ddr_phy_init(unsigned long ps, unsigned int dtpr0_reg)
 			hang();
 	}
 
+  // DQS extension and early set to 1
+  tmp = readl(DDRP_DSGCR);
+  tmp &= ~(0x7E << 4);
+  tmp |= 0x12 << 4;
+  writel(tmp, DDRP_DSGCR);
+
+  // 500 pull up and 500 pull down
+  tmp = readl(DDRP_DXCCR);
+  tmp &= ~(0xFF << 4);
+  tmp |= 0xC4 << 4;
+  writel(tmp, DDRP_DXCCR);
+
+  // Initialise phy
 	writel(DDRP_PIR_INIT | DDRP_PIR_DRAMINT | DDRP_PIR_DRAMRST, DDRP_PIR);
 
 	count = 0;
@@ -207,6 +220,7 @@ static void ddr_phy_init(unsigned long ps, unsigned int dtpr0_reg)
 		}
 	}
 
+	// Override impedence
 	tmp = readl(DDRP_ZQXCR0(0));
 	tmp &= ~0x3ff;
 	tmp |= (CONFIG_SYS_DDR3PHY_PULLUP_IMPEDANCE & 0x1f) <<
@@ -215,6 +229,7 @@ static void ddr_phy_init(unsigned long ps, unsigned int dtpr0_reg)
 		DDRP_ZQXCR_PULLDOWN_IMPE_BIT;
 	tmp |= DDRP_ZQXCR_ZDEN;
 	writel(tmp, DDRP_ZQXCR0(0));
+
 }
 
 #define BIT(bit) ((bit % 4) * 8)

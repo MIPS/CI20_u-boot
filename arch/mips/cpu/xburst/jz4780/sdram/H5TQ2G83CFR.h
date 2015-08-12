@@ -70,7 +70,7 @@
 #define DDR_tWL 	(DDR_tAL + DDR_tCWL)	/* DDR3: Write Latency = tAL + tCWL */
 #define DDR_tRDLAT	(DDR_tRL - 2)	
 #define DDR_tWDLAT	(DDR_tWL - 1)
-#define DDR_tRTW 	(DDR_tRL + DDR_tCCD + 2 - DDR_tWL)	/* Read to Write delay */
+#define DDR_tRTW 	(DDR_tRL + DDR_tCCD + 2 - DDR_tWL + 1)	/* Read to Write delay */
 #define DDR_tCKSRE 	DDR_MAX(5, 10000) /* Valid Clock Requirement after Self Refresh Entry or Power-Down Entry */
 
 #define DDR_tDLLLOCK	512		/* DDR3 only: DLL LOCK, tck */
