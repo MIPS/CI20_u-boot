@@ -1,5 +1,7 @@
-#ifndef __DDR3_CONFIG_H
-#define __DDR3_CONFIG_H
+#ifndef __DDR3_K4B2G0846Q_CONFIG_H
+#define __DDR3_K4B2G0846Q_CONFIG_H
+
+#if 0
 
 #define SDRAM_PART_NAME "K4B2G0846Q"
 #define SDRAM_TYPE_DDR3
@@ -87,5 +89,61 @@
 #define DDR_CLK_DIV 1    	/* Clock Divider. auto refresh
 			  *	cnt_clk = memclk/(16*(2^DDR_CLK_DIV))
 			  */
+#endif
 
-#endif /* __DDR3_CONFIG_H */
+#include "ddr_parameters.h"
+
+
+static const struct jz4780_ddr_config K4B2G0846Q_48_config = {
+	.name		= "K4B2G0846Q",
+
+	.timing1	= (	(4	<< DDRC_TIMING1_TRTP_BIT)	|
+				(13	<< DDRC_TIMING1_TWTR_BIT)	|
+				(6	<< DDRC_TIMING1_TWR_BIT)	|
+				(5	<< DDRC_TIMING1_TWL_BIT)),
+
+	.timing2	= (	(4	<< DDRC_TIMING2_TCCD_BIT)	|
+				(15	<< DDRC_TIMING2_TRAS_BIT)	|
+				(6	<< DDRC_TIMING2_TRCD_BIT)	|
+				(6	<< DDRC_TIMING2_TRL_BIT)),
+
+	.timing3	= (	(4	<< DDRC_TIMING3_ONUM)		|
+				(7	<< DDRC_TIMING3_TCKSRE_BIT)	|
+				(6	<< DDRC_TIMING3_TRP_BIT)	|
+				(4	<< DDRC_TIMING3_TRRD_BIT)	|
+				(21	<< DDRC_TIMING3_TRC_BIT)),
+
+	.timing4	= (	(31	<< DDRC_TIMING4_TRFC_BIT)	|
+				(1	<< DDRC_TIMING4_TRWCOV_BIT)	|
+				(4	<< DDRC_TIMING4_TCKE_BIT)	|
+				(9	<< DDRC_TIMING4_TMINSR_BIT)	|
+				(8	<< DDRC_TIMING4_TXP_BIT)	|
+				(3	<< DDRC_TIMING4_TMRD_BIT)),
+
+	.timing5	= (	(8	<< DDRC_TIMING5_TRTW_BIT)	|
+				(4	<< DDRC_TIMING5_TRDLAT_BIT)	|
+				(4	<< DDRC_TIMING5_TWDLAT_BIT)),
+
+	.timing6	= (	(25	<< DDRC_TIMING6_TXSRD_BIT)	|
+				(12	<< DDRC_TIMING6_TFAW_BIT)	|
+				(2	<< DDRC_TIMING6_TCFGW_BIT)	|
+				(2	<< DDRC_TIMING6_TCFGR_BIT)),
+	/* PHY */
+
+	/* Mode Register 0 */
+	.mr0		= 	(0x00000420),
+#ifdef SDRAM_DISABLE_DLL
+	.mr1		=	(DDR3_MR1_DIC_7 | DDR3_MR1_RTT_DIS | DDR3_MR1_DLL_DISABLE),
+#else
+	.mr1		=	(DDR3_MR1_DIC_7 | DDR3_MR1_RTT_DIS),
+#endif
+
+	.ptr0		=	0x002000d4,
+	.ptr1		=	0x02230d40,
+	.ptr2		=	0x04013880,
+
+	.dtpr0		=	0x2a8f6690,
+	.dtpr1		=	0x00400860,
+	.dtpr2		=	0x10042a00,
+};
+#endif /* __DDR3_K4B2G0846Q_CONFIG_H */
