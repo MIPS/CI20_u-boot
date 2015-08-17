@@ -34,8 +34,6 @@
 #define CI20_GPIO_REV_BITS	(3)	/* 2 bits */
 #define CI20_GPIO_REV_MASK	(CI20_GPIO_REV_BITS << CI20_GPIO_REV_SHIFT)
 
-int ci20_revision = 0;
-
 struct ci20_otp {
 	uint32_t serial_number;
 	uint32_t date;
@@ -171,8 +169,7 @@ int board_eth_init(bd_t *bis)
 
 #endif /* CONFIG_DRIVER_DM9000 */
 
-/* U-Boot common routines */
-int checkboard(void)
+int ci20_revision(void)
 {
 	int val;
 
@@ -188,13 +185,18 @@ int checkboard(void)
 
 	/* pulldowns invert the revision number */
 	switch (val) {
-#define CI20_REV(a, b) case(b): ci20_revision = a; break
+#define CI20_REV(a, b) case(b): return a
 	CI20_REV(1, 3); /* Rev 1 boards had no pulldowns - giving 3 */
 	CI20_REV(2, 1); /* Rev 2 boards pulldown port C bit 18 giving 1 */
 #undef CI20_REV
 	}
+	return 0;
+}
 
-	printf("Board: ci20 (r%d) (Ingenic XBurst JZ4780 SoC)\n", ci20_revision);
+/* U-Boot common routines */
+int checkboard(void)
+{
+	printf("Board: ci20 (r%d) (Ingenic XBurst JZ4780 SoC)\n", ci20_revision());
 	return 0;
 }
 
