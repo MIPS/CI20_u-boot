@@ -312,10 +312,6 @@
 #define CONFIG_SPL_TEXT_BASE		0xf4000800
 #define CONFIG_SPL_MAX_SIZE		((14 * 1024) - 0x800)
 
-/* the NAND SPL is small enough to enable serial */
-#define CONFIG_SPL_SERIAL_SUPPORT
-#define CONFIG_SPL_LIBCOMMON_SUPPORT
-
 #endif /* !CONFIG_SPL_MMC_SUPPORT */
 
 #endif /* __CONFIG_CI20_H__ */
