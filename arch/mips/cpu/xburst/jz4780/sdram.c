@@ -88,12 +88,12 @@ static void ddr_cfg_init(void)
 	writel(ddrc_cfg, DDRC_CFG);
 }
 
-#define DDRP_PTR0_tDLLSRST  	50		// 50ns 
-#define DDRP_tDLLLOCK 	    	5120 		// 5.12us
-#define DDRP_PTR0_ITMSRST_8 	8		// 8tck 
-#define DDRP_PTR1_DINIT0_DDR3	500 * 1000 	// 500us
-#define DDRP_PTR2_DINIT2_DDR3 	200 * 1000	// 200us
-#define DDRP_PTR2_DINIT3_DDR3	512 		// 512 tck
+#define DDRP_PTR0_tDLLSRST  	50		/* 50ns */
+#define DDRP_tDLLLOCK 	    	5120 		/* 5.12us */
+#define DDRP_PTR0_ITMSRST_8 	8		/* 8tck */
+#define DDRP_PTR1_DINIT0_DDR3	500 * 1000 	/* 500us */
+#define DDRP_PTR2_DINIT2_DDR3 	200 * 1000	/* 200us */
+#define DDRP_PTR2_DINIT3_DDR3	512 		/* 512 tck */
 
 static void ddr_phy_init(const struct jz4780_ddr_config *ddr_config)
 {
@@ -132,19 +132,19 @@ static void ddr_phy_init(const struct jz4780_ddr_config *ddr_config)
 			hang();
 	}
 
-	// DQS extension and early set to 1
+	/* DQS extension and early set to 1 */
 	tmp = readl(DDRP_DSGCR);
 	tmp &= ~(0x7E << 4);
 	tmp |= 0x12 << 4;
 	writel(tmp, DDRP_DSGCR);
 
-	// 500 pull up and 500 pull down
+	/* 500 pull up and 500 pull down */
 	tmp = readl(DDRP_DXCCR);
 	tmp &= ~(0xFF << 4);
 	tmp |= 0xC4 << 4;
 	writel(tmp, DDRP_DXCCR);
 
-	// Initialise phy
+	/* Initialise phy */
 	writel(DDRP_PIR_INIT | DDRP_PIR_DRAMINT | DDRP_PIR_DRAMRST, DDRP_PIR);
 
 	count = 0;
@@ -165,7 +165,7 @@ static void ddr_phy_init(const struct jz4780_ddr_config *ddr_config)
 		}
 	}
 
-	// Override impedence
+	/* Override impedence */
 	tmp = readl(DDRP_ZQXCR0(0));
 	tmp &= ~0x3ff;
 	tmp |= (CONFIG_SYS_DDR3PHY_PULLUP_IMPEDANCE & 0x1f) <<
