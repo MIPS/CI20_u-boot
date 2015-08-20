@@ -67,6 +67,9 @@ struct jz4780_ddr_config {
 	u32	dtpr0;	/* DRAM Timing Parameters Register 0 */
 	u32	dtpr1;	/* DRAM Timing Parameters Register 1 */
 	u32	dtpr2;	/* DRAM Timing Parameters Register 2 */
+
+	u8	pullup;	/* PHY pullup impedance */
+	u8	pulldn;	/* PHY pulldown impedance */
 };
 
 

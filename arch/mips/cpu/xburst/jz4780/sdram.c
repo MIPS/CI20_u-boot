@@ -165,12 +165,12 @@ static void ddr_phy_init(const struct jz4780_ddr_config *ddr_config)
 		}
 	}
 
-	/* Override impedence */
+	/* Override impedance */
 	tmp = readl(DDRP_ZQXCR0(0));
 	tmp &= ~0x3ff;
-	tmp |= (CONFIG_SYS_DDR3PHY_PULLUP_IMPEDANCE & 0x1f) <<
+	tmp |= (ddr_config->pullup & 0x1f) <<
 		DDRP_ZQXCR_PULLUP_IMPE_BIT;
-	tmp |= (CONFIG_SYS_DDR3PHY_PULLDOWN_IMPEDANCE & 0x1f) <<
+	tmp |= (ddr_config->pulldn & 0x1f) <<
 		DDRP_ZQXCR_PULLDOWN_IMPE_BIT;
 	tmp |= DDRP_ZQXCR_ZDEN;
 	writel(tmp, DDRP_ZQXCR0(0));

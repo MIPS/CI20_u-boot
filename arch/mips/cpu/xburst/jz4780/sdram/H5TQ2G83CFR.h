@@ -144,6 +144,9 @@ static const struct jz4780_ddr_config H5TQ2G83CFR_48_config = {
 	.dtpr0		=	0x2c906690,
 	.dtpr1		=	0x005608a0,
 	.dtpr2		=	0x10042a00,
+
+	.pullup		=	0x0e,
+	.pulldn		=	0x0e,
 };
 
 #endif /* __DDR3_H5TQ2G83CFR_CONFIG_H */

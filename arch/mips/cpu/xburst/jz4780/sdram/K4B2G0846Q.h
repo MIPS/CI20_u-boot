@@ -145,5 +145,8 @@ static const struct jz4780_ddr_config K4B2G0846Q_48_config = {
 	.dtpr0		=	0x2a8f6690,
 	.dtpr1		=	0x00400860,
 	.dtpr2		=	0x10042a00,
+
+	.pullup		=	0x0b,
+	.pulldn		=	0x0b,
 };
 #endif /* __DDR3_K4B2G0846Q_CONFIG_H */
