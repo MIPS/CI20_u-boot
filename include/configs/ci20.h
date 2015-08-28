@@ -71,10 +71,11 @@
 
 #define CONFIG_BOOTP_MASK	(CONFIG_BOOTP_DEFAUL)
 
-#define CONFIG_BOOTDELAY 2
+#define CONFIG_BOOTDELAY 1
 #define CONFIG_SYS_BOOTM_LEN (64 << 20)
 #define BOOTARGS_COMMON \
-	"console=ttyS4,115200 console=tty0 mem=256M@0x0 mem=768M@0x30000000 rootwait"
+	"console=ttyS4,115200 console=tty0 mem=256M@0x0 mem=768M@0x30000000 " \
+	"rootwait quiet"
 
 #ifdef CONFIG_SPL_MMC_SUPPORT
 
