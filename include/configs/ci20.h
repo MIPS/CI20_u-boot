@@ -170,7 +170,7 @@
 #define CONFIG_MTD_DEVICE
 #define CONFIG_MTD_PARTITIONS
 #define MTDIDS_DEFAULT			"nand0=nand"
-#define MTDPARTS_DEFAULT		"mtdparts=nand:8m(uboot-spl),2m(uboot),2m(uboot-env),128m(boot),-(system)"
+#define MTDPARTS_DEFAULT		"mtdparts=nand:8m(uboot-spl),2m(uboot),2m(uboot-env),64m(boot),-(system)"
 
 /*
  * MMC
