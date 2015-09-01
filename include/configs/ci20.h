@@ -71,10 +71,11 @@
 
 #define CONFIG_BOOTP_MASK	(CONFIG_BOOTP_DEFAUL)
 
-#define CONFIG_BOOTDELAY 2
+#define CONFIG_BOOTDELAY 1
 #define CONFIG_SYS_BOOTM_LEN (64 << 20)
 #define BOOTARGS_COMMON \
-	"console=ttyS4,115200 console=tty0 mem=256M@0x0 mem=768M@0x30000000 rootwait"
+	"console=ttyS4,115200 console=tty0 mem=256M@0x0 mem=768M@0x30000000 " \
+	"rootwait quiet"
 
 #ifdef CONFIG_SPL_MMC_SUPPORT
 
@@ -90,9 +91,10 @@
 /* NAND defaults */
 
 #define CONFIG_BOOTARGS \
-	BOOTARGS_COMMON " ubi.mtd=3 root=ubi0:root rootfstype=ubifs rw"
+	BOOTARGS_COMMON " ubi.mtd=3 ubi.mtd=4 ubi.fm_autoconvert=1 " \
+	"root=ubi1:root rootfstype=ubifs rw"
 #define CONFIG_BOOTCOMMAND \
-	"run ethargs; mtdparts default; ubi part system; ubifsmount ubi:boot; " \
+	"run ethargs; mtdparts default; ubi part boot; ubifsmount ubi:boot; " \
 	"ubifsload 0x88000000 uImage; bootm 0x88000000"
 
 #endif /* !CONFIG_SPL_MMC_SUPPORT */
@@ -168,7 +170,7 @@
 #define CONFIG_MTD_DEVICE
 #define CONFIG_MTD_PARTITIONS
 #define MTDIDS_DEFAULT			"nand0=nand"
-#define MTDPARTS_DEFAULT		"mtdparts=nand:8m(uboot-spl),2m(uboot),2m(uboot-env),-(system)"
+#define MTDPARTS_DEFAULT		"mtdparts=nand:8m(uboot-spl),2m(uboot),2m(uboot-env),64m(boot),-(system)"
 
 /*
  * MMC
