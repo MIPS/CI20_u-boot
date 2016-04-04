@@ -75,7 +75,7 @@
 #define CONFIG_SYS_BOOTM_LEN (64 << 20)
 #define BOOTARGS_COMMON \
 	"console=ttyS4,115200 console=tty0 mem=256M@0x0 mem=768M@0x30000000 " \
-	"rootwait quiet"
+	"rootwait quiet rw"
 
 #ifdef CONFIG_SPL_MMC_SUPPORT
 
@@ -92,7 +92,7 @@
 
 #define CONFIG_BOOTARGS \
 	BOOTARGS_COMMON " ubi.mtd=3 ubi.mtd=4 ubi.fm_autoconvert=1 " \
-	"root=ubi1:root rootfstype=ubifs rw"
+	"root=ubi1:root rootfstype=ubifs"
 #define CONFIG_BOOTCOMMAND \
 	"run ethargs; mtdparts default; ubi part boot; ubifsmount ubi:boot; " \
 	"ubifsload 0x88000000 uImage; bootm 0x88000000"
