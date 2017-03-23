@@ -869,9 +869,7 @@ void reboot_cb(void)
 
 void do_cmd_reboot_bootloader(USB_STATUS * status)
 {
-	// TODO:  How is this Fastboot command (reboot-bootloader)
-	// different from the Fastboot command "reboot"?
-	cpm_set_scrpad(0);
+	cpm_set_scrpad(BOOTLOADER_SIGNATURE);
 
 	printf("\nprocess--->reboot-bootloader\n");
 	status->cb = reboot_cb;

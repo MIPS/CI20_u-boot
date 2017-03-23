@@ -337,7 +337,8 @@ void board_init_r(gd_t *id, ulong dest_addr)
 #ifdef CONFIG_CMD_FASTBOOT
 	printf("\nBOOTSEL = %x\n", gpio_get_bootsel());
 
-	if (gpio_get_bootsel() == BOOT_FROM_USB) {
+	if (gpio_get_bootsel() == BOOT_FROM_USB ||
+		(cpm_get_scrpad() & 0xffff) == BOOTLOADER_SIGNATURE) {
 		printf("\nWaiting for connection from fastboot utility\n");
 		do_fastboot(NULL, 0, 0, NULL);
 	}

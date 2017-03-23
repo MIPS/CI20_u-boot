@@ -433,6 +433,7 @@
 #define RECOVERY_SIGNATURE_SEC  0x800      	/* means "RECY" */
 
 #define REBOOT_SIGNATURE		(0x3535) /* means reboot*/
+#define BOOTLOADER_SIGNATURE		(0x4242) /* means bootloader */
 
 
 #define cpm_get_scrpad()        readl(CPM_CPSPR)
