@@ -222,6 +222,8 @@
 #define	CPM_USBPCR1_USB_SEL	(1 << 28)	/* 1: Synopsis OTG,
 						 * 0: Mentor OTG
 						 */
+#define	CPM_USBPCR1_REF_CLK_SEL_HIGH	(1 << 25)
+#define	CPM_USBPCR1_REF_CLK_SEL_LOW	(1 << 24)
 #define	CPM_USBPCR1_WORD_IF0	(1 << 19)
 #define	CPM_USBPCR1_WORD_IF1	(1 << 18)
 

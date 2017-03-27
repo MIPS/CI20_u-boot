@@ -36,6 +36,10 @@ static inline void clearl(uint32_t val, uint32_t off)
 
 static void dwc_otg_cpm_init(void)
 {
+	/* Set clock frequency to required 48MHz */
+	clearl(CPM_USBPCR1_REF_CLK_SEL_LOW, CPM_USBPCR1);
+	setl(CPM_USBPCR1_REF_CLK_SEL_HIGH, CPM_USBPCR1);
+
 	/* Select Synopsis OTG rather than Mentor OTG */
 	setl(CPM_USBPCR1_USB_SEL, CPM_USBPCR1);
 
