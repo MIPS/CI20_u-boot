@@ -28,6 +28,7 @@
 #include <version.h>
 #include <fastboot.h>
 #include <asm/arch/jz4780.h>
+#include <image-sparse.h>
 
 #define TYPE_DEVICE          1
 #define TYPE_CONFIGURATION   2
@@ -39,6 +40,9 @@
 #include <asm/arch/jz4780_otg.h>
 
 void storage_info_dump(void);
+
+lbaint_t sparse_reserve(struct sparse_storage *info,
+		lbaint_t blk, lbaint_t blkcnt);
 
 void cmd_flash_core(USB_STATUS * status, char *par_name,
 	unsigned char *Bulk_Data_Buf, int image_size);

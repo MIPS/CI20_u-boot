@@ -2,6 +2,7 @@
  * Fastboot nand storage implementation
  *
  * Copyright (c) 2017 Imagination Technologies
+ * Portions Copyright 2014 Broadcom Corporation
  * Author: Chris Larsen <chris.larsen@imgtec.com>
  * Author: Dragan Cecavac <dragan.cecavac@imgtec.com>
  *
@@ -30,6 +31,11 @@
 
 #include "fastboot_storage.h"
 
+struct ubifs_sparse {
+	unsigned full_size;
+	char *par_name;
+};
+
 void storage_info_dump(void)
 {
 	if (do_mtdparts_default()) {	// mtdparts default
@@ -51,6 +57,39 @@ void storage_info_dump(void)
 	}
 
 	dump_ubi_volume_table("system");
+}
+
+static lbaint_t write_to_ubi_partition(struct sparse_storage *info,
+		lbaint_t blk, lbaint_t blkcnt, const void *buffer)
+{
+	char *argv[6];
+	char bufferAddr[16];
+	char bufferSize[16];
+	char fullSize[16];
+	struct ubifs_sparse *sparse_priv = (struct ubifs_sparse*) info->priv;
+	int argc = 5;
+
+	/*
+	 * 6th argument is only needed when writing
+	 * the first part of the image.
+	 */
+	if (!blk)
+		argc++;
+
+	sprintf(bufferAddr, "0x%08X", buffer);
+	sprintf(bufferSize, "0x%08X", blkcnt * info->blksz);
+	sprintf(fullSize, "0x%08X", sparse_priv->full_size);
+
+	argv[0] = "ubi";
+	argv[1] = "write.part";
+	argv[2] = bufferAddr;
+	argv[3] = sparse_priv->par_name;
+	argv[4] = bufferSize;
+	argv[5] = fullSize;
+
+	do_ubi(NULL, 0, argc, argv);
+
+	return blkcnt;
 }
 
 void cmd_flash_core(USB_STATUS * status, char *par_name,
@@ -95,16 +134,49 @@ void cmd_flash_core(USB_STATUS * status, char *par_name,
 	// Now we need to write the UBI volume within the UBI partition
 	// "system" which corresponds to the Android partition.
 	printf("writing %08lx bytes to %s\n", image_size, par_name);
-	int ret = ubi_volume_write(par_name, Bulk_Data_Buf, image_size);
 
-	if (ret) {
-		debug("%s, line %d:  FAILflash write \"%s\" failure\n",
-		      __FILE__, __LINE__, par_name);
-		tx_status(status, FASTBOOT_REPLY_FAIL "flash write failure");
-	} else {
-		debug("%s, line %d:  OKAY writing partition \"%s\"\n",
-		      __FILE__, __LINE__, par_name);
+
+	if (is_sparse_image(Bulk_Data_Buf)) {
+
+		struct ubifs_sparse sparse_priv;
+		struct sparse_storage sparse;
+		sparse_header_t *s_header = (sparse_header_t *)Bulk_Data_Buf;
+
+		/*
+		 * UBI does not implement blocks.
+		 * It is required for the block size to be a multiple of
+		 * s_header->blk_sz, so just set s_header->blk_sz.
+		 */
+		sparse.blksz = s_header->blk_sz;
+		/*
+		 * Set start to 0. This is used to detect when it is written
+		 * to the partition for the first time.
+		 */
+		sparse.start = 0;
+		sparse.size = ubi_vol_size(par_name) / s_header->blk_sz;
+		sparse.write = write_to_ubi_partition;
+		sparse.reserve = sparse_reserve;
+
+		sparse_priv.full_size = s_header->blk_sz * s_header->total_blks;
+		sparse_priv.par_name = par_name;
+		sparse.priv = &sparse_priv;
+
+		printf("Flashing sparse image at offset " LBAFU "\n",
+		       sparse.start);
+		write_sparse_image(&sparse, par_name, Bulk_Data_Buf,
+				   image_size);
 		tx_status(status, FASTBOOT_REPLY_OKAY);
+	} else {
+		int ret = ubi_volume_write(par_name, Bulk_Data_Buf, image_size);
+		if (ret) {
+			debug("%s, line %d:  FAILflash write \"%s\" failure\n",
+			      __FILE__, __LINE__, par_name);
+			tx_status(status, FASTBOOT_REPLY_FAIL "flash write failure");
+		} else {
+			debug("%s, line %d:  OKAY writing partition \"%s\"\n",
+			      __FILE__, __LINE__, par_name);
+			tx_status(status, FASTBOOT_REPLY_OKAY);
+		}
 	}
 }
 

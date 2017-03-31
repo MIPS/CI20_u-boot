@@ -246,6 +246,12 @@ static struct ubi_volume *ubi_find_volume(char *volume)
 	return NULL;
 }
 
+int64_t ubi_vol_size(char *volume)
+{
+	struct ubi_volume *vol = ubi_find_volume(volume);
+	return vol->used_bytes;
+}
+
 int ubi_volume_exists(char *volume)
 {
 	return ubi_find_volume(volume) ? 1 : 0;
@@ -559,7 +565,7 @@ int ubi_part(char *part_name, const char *vid_header_offset)
 	return 0;
 }
 
-static int do_ubi(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+int do_ubi(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
 	int64_t size = 0;
 	ulong addr = 0;

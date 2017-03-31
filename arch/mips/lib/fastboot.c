@@ -40,6 +40,7 @@ static unsigned long Bulk_Data_Size = 0;
 static unsigned long rx_length;
 static int cmd_downloading = 0;
 static unsigned int d_count = 0;
+static USB_STATUS status = { NULL, {0, 0}, 0, 0, 0, NULL };
 void tx_status(USB_STATUS * status, const char *fmt, ...);
 void HW_SendPKT(int epnum, const u8 * buf, int size, USB_STATUS * status);
 
@@ -886,8 +887,6 @@ void fastboot_usb_poll(USB_STATUS * status)
  */
 int fastboot_usb_boot(unsigned zero, unsigned type, unsigned tags)
 {
-	USB_STATUS status = { NULL, {0, 0}, 0, 0, 0, NULL };
-
 	flash_dump_ptn();
 	usbloader_init();
 	for (;;) {
@@ -923,4 +922,14 @@ void fastboot_usb_init(void)
 int fastboot_usb_detected(void)
 {
 	return gpio_get_pin(GPIO_USB_DETECT);
+}
+
+void fastboot_fail(char *c)
+{
+	tx_status(&status, FASTBOOT_REPLY_FAIL "%s", c);
+}
+
+void fastboot_okay(char *c)
+{
+	tx_status(&status, FASTBOOT_REPLY_OKAY "%s", c);
 }
