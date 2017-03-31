@@ -29,6 +29,7 @@ COBJS-y += cmd_boot.o
 COBJS-$(CONFIG_CMD_BOOTM) += cmd_bootm.o
 COBJS-$(CONFIG_CMD_BOOTA) += cmd_boota.o
 COBJS-$(CONFIG_CMD_FASTBOOT) += cmd_fastboot.o
+COBJS-$(CONFIG_CMD_FASTBOOT) += image-sparse.o
 COBJS-y += cmd_help.o
 COBJS-y += cmd_version.o
 
