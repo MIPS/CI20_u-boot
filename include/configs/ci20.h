@@ -197,6 +197,8 @@
 #define CONFIG_CMD_DHCP		/* DHCP support                 */
 #define CONFIG_CMD_ECHO		/* echo arguments               */
 #define CONFIG_CMD_EXT4		/* ext4 support                 */
+#define CONFIG_EXT4_WRITE
+#define CONFIG_CMD_EXT4_WRITE
 #define CONFIG_CMD_FASTBOOT	/* Fastboot support             */
 #define CONFIG_CMD_FAT		/* FAT support                  */
 #define CONFIG_CMD_LOADB	/* loadb                        */

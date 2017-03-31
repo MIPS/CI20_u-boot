@@ -161,7 +161,7 @@ static int boot_part_access(struct mmc *mmc, u8 ack, u8 part_num, u8 access)
 }
 #endif
 
-static int do_mmcops(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+int do_mmcops(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
 	enum mmc_state state;
 
