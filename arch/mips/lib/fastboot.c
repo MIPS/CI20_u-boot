@@ -643,6 +643,9 @@ void do_cmd_getvar(USB_STATUS * status, char *strparam)
 		snprintf(buf, sizeof(buf), FASTBOOT_REPLY_OKAY "%s", "no");
 	} else if (sscanf(strparam, "partition-type:%s", ptnparam) == 1) {
 		cmd_getvar_partition_type(buf, ptnparam);
+	} else if (!strcmp("max-download-size", strparam)) {
+		snprintf(buf, sizeof(buf), FASTBOOT_REPLY_OKAY "0x%08X",
+			CONFIG_FASTBOOT_BUF_SIZE);
 	} else {
 		printf("Unknown Fastboot Command: \"%s\"\n",
 		       (char *)Bulk_Out_Buf);
