@@ -257,12 +257,14 @@
 #define CONFIG_SYS_MMC_ENV_DEV		0
 #define CONFIG_ENV_SIZE			(32 << 10)
 #define CONFIG_ENV_OFFSET		((14 + 512) << 10)
+#define CONFIG_MMC_FASTBOOT
 
 #else
 
 #define CONFIG_ENV_IS_IN_NAND
 #define CONFIG_ENV_SIZE			(32 << 10)
 #define CONFIG_ENV_OFFSET		(CONFIG_SYS_NAND_BLOCK_SIZE * 5)
+#define CONFIG_NAND_FASTBOOT
 
 #endif
 

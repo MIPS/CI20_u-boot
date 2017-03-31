@@ -29,22 +29,7 @@
  * MA 02111-1307 USA
  */
 
-#include <common.h>
-#include <version.h>
-#include <fastboot.h>
-#include <asm/arch/jz4780.h>
-
-#define TYPE_DEVICE          1
-#define TYPE_CONFIGURATION   2
-#define TYPE_STRING          3
-#define TYPE_INTERFACE       4
-#define TYPE_ENDPOINT        5
-
-#include "usb_descriptors.h"
-#include <asm/arch/jz4780_otg.h>
-
-#define PRINT_BUF_MAX 1024
-static char print_buf[PRINT_BUF_MAX];
+#include "fastboot_storage.h"
 
 #define	BULK_OUT_BUF_SIZE	0x4000	//0x21000       //buffer size :
 
@@ -62,27 +47,7 @@ void HW_SendPKT(int epnum, const u8 * buf, int size, USB_STATUS * status);
 
 void flash_dump_ptn(void)
 {
-	if (do_mtdparts_default()) {	// mtdparts default
-		return;
-	}
-
-	if (ubi_part("boot", NULL)) {	// ubi part boot
-		debug("%s, line %d:  UBI partition \"boot\" does not exist\n",
-			__FILE__, __LINE__);
-		return;
-	}
-	printf("\n");
-
-	dump_ubi_volume_table("boot");
-
-	if (ubi_part("system", NULL)) {	// ubi part system
-		debug("%s, line %d:  UBI partition \"system\" does not exist\n",
-			__FILE__, __LINE__);
-		return;
-	}
-	printf("\n");
-
-	dump_ubi_volume_table("system");
+	storage_info_dump();
 }
 
 static void handle_early_suspend_intr(void)
@@ -677,19 +642,7 @@ void do_cmd_getvar(USB_STATUS * status, char *strparam)
 	} else if (!strcmp("secure", strparam)) {
 		snprintf(buf, sizeof(buf), FASTBOOT_REPLY_OKAY "%s", "no");
 	} else if (sscanf(strparam, "partition-type:%s", ptnparam) == 1) {
-		if (!strcmp(FB_PARTITION_BOOT, ptnparam)) {
-			snprintf(buf, sizeof(buf), FASTBOOT_REPLY_OKAY "%s",
-				 "raw");
-		} else if (!strcmp(FB_PARTITION_RECOVERY, ptnparam)) {
-			snprintf(buf, sizeof(buf), FASTBOOT_REPLY_OKAY "%s",
-				 "raw");
-		} else if (!strcmp(FB_PARTITION_SYSTEM, ptnparam)) {
-			snprintf(buf, sizeof(buf), FASTBOOT_REPLY_OKAY "%s",
-				 "ubifs");
-		} else {
-			snprintf(buf, sizeof(buf), FASTBOOT_REPLY_OKAY "%s",
-				 "UNKNOWN");
-		}
+		cmd_getvar_partition_type(buf, ptnparam);
 	} else {
 		printf("Unknown Fastboot Command: \"%s\"\n",
 		       (char *)Bulk_Out_Buf);
@@ -733,62 +686,7 @@ void do_cmd_flash(USB_STATUS * status, char *ptnparam)
 		strcpy(par_name, "");
 	}
 
-	// Things get a bit tricky here.  What Fastboot calls a
-	// partition, UBI calls a volume.  Before we can write the UBI
-	// volume we must first select the appropriate UBI partition.
-	// All of the Android partitions exist as volumes in the UBI
-	// volume "system" (not to be confused with the Android
-	// partition "system").
-	if (do_mtdparts_default()) {	// mtdparts default
-		tx_status(status, FASTBOOT_REPLY_FAIL
-			  "do_mtdparts_default() failed");
-		return;
-	}
-
-	if (!strcmp(par_name, FB_PARTITION_BOOT) ||
-	    !strcmp(par_name, FB_PARTITION_RECOVERY)) {
-
-		if (ubi_part("boot", NULL)) {	// ubi part boot
-			debug("%s, line %d:  UBI partition \"boot\" does not "
-			      "exist\n", __FILE__, __LINE__);
-			tx_status(status, FASTBOOT_REPLY_FAIL
-				  "UBI partition \"boot\" does not exist");
-			return;
-		}
-
-		if (memcmp
-		    ((void *)Bulk_Data_Buf, FASTBOOT_BOOT_MAGIC,
-		     FASTBOOT_BOOT_MAGIC_SIZE)) {
-			tx_status(status, FASTBOOT_REPLY_FAIL
-				  "image is not a boot image");
-			return;
-		}
-		debug("%s, line %d: valid boot image being written to \"%s\" "
-		      "partition\n", __FILE__, __LINE__, par_name);
-	} else {
-		if (ubi_part("system", NULL)) {	// ubi part system
-			debug("%s, line %d:  UBI partition \"system\" does not "
-			      "exist\n", __FILE__, __LINE__);
-			tx_status(status, FASTBOOT_REPLY_FAIL
-				  "UBI partition \"system\" does not exist");
-			return;
-		}
-	}
-
-	// Now we need to write the UBI volume within the UBI partition
-	// "system" which corresponds to the Android partition.
-	printf("writing %08lx bytes to %s\n", rx_length, par_name);
-	int ret = ubi_volume_write(par_name, Bulk_Data_Buf, rx_length);
-
-	if (ret) {
-		debug("%s, line %d:  FAILflash write \"%s\" failure\n",
-		      __FILE__, __LINE__, par_name);
-		tx_status(status, FASTBOOT_REPLY_FAIL "flash write failure");
-	} else {
-		debug("%s, line %d:  OKAY writing partition \"%s\"\n",
-		      __FILE__, __LINE__, par_name);
-		tx_status(status, FASTBOOT_REPLY_OKAY);
-	}
+	cmd_flash_core(status, par_name, Bulk_Data_Buf, rx_length);
 }
 
 void do_cmd_erase(USB_STATUS * status, char *ptnparam)
@@ -807,59 +705,7 @@ void do_cmd_erase(USB_STATUS * status, char *ptnparam)
 	} else {
 		strcpy(par_name, "");
 	}
-
-	// Things get a bit tricky here.  What Fastboot calls a
-	// partition, UBI calls a volume.  Before we can write the UBI
-	// volume we must first select the appropriate UBI partition.
-	// All of the Android partitions exist as volumes in the UBI
-	// volume "system" (not to be confused with the Android
-	// partition "system").
-	if (do_mtdparts_default()) {	// mtdparts default
-		tx_status(status, FASTBOOT_REPLY_FAIL
-			  "do_mtdparts_default() failed");
-		return;
-	}
-
-	if (ubi_part("boot", NULL)) {	// ubi part boot
-		debug("%s, line %d:  UBI partition \"boot\" does not exist\n",
-		      __FILE__, __LINE__);
-		tx_status(status, FASTBOOT_REPLY_FAIL
-			  "UBI partition \"boot\" does not exist");
-		return;
-	}
-
-	if (ubi_volume_exists(par_name)) {
-		// For now, this command doesn't do any work.  Erasing
-		// a UBI volume isn't a prerequisite for rewriting the
-		// volume.  By avoiding this work, it's hoped that the
-		// life of the NAND will be extended.
-		//
-		// flash_erase(...);
-		tx_status(status, FASTBOOT_REPLY_OKAY);
-		return;
-	}
-
-
-	if (ubi_part("system", NULL)) {	// ubi part system
-		debug("%s, line %d:  UBI partition \"system\" does not exist\n",
-		      __FILE__, __LINE__);
-		tx_status(status, FASTBOOT_REPLY_FAIL
-			  "UBI partition \"system\" does not exist");
-		return;
-	}
-
-	if (ubi_volume_exists(par_name)) {
-		// For now, this command doesn't do any work.  Erasing
-		// a UBI volume isn't a prerequisite for rewriting the
-		// volume.  By avoiding this work, it's hoped that the
-		// life of the NAND will be extended.
-		//
-		// flash_erase(...);
-		tx_status(status, FASTBOOT_REPLY_OKAY);
-	} else {
-		tx_status(status, FASTBOOT_REPLY_FAIL
-			  "partition %s does not exist", ptnparam);
-	}
+	cmd_erase_core(status, ptnparam, par_name);
 }
 
 void reboot_cb(void)

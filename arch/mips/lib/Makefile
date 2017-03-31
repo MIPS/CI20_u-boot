@@ -22,6 +22,9 @@ ifndef CONFIG_SPL_BUILD
 COBJS-y	+= board.o
 COBJS-$(CONFIG_CMD_BOOTM) += bootm.o
 COBJS-$(CONFIG_CMD_FASTBOOT) += fastboot.o
+COBJS-$(CONFIG_CMD_FASTBOOT) += fastboot_common.o
+COBJS-$(CONFIG_NAND_FASTBOOT) += fastboot_nand.o
+COBJS-$(CONFIG_MMC_FASTBOOT) += fastboot_mmc.o
 else
 COBJS-$(CONFIG_SPL_FRAMEWORK) += spl.o
 endif
