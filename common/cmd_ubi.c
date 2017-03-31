@@ -88,7 +88,7 @@ static void display_volume_info(struct ubi_device *ubi)
 	}
 }
 
-void dump_ubi_volume_table(void)
+void dump_ubi_volume_table(char *partition_name)
 {
 	int i;
 	int j;
@@ -100,7 +100,7 @@ void dump_ubi_volume_table(void)
 		return;
 	}
 
-	printf("            UBI Partition \"system\" Volume Table\n");
+	printf("            UBI Partition \"%s\" Volume Table\n", partition_name);
 	printf("            ===================================\n");
 	printf("Volume Name      Volume ID      Size (PEBs)    Size (Bytes)\n");
 	printf("-------------    -----------    -----------    ------------\n");

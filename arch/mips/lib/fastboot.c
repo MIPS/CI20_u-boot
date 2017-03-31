@@ -66,14 +66,23 @@ void flash_dump_ptn(void)
 		return;
 	}
 
-	if (ubi_part("system", NULL)) {	// ubi part system
-		debug("%s, line %d:  UBI partition \"system\" does not exist\n",
-		      __FILE__, __LINE__);
+	if (ubi_part("boot", NULL)) {	// ubi part boot
+		debug("%s, line %d:  UBI partition \"boot\" does not exist\n",
+			__FILE__, __LINE__);
 		return;
 	}
 	printf("\n");
 
-	dump_ubi_volume_table();
+	dump_ubi_volume_table("boot");
+
+	if (ubi_part("system", NULL)) {	// ubi part system
+		debug("%s, line %d:  UBI partition \"system\" does not exist\n",
+			__FILE__, __LINE__);
+		return;
+	}
+	printf("\n");
+
+	dump_ubi_volume_table("system");
 }
 
 static void handle_early_suspend_intr(void)
@@ -736,16 +745,17 @@ void do_cmd_flash(USB_STATUS * status, char *ptnparam)
 		return;
 	}
 
-	if (ubi_part("system", NULL)) {	// ubi part system
-		debug("%s, line %d:  UBI partition \"system\" does not "
-		      "exist\n", __FILE__, __LINE__);
-		tx_status(status, FASTBOOT_REPLY_FAIL
-			  "UBI partition \"system\" does not exist");
-		return;
-	}
-
 	if (!strcmp(par_name, FB_PARTITION_BOOT) ||
 	    !strcmp(par_name, FB_PARTITION_RECOVERY)) {
+
+		if (ubi_part("boot", NULL)) {	// ubi part boot
+			debug("%s, line %d:  UBI partition \"boot\" does not "
+			      "exist\n", __FILE__, __LINE__);
+			tx_status(status, FASTBOOT_REPLY_FAIL
+				  "UBI partition \"boot\" does not exist");
+			return;
+		}
+
 		if (memcmp
 		    ((void *)Bulk_Data_Buf, FASTBOOT_BOOT_MAGIC,
 		     FASTBOOT_BOOT_MAGIC_SIZE)) {
@@ -755,6 +765,14 @@ void do_cmd_flash(USB_STATUS * status, char *ptnparam)
 		}
 		debug("%s, line %d: valid boot image being written to \"%s\" "
 		      "partition\n", __FILE__, __LINE__, par_name);
+	} else {
+		if (ubi_part("system", NULL)) {	// ubi part system
+			debug("%s, line %d:  UBI partition \"system\" does not "
+			      "exist\n", __FILE__, __LINE__);
+			tx_status(status, FASTBOOT_REPLY_FAIL
+				  "UBI partition \"system\" does not exist");
+			return;
+		}
 	}
 
 	// Now we need to write the UBI volume within the UBI partition
@@ -801,6 +819,26 @@ void do_cmd_erase(USB_STATUS * status, char *ptnparam)
 			  "do_mtdparts_default() failed");
 		return;
 	}
+
+	if (ubi_part("boot", NULL)) {	// ubi part boot
+		debug("%s, line %d:  UBI partition \"boot\" does not exist\n",
+		      __FILE__, __LINE__);
+		tx_status(status, FASTBOOT_REPLY_FAIL
+			  "UBI partition \"boot\" does not exist");
+		return;
+	}
+
+	if (ubi_volume_exists(par_name)) {
+		// For now, this command doesn't do any work.  Erasing
+		// a UBI volume isn't a prerequisite for rewriting the
+		// volume.  By avoiding this work, it's hoped that the
+		// life of the NAND will be extended.
+		//
+		// flash_erase(...);
+		tx_status(status, FASTBOOT_REPLY_OKAY);
+		return;
+	}
+
 
 	if (ubi_part("system", NULL)) {	// ubi part system
 		debug("%s, line %d:  UBI partition \"system\" does not exist\n",
