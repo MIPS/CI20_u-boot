@@ -95,12 +95,14 @@ static lbaint_t write_to_ubi_partition(struct sparse_storage *info,
 void cmd_flash_core(USB_STATUS * status, char *par_name,
 	unsigned char *Bulk_Data_Buf, int image_size)
 {
-	// Things get a bit tricky here.  What Fastboot calls a
-	// partition, UBI calls a volume.  Before we can write the UBI
-	// volume we must first select the appropriate UBI partition.
-	// All of the Android partitions exist as volumes in the UBI
-	// volume "system" (not to be confused with the Android
-	// partition "system").
+	/*
+	 * Things get a bit tricky here.  What Fastboot calls a
+	 * partition, UBI calls a volume.  Before we can write the UBI
+	 * volume we must first select the appropriate UBI partition.
+	 * All of the Android partitions exist as volumes in the UBI
+	 * partitions "boot" and "system" (not to be confused with the Android
+	 * partitions "boot" and "system").
+	 */
 	if (do_mtdparts_default()) {	// mtdparts default
 		tx_status(status, FASTBOOT_REPLY_FAIL
 			  "do_mtdparts_default() failed");
@@ -182,58 +184,48 @@ void cmd_flash_core(USB_STATUS * status, char *par_name,
 
 void cmd_erase_core(USB_STATUS * status, char *ptnparam, char *par_name)
 {
-	// Things get a bit tricky here.  What Fastboot calls a
-	// partition, UBI calls a volume.  Before we can write the UBI
-	// volume we must first select the appropriate UBI partition.
-	// All of the Android partitions exist as volumes in the UBI
-	// volume "system" (not to be confused with the Android
-	// partition "system").
-	if (do_mtdparts_default()) {	// mtdparts default
+	/*
+	 * Things get a bit tricky here.  What Fastboot calls a
+	 * partition, UBI calls a volume.  Before we can write the UBI
+	 * volume we must first select the appropriate UBI partition.
+	 * All of the Android partitions exist as volumes in the UBI
+	 * partitions "boot" and "system" (not to be confused with the Android
+	 * partitions "boot" and "system").
+	 */
+	if (do_mtdparts_default()) {
 		tx_status(status, FASTBOOT_REPLY_FAIL
-			  "do_mtdparts_default() failed");
+			"do_mtdparts_default() failed");
 		return;
 	}
 
-	if (ubi_part("boot", NULL)) {	// ubi part boot
-		debug("%s, line %d:  UBI partition \"boot\" does not exist\n",
-		      __FILE__, __LINE__);
-		tx_status(status, FASTBOOT_REPLY_FAIL
-			  "UBI partition \"boot\" does not exist");
-		return;
-	}
+	if (!strcmp(par_name, FB_PARTITION_BOOT) ||
+		!strcmp(par_name, FB_PARTITION_RECOVERY)) {
+		if (ubi_part("boot", NULL)) {
+			goto exit_error;
+		}
 
-	if (ubi_volume_exists(par_name)) {
-		// For now, this command doesn't do any work.  Erasing
-		// a UBI volume isn't a prerequisite for rewriting the
-		// volume.  By avoiding this work, it's hoped that the
-		// life of the NAND will be extended.
-		//
-		// flash_erase(...);
-		tx_status(status, FASTBOOT_REPLY_OKAY);
-		return;
-	}
+		if (ubi_volume_exists(par_name)) {
+			ubi_format_vol(par_name);
+			goto exit_ok;
+		}
+	} else 	if (!strcmp(par_name, FB_PARTITION_CACHE) ||
+		!strcmp(par_name, FB_PARTITION_SYSTEM) ||
+		!strcmp(par_name, FB_PARTITION_USERDATA)) {
 
+		if (ubi_part("system", NULL))
+			goto exit_error;
 
-	if (ubi_part("system", NULL)) {	// ubi part system
-		debug("%s, line %d:  UBI partition \"system\" does not exist\n",
-		      __FILE__, __LINE__);
-		tx_status(status, FASTBOOT_REPLY_FAIL
-			  "UBI partition \"system\" does not exist");
-		return;
+		if (ubi_volume_exists(par_name)) {
+			ubi_format_vol(par_name);
+			goto exit_ok;
+		}
 	}
-
-	if (ubi_volume_exists(par_name)) {
-		// For now, this command doesn't do any work.  Erasing
-		// a UBI volume isn't a prerequisite for rewriting the
-		// volume.  By avoiding this work, it's hoped that the
-		// life of the NAND will be extended.
-		//
-		// flash_erase(...);
-		tx_status(status, FASTBOOT_REPLY_OKAY);
-	} else {
-		tx_status(status, FASTBOOT_REPLY_FAIL
-			  "partition %s does not exist", ptnparam);
-	}
+exit_error:
+	tx_status(status, FASTBOOT_REPLY_FAIL
+		"partition %s does not exist", ptnparam);
+	return;
+exit_ok:
+	tx_status(status, FASTBOOT_REPLY_OKAY);
 }
 
 void cmd_getvar_partition_type(char *buf, char *ptnparam) {

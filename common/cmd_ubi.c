@@ -311,6 +311,22 @@ out_err:
 	return err;
 }
 
+static int8_t ubi_vol_type(char *volume)
+{
+	struct ubi_volume *vol = ubi_find_volume(volume);
+	return vol->vol_type;
+}
+
+void ubi_format_vol(char *volume)
+{
+	int64_t size = ubi_vol_size(volume);
+	int8_t vol_type = ubi_vol_type(volume);
+	if (size) {
+		ubi_remove_vol(volume);
+		ubi_create_vol(volume, size, vol_type);
+	}
+}
+
 int ubi_volume_continue_write(char *volume, void *buf, size_t size)
 {
 	int err = 1;
