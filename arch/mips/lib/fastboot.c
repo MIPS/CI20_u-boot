@@ -46,6 +46,35 @@ void HW_SendPKT(int epnum, const u8 * buf, int size, USB_STATUS * status);
 
 #define	MAX_PACKET_SIZE	64
 
+/*
+ * First array element contains string related info.
+ * Elements 2-5 are predefined.
+ * This leaves us with 6 digits used for storing serial number.
+ * This is enough to support 1 million unique IDs.
+ */
+static unsigned short device_id_string[11];
+static int device_id_len;
+
+static void set_device_id(char *buf)
+{
+	int i, j;
+
+	i = 1;
+	device_id_string[i++] = (unsigned short) 'c';
+	device_id_string[i++] = (unsigned short) 'i';
+	device_id_string[i++] = (unsigned short) '2';
+	device_id_string[i++] = (unsigned short) '0';
+
+	for(j = 0; buf[j] != '\0' && i < ARRAY_SIZE(device_id_string); j++) {
+		device_id_string[i++] = (unsigned short) buf[j];
+	}
+
+	device_id_len = i * sizeof(unsigned short);
+	/* Add the string header which includes the overall length */
+	device_id_string[0] =
+		(unsigned short) ((TYPE_STRING << 8) | device_id_len);
+}
+
 void flash_dump_ptn(void)
 {
 	storage_info_dump();
@@ -428,12 +457,9 @@ int handle_setup_packet(USB_STATUS * status, int epnum)
 			case USB_DT_STRING:
 				debug("STRING. \n");
 				i = (word1 >> 16) & 0xff;
-
 				if (i == 1) {
-					status->addr =
-					    (u8 *) manufacturer_string;
-					status->length =
-					    sizeof(manufacturer_string);
+					status->addr = (u8 *) device_id_string;
+					status->length = device_id_len;
 				} else if (i == 2) {
 					status->addr = (u8 *) product_string;
 					status->length = sizeof(product_string);
@@ -888,6 +914,7 @@ void fastboot_usb_poll(USB_STATUS * status)
 int fastboot_usb_boot(unsigned zero, unsigned type, unsigned tags)
 {
 	flash_dump_ptn();
+	set_device_id(getenv("serial#"));
 	usbloader_init();
 	for (;;) {
 		fastboot_usb_poll(&status);
