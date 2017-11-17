@@ -32,6 +32,7 @@ COBJS-y += timer.o
 ifndef CONFIG_SPL_BUILD
 COBJS-y += cpu.o
 COBJS-$(CONFIG_CMD_FASTBOOT) += usb.o
+COBJS-$(CONFIG_JZ4780_LCD) += jz4780_lcd.o lcd_panel_data.o lcd.o
 endif
 
 SRCS	:= $(START:.o=.S) $(SOBJS-y:.o=.S) $(COBJS-y:.o=.c)

@@ -37,6 +37,13 @@ static char *failed = "*** failed ***\n";
  */
 const unsigned long mips_io_port_base = -1;
 
+#ifdef CONFIG_JZ4780_LCD
+extern unsigned long fb_base;
+
+int print_logo(void);
+unsigned long lcd_setmem (unsigned long addr);
+#endif
+
 int __board_early_init_f(void)
 {
 	/*
@@ -163,6 +170,11 @@ void board_init_f(ulong bootflag)
 	 */
 	addr &= ~(4096 - 1);
 	debug("Top of RAM usable for U-Boot at: %08lx\n", addr);
+
+#ifdef CONFIG_JZ4780_LCD
+	addr = lcd_setmem(addr);
+	fb_base = addr;
+#endif
 
 	/* Reserve memory for U-Boot code, data & bss
 	 * round down to next 16 kB limit
@@ -344,6 +356,9 @@ void board_init_r(gd_t *id, ulong dest_addr)
 	}
 #endif	/* CONFIG_CMD_FASTBOOT */
 
+#ifdef CONFIG_JZ4780_LCD
+	print_logo();
+#endif
 	/* main_loop() can return to retry autoboot, if so just run it again. */
 	for (;;)
 		main_loop();
