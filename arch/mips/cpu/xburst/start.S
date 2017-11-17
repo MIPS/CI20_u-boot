@@ -21,7 +21,7 @@
 _start:
 #ifdef CONFIG_SPL_BUILD
 
-#ifdef CONFIG_SPL_MMC_SUPPORT
+#if defined(CONFIG_SPL_MMC_SUPPORT) && !defined(CONFIG_COMBINED_NAND_MMC)
 
 	/* magic value ("MSPL") */
 	.word 0x4d53504c

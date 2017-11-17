@@ -1,0 +1,11 @@
+NPM801 U-Boot
+
+Installation to an SD card:
+  Repartition your card with an MBR such that the first partition starts at an
+  offset of no less than 270KB. Then install U-Boot image to the card like so:
+
+    dd if=u-boot.img of=/dev/sdX obs=1K seek=14
+    sync
+
+  U-Boot SPL has to be burned to NAND using ingenic-bootloader-updater, which is
+  present in NPM801 Android device project.

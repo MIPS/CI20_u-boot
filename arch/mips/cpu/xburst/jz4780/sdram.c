@@ -39,6 +39,22 @@ extern int ci20_revision(void);
 #include "sdram/K4B2G0846Q.h"
 #endif
 
+#ifdef CONFIG_SYS_DDR3_H5TQ2G83CFR
+#if CONFIG_SYS_CPU_SPEED == 1200000000	&& CONFIG_SYS_EXTAL == 48000000
+#define SELECT_DDR3_H5TQ2G83CFR		ddr_config = &H5TQ2G83CFR_48_config;
+#else
+#error No DDR configuration for CPU speed
+#endif
+#endif
+
+#ifdef CONFIG_SYS_DDR3_K4B2G0846Q
+#if CONFIG_SYS_CPU_SPEED == 1200000000	&& CONFIG_SYS_EXTAL == 48000000
+#define SELECT_DDR3_K4B2G0846Q		ddr_config = &K4B2G0846Q_48_config;
+#else
+#error No DDR configuration for CPU speed
+#endif
+#endif
+
 static const uint32_t get_mem_clk(void)
 {
 	uint32_t mpll_out;
@@ -228,28 +244,16 @@ void sdram_init(void)
 	uint32_t mem_size0, mem_size1;
 	const struct jz4780_ddr_config *ddr_config;
 
+#ifdef __CONFIG_CI20_H__
 	board_revision = ci20_revision();
 
 	if (board_revision == 2)
-#ifdef CONFIG_SYS_DDR3_K4B2G0846Q
-#if CONFIG_SYS_CPU_SPEED == 1200000000	&& CONFIG_SYS_EXTAL == 48000000
-		ddr_config = &K4B2G0846Q_48_config;
-#else
-#error No DDR configuration for CPU speed
-#endif	
-#else
-#error K4B2G0846Q support disabled
-#endif
+		SELECT_DDR3_K4B2G0846Q
 	else /* Fall back to H5TQ2G83CFR RAM */
-#ifdef CONFIG_SYS_DDR3_H5TQ2G83CFR
-#if CONFIG_SYS_CPU_SPEED == 1200000000	&& CONFIG_SYS_EXTAL == 48000000
-		ddr_config = &H5TQ2G83CFR_48_config;
-#else
-#error No DDR configuration for CPU speed
-#endif
-#else
-#error H5TQ2G83CFR support disabled
-#endif
+		SELECT_DDR3_H5TQ2G83CFR
+#else /* __CONFIG_CI20_H__ */
+	SELECT_DDR3_H5TQ2G83CFR
+#endif /* __CONFIG_CI20_H__ */
 
 #if !defined(CONFIG_SPL_BUILD) || defined(CONFIG_SPL_LIBCOMMON_SUPPORT)
 	puts("SDRAM ");

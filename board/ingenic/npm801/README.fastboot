@@ -1,0 +1,16 @@
+U-Boot for NPM801 has been modified to support the Android Fastboot
+protocol. u-boot-spl.bin is kept on NAND and u-boot.img is kept
+in unpartitioned segment of the SD card. Fastboot supports updating
+Android images only. Updating u-boot-spl.bin is done by using
+ingenic-bootloader-updater, present in NPM810 Android device project.
+Updating u-boot.img is done by using sdcardinstaller/mksdcard script,
+which is also present in NPM810 Android device project, but please
+note that running this script will also burn all necessary images
+to the SD card.
+Fastboot supports updating of the following images: boot.img,
+recovery.img, cache.img, userdata.img and system.img. Image
+updating is performed by running the following command:
+fastboot flash <image-name>
+Android device is rebooted to fastboot mode by running the
+following command:
+adb reboot-bootloader
