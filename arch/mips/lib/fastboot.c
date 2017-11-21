@@ -48,24 +48,28 @@ void HW_SendPKT(int epnum, const u8 * buf, int size, USB_STATUS * status);
 
 /*
  * First array element contains string related info.
- * Elements 2-5 are predefined.
- * This leaves us with 6 digits used for storing serial number.
- * This is enough to support 1 million unique IDs.
+ * Elements 2-x are predefined by CONFIG_FASTBOOT_NAME_PREFIX.
+ * Remaining space is used for storing the unique device ID.
  */
-static unsigned short device_id_string[11];
+static unsigned short device_id_string[20];
 static int device_id_len;
 
 static void set_device_id(char *buf)
 {
 	int i, j;
+	char prefix[] = CONFIG_FASTBOOT_NAME_PREFIX;
 
+	/* Skip over the first element which will contain the final string length */
 	i = 1;
-	device_id_string[i++] = (unsigned short) 'c';
-	device_id_string[i++] = (unsigned short) 'i';
-	device_id_string[i++] = (unsigned short) '2';
-	device_id_string[i++] = (unsigned short) '0';
 
-	for(j = 0; buf[j] != '\0' && i < ARRAY_SIZE(device_id_string); j++) {
+	for (j = 0;
+		prefix[j] != '\0' && j < ARRAY_SIZE(prefix) &&
+			i < ARRAY_SIZE(device_id_string);
+		j++) {
+		device_id_string[i++] = prefix[j];
+	}
+
+	for (j = 0; buf[j] != '\0' && i < ARRAY_SIZE(device_id_string); j++) {
 		device_id_string[i++] = (unsigned short) buf[j];
 	}
 
