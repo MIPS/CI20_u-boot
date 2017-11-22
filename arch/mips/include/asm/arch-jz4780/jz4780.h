@@ -1099,6 +1099,93 @@ do {							\
 
 #define DDR3_MR2_CWL_BIT	3
 
+/*************************************************************************
+ * RTC
+ *************************************************************************/
+#define RTC_BASE  0xB0003000
+
+#define RTC_RCR   (RTC_BASE + 0x00) /* RTC Control Register */
+#define RTC_RSR   (RTC_BASE + 0x04) /* RTC Second Register */
+#define RTC_RSAR  (RTC_BASE + 0x08) /* RTC Second Alarm Register */
+#define RTC_RGR   (RTC_BASE + 0x0c) /* RTC Regulator Register */
+
+#define RTC_HCR   (RTC_BASE + 0x20) /* Hibernate Control Register */
+#define RTC_HWFCR (RTC_BASE + 0x24) /* Hibernate Wakeup Filter Counter Reg */
+#define RTC_HRCR  (RTC_BASE + 0x28) /* Hibernate Reset Counter Register */
+#define RTC_HWCR  (RTC_BASE + 0x2c) /* Hibernate Wakeup Control Register */
+#define RTC_HWRSR (RTC_BASE + 0x30) /* Hibernate Wakeup Status Register */
+#define RTC_HSPR  (RTC_BASE + 0x34) /* Hibernate Scratch Pattern Register */
+#define RTC_WENR  (RTC_BASE + 0x3c) /* Write enable pattern register */
+
+/* RTC Control Register */
+#define RTC_RCR_WRDY  (1 << 7)  /* Write Ready Flag */
+#define RTC_RCR_HZ  (1 << 6)  /* 1Hz Flag */
+#define RTC_RCR_HZIE  (1 << 5)  /* 1Hz Interrupt Enable */
+#define RTC_RCR_AF  (1 << 4)  /* Alarm Flag */
+#define RTC_RCR_AIE (1 << 3)  /* Alarm Interrupt Enable */
+#define RTC_RCR_AE  (1 << 2)  /* Alarm Enable */
+#define RTC_RCR_RTCE  (1 << 0)  /* RTC Enable */
+
+/* RTC Regulator Register */
+#define RTC_RGR_LOCK    (1 << 31) /* Lock Bit */
+#define RTC_RGR_ADJC_BIT  16
+#define RTC_RGR_ADJC_MASK (0x3ff << RTC_RGR_ADJC_BIT)
+#define RTC_RGR_NC1HZ_BIT 0
+#define RTC_RGR_NC1HZ_MASK  (0xffff << RTC_RGR_NC1HZ_BIT)
+
+/* Hibernate Control Register */
+#define RTC_HCR_PD    (1 << 0)  /* Power Down */
+
+/* Hibernate Wakeup Filter Counter Register */
+#define RTC_HWFCR_BIT   5
+#define RTC_HWFCR_MASK    (0x7ff << RTC_HWFCR_BIT)
+
+/* Hibernate Reset Counter Register */
+#define RTC_HRCR_BIT    5
+#define RTC_HRCR_MASK   (0x7f << RTC_HRCR_BIT)
+
+/* Hibernate Wakeup Control Register */
+#define RTC_HWCR_EALM   (1 << 0)  /* RTC alarm wakeup enable */
+
+/* Hibernate Wakeup Status Register */
+#define RTC_HWRSR_HR    (1 << 5)  /* Hibernate reset */
+#define RTC_HWRSR_PPR   (1 << 4)  /* PPR reset */
+#define RTC_HWRSR_PIN   (1 << 1)  /* Wakeup pin status bit */
+#define RTC_HWRSR_ALM   (1 << 0)  /* RTC alarm status bit */
+
+/* Write enable pattern register */
+#define RTC_WENR_WEN    (1 << 31) /* write has been enabled */
+#define RTC_WENR_WENPAT_BIT 0
+#define RTC_WENR_WENPAT_MASK  (0xffff << RTC_WENR_WENPAT_BIT) /* The write enable pattern. */
+
+/* Generate the bit field mask from msb to lsb */
+#define BITS_H2L(msb, lsb)  ((0xFFFFFFFF >> (32-((msb)-(lsb)+1))) << (lsb))
+
+#define RTC_RTCCR_OFFSET  (0x00)  /* rw, 32, 0x00000081 */
+#define RTC_RTCCR (RTC_BASE + RTC_RTCCR_OFFSET)
+#define WENR_WENPAT_WRITABLE  (0xa55a)
+
+#define RTC_RTCSR_OFFSET    (0x04)
+#define RTC_RTCSR   (RTC_BASE + RTC_RTCSR_OFFSET)
+
+/* Hibernate control register(HCR) */
+#define HCR_PD      1
+
+/* RTC control register(RTCCR) */
+#define RTCCR_WRDY    1 << 7
+
+/* write enable pattern register(WENR) */
+#define WENR_WEN    1 << 31
+
+/* Hibernate wakeup filter counter register(HWFCR) */
+#define HWFCR_LSB   5
+#define HWFCR_MASK    BITS_H2L(15, HWFCR_LSB)
+#define HWFCR_WAIT_TIME(ms) (((ms) << HWFCR_LSB) > HWFCR_MASK ? HWFCR_MASK : ((ms) << HWFCR_LSB))
+
+/* Hibernate reset counter register(HRCR) */
+#define HRCR_LSB    5
+#define HRCR_MASK   BITS_H2L(11, HRCR_LSB)
+#define HRCR_WAIT_TIME(ms)     (((ms) << HRCR_LSB) > HRCR_MASK ? HRCR_MASK : ((ms) << HRCR_LSB))
 
 
 /*

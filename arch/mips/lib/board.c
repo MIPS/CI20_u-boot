@@ -44,6 +44,11 @@ int print_logo(void);
 unsigned long lcd_setmem (unsigned long addr);
 #endif
 
+#ifdef CONFIG_HIBERNATE_CONDITION
+int hibernate_condition(void);
+int pm_do_hibernate(void);
+#endif
+
 int __board_early_init_f(void)
 {
 	/*
@@ -355,6 +360,12 @@ void board_init_r(gd_t *id, ulong dest_addr)
 		do_fastboot(NULL, 0, 0, NULL);
 	}
 #endif	/* CONFIG_CMD_FASTBOOT */
+
+#ifdef CONFIG_HIBERNATE_CONDITION
+	if (hibernate_condition()) {
+		pm_do_hibernate();
+	}
+#endif
 
 #ifdef CONFIG_JZ4780_LCD
 	print_logo();

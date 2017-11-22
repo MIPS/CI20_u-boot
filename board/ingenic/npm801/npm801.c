@@ -85,3 +85,89 @@ void spl_board_init(void)
 }
 
 #endif /* CONFIG_SPL_BUILD */
+
+/* Basic RTC ops */
+
+static unsigned int rtc_read_reg(unsigned int reg)
+{
+  unsigned int data;
+  do {
+    data = readl(reg);
+  } while (readl(reg) != data);
+  return data;
+}
+
+/* Waiting for the RTC register writing finish */
+static void __wait_write_ready(void)
+{
+  while (!(readl(RTC_RTCCR) & RTCCR_WRDY));
+}
+
+/* Waiting for the RTC register writable */
+static void __wait_writable(void)
+{
+  __wait_write_ready();
+  writel(WENR_WENPAT_WRITABLE, RTC_WENR);
+  __wait_write_ready();
+  while (!(readl(RTC_WENR) & WENR_WEN));
+}
+
+static void rtc_write_reg(unsigned int reg, unsigned int data)
+{
+  __wait_writable();
+  writel(data, reg);
+  __wait_write_ready();
+}
+
+int pm_do_hibernate(void)
+{
+	/*
+	 * RTC Wakeup or 1Hz interrupt can be enabled or disabled
+	 * through  RTC driver's ioctl (linux/driver/char/rtc_jz.c).
+	 */
+	writel(0x0, CPM_RSR);
+
+	/* Set minimum wakeup_n pin low-level assertion time for wakeup: 2000ms */
+	rtc_write_reg(RTC_HWFCR, HWFCR_WAIT_TIME(2000));
+
+	/* Set reset pin low-level assertion time after wakeup: must  > 60ms */
+	rtc_write_reg(RTC_HRCR, HRCR_WAIT_TIME(60));
+
+	/* Scratch pad register to be reserved */
+	rtc_write_reg(RTC_HSPR, 0x52544356);
+
+	/* clear wakeup status register */
+	rtc_write_reg(RTC_HWRSR, 0x0);
+
+	/* set wake up valid level as low */
+	rtc_write_reg(RTC_HWCR,0x8);
+
+	/* Put CPU to hibernate mode */
+	rtc_write_reg(RTC_HCR, HCR_PD);
+
+	/* We can't get here */
+	return 0;
+}
+
+
+static int wakeup_pressed(int filter)
+{
+	while ((!gpio_get_pin(CONFIG_GPIO_KEY_WAKEUP)) && --filter)
+		mdelay(1);
+
+	return !filter;
+}
+
+int hibernate_condition(void)
+{
+	if ((cpm_get_scrpad() & 0xffff) == REBOOT_SIGNATURE) {
+		return 0;
+	}
+
+	if (!(rtc_read_reg(RTC_HWRSR) & RTC_HWRSR_PPR) &&
+		!wakeup_pressed(500)) {
+		return 1;
+	}
+
+	return 0;
+}

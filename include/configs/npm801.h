@@ -215,4 +215,6 @@
 #define CONFIG_LCD_RESET_PIN			(32*1 + 22)	/*PB22*/
 #define CONFIG_LCD_BPP				LCD_COLOR8
 
+#define CONFIG_HIBERNATE_CONDITION
+
 #endif /* __CONFIG_NPM801_H__ */
