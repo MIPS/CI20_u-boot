@@ -86,6 +86,10 @@
 #define CONFIG_BOOTCOMMAND \
 	"run ethargs; ext4load mmc 0:1 0x88000000 /boot/uImage; bootm 0x88000000"
 
+#define CONFIG_PARTITION_NAMES	"boot", "system", "vendor", "extended", "cache", "userdata"
+#define CONFIG_PARTITION_NUM	6
+#define CONFIG_DOS_BLKDEVPARTS
+
 #else /* !CONFIG_SPL_MMC_SUPPORT */
 
 /* NAND defaults */
