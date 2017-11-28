@@ -23,40 +23,32 @@
 
 #include "fastboot_storage.h"
 
+char dev_part_str[5];
+
 static char* get_dev_part_str(char *par_name)
 {
-	/*
-	 * This layout assumes the following partition layout:
-	 * boot		:	mmc 0:1
-	 * system	:	mmc 0:2
-	 * cache	:	mmc 0:3
-	 * userdata	:	mmc 0:4
-	 *
-	 * Partition names and sizes may be altered
-	 * as long as they are used for the same purpose.
-	 * But in case of more complex partition changes,
-	 * update the following code.
-	 */
+	int i;
+	char *partition_names[] = {CONFIG_PARTITION_NAMES};
 
-	if (!strcmp(par_name, FB_PARTITION_BOOT)) {
-		return "0:1";
-	} else if (!strcmp(par_name, FB_PARTITION_RECOVERY)) {
+	memset(dev_part_str, 0, sizeof(dev_part_str));
+
+	for (i = 0; i < ARRAY_SIZE(partition_names); i++) {
 		/*
 		 * boot.img and recovery.img are stored
 		 * to the same ext4 partition named "boot",
 		 * unlike other images which are being
 		 * flashed directly to the mmc partition.
 		 */
-		return "0:1";
-	} else if (!strcmp(par_name, FB_PARTITION_SYSTEM)) {
-		return "0:2";
-	} else if (!strcmp(par_name, FB_PARTITION_CACHE)) {
-		return "0:3";
-	} else if (!strcmp(par_name, FB_PARTITION_USERDATA)) {
-		return "0:4";
-	} else {
-		return 0;
+		int is_recovery = !strcmp(par_name, FB_PARTITION_RECOVERY) &&
+			    !strcmp(FB_PARTITION_BOOT, partition_names[i]);
+
+		if (is_recovery || !strcmp(par_name, partition_names[i])) {
+			sprintf(dev_part_str, "0:%d", i + 1);
+			break;
+		}
 	}
+
+	return dev_part_str;
 }
 
 void storage_info_dump(void)
@@ -135,7 +127,8 @@ void cmd_flash_core(USB_STATUS * status, char *par_name,
 
 	if (!strcmp(par_name, FB_PARTITION_CACHE) ||
 		!strcmp(par_name, FB_PARTITION_SYSTEM) ||
-		!strcmp(par_name, FB_PARTITION_USERDATA)) {
+		!strcmp(par_name, FB_PARTITION_USERDATA) ||
+		!strcmp(par_name, FB_PARTITION_VENDOR)) {
 
 		disk_partition_t info;
 		char *dev_part_str = get_dev_part_str(par_name);
@@ -192,7 +185,8 @@ void cmd_getvar_partition_type(char *buf, char *ptnparam) {
 		!strcmp(FB_PARTITION_RECOVERY, ptnparam)) {
 		snprintf(buf, sizeof(buf), FASTBOOT_REPLY_OKAY "%s",
 			"raw");
-	} else if (!strcmp(FB_PARTITION_SYSTEM, ptnparam)) {
+	} else if (!strcmp(FB_PARTITION_SYSTEM, ptnparam) ||
+		!strcmp(FB_PARTITION_VENDOR, ptnparam)) {
 		snprintf(buf, sizeof(buf), FASTBOOT_REPLY_OKAY "%s",
 			"ext4");
 	} else if (!strcmp(FB_PARTITION_CACHE, ptnparam) ||

@@ -8,7 +8,7 @@ which is also present in NPM810 Android device project, but please
 note that running this script will also burn all necessary images
 to the SD card.
 Fastboot supports updating of the following images: boot.img,
-recovery.img, cache.img, userdata.img and system.img. Image
+recovery.img, cache.img, userdata.img, system.img and vendor.img. Image
 updating is performed by running the following command:
 fastboot flash <image-name>
 Android device is rebooted to fastboot mode by running the
