@@ -44,6 +44,32 @@ static inline int is_bootable(dos_partition_t *p)
 	return p->boot_ind == 0x80;
 }
 
+#ifdef CONFIG_DOS_BLKDEVPARTS
+int partition_index = 0;
+unsigned partition_start[CONFIG_PARTITION_NUM];
+unsigned partition_size[CONFIG_PARTITION_NUM];
+
+static void blkdevparts_setenv(unsigned block_size) {
+	int i;
+	char blkdevparts_argument[256];
+	char *partition_names[] = {CONFIG_PARTITION_NAMES};
+
+	for (i = 0; i < ARRAY_SIZE(partition_names); i++) {
+		sprintf(
+			    i ? blkdevparts_argument + strlen(blkdevparts_argument) :
+				    blkdevparts_argument,
+			    i ? ",%dM@%dM(%s)\0" : "%dM@%dM(%s)\0",
+			    (partition_size[i] >> 10) * block_size >> 10,
+			    (partition_start[i] >> 10) * block_size >> 10,
+			    partition_names[i]);
+		if (strlen(blkdevparts_argument) >= ARRAY_SIZE(blkdevparts_argument))
+			printf("ERROR: blkdevparts_argument overflow\n");
+	}
+
+	setenv("blkdevparts", blkdevparts_argument);
+}
+#endif
+
 static void print_one_part(dos_partition_t *p, int ext_part_sector,
 			   int part_num, unsigned int disksig)
 {
@@ -54,6 +80,10 @@ static void print_one_part(dos_partition_t *p, int ext_part_sector,
 		part_num, lba_start, lba_size, disksig, part_num, p->sys_ind,
 		(is_extended(p->sys_ind) ? " Extd" : ""),
 		(is_bootable(p) ? " Boot" : ""));
+#ifdef CONFIG_DOS_BLKDEVPARTS
+	partition_start[partition_index] = lba_start;
+	partition_size[partition_index++] = lba_size;
+#endif
 }
 
 static int test_block_type(unsigned char *buffer)
@@ -259,6 +289,10 @@ void print_part_dos (block_dev_desc_t *dev_desc)
 {
 	printf("Part\tStart Sector\tNum Sectors\tUUID\t\tType\n");
 	print_partition_extended(dev_desc, 0, 0, 1, 0);
+#ifdef CONFIG_DOS_BLKDEVPARTS
+	partition_index = 0;
+	blkdevparts_setenv(dev_desc->blksz);
+#endif
 }
 
 int get_partition_info_dos (block_dev_desc_t *dev_desc, int part, disk_partition_t * info)
