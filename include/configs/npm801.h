@@ -73,13 +73,21 @@
 #define CONFIG_BOOTDELAY 1
 #define CONFIG_SYS_BOOTM_LEN (64 << 20)
 
+#define CONFIG_PARTITION_NAMES	"boot", "system", "vendor", "extended", "cache", "userdata"
+#define CONFIG_PARTITION_NUM	6
+#define CONFIG_DOS_BLKDEVPARTS
+
 #define CONFIG_BOOTCOMMAND \
-	"ext4load mmc 0:1 0x88000000 boot.img; boota 0x88000000"
+	"run blkdevpartscmd; run dtbcmd; run abootcmd;"
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"stdin=eserial0,eserial3\0" \
 	"stdout=eserial0,eserial3\0" \
-	"stderr=eserial0,eserial3\0"
+	"stderr=eserial0,eserial3\0" \
+	"blkdevpartscmd=mmc part; setenv bootargs blkdevparts=mmcblk0:${blkdevparts};\0" \
+	"dtbcmd=env set bootargs \"${bootargs} dtb_addr=0x87000000\"; ext4load mmc 0:1 0x87000000 jz4780.dtb;\0" \
+	"abootcmd=ext4load mmc 0:1 0x88000000 boot.img; boota 0x88000000;\0"
+
 
 #define CONFIG_SYS_HUSH_PARSER
 
