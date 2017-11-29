@@ -210,7 +210,8 @@ void cmd_erase_core(USB_STATUS * status, char *ptnparam, char *par_name)
 		}
 	} else 	if (!strcmp(par_name, FB_PARTITION_CACHE) ||
 		!strcmp(par_name, FB_PARTITION_SYSTEM) ||
-		!strcmp(par_name, FB_PARTITION_USERDATA)) {
+		!strcmp(par_name, FB_PARTITION_USERDATA) ||
+		!strcmp(par_name, FB_PARTITION_VENDOR)) {
 
 		if (ubi_part("system", NULL))
 			goto exit_error;
@@ -235,7 +236,8 @@ void cmd_getvar_partition_type(char *buf, char *ptnparam) {
 			 "raw");
 	} else if (!strcmp(FB_PARTITION_SYSTEM, ptnparam) ||
 		!strcmp(FB_PARTITION_CACHE, ptnparam) ||
-		!strcmp(FB_PARTITION_USERDATA, ptnparam)) {
+		!strcmp(FB_PARTITION_USERDATA, ptnparam) ||
+		!strcmp(FB_PARTITION_VENDOR, ptnparam)) {
 		snprintf(buf, sizeof(buf), FASTBOOT_REPLY_OKAY "%s",
 			 "ubifs");
 	} else {
