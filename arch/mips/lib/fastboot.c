@@ -713,6 +713,7 @@ void do_cmd_flash(USB_STATUS * status, char *ptnparam)
 	if (!strcmp(FB_PARTITION_BOOT, ptnparam) ||
 	    !strcmp(FB_PARTITION_CACHE, ptnparam) ||
 	    !strcmp(FB_PARTITION_RECOVERY, ptnparam) ||
+	    !strcmp(FB_KERNEL_DTB, ptnparam) ||
 	    !strcmp(FB_PARTITION_SYSTEM, ptnparam) ||
 	    !strcmp(FB_PARTITION_USERDATA, ptnparam) ||
 	    !strcmp(FB_PARTITION_VENDOR, ptnparam)) {
@@ -733,6 +734,7 @@ void do_cmd_erase(USB_STATUS * status, char *ptnparam)
 	    !strcmp(FB_PARTITION_CACHE, ptnparam) ||
 	    !strcmp(FB_PARTITION_MISC, ptnparam) ||
 	    !strcmp(FB_PARTITION_RECOVERY, ptnparam) ||
+	    !strcmp(FB_KERNEL_DTB, ptnparam) ||
 	    !strcmp(FB_PARTITION_STORAGE, ptnparam) ||
 	    !strcmp(FB_PARTITION_SYSTEM, ptnparam) ||
 	    !strcmp(FB_PARTITION_USERDATA, ptnparam ||

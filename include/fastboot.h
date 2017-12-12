@@ -100,6 +100,7 @@
 #define	FB_PARTITION_SYSTEM	"system"
 #define	FB_PARTITION_USERDATA	"userdata"
 #define	FB_PARTITION_VENDOR	"vendor"
+#define	FB_KERNEL_DTB		"dtb"
 #define	FASTBOOT_CMD_DOWNLOAD	"download:"
 #define	FASTBOOT_CMD_VERIFY	"verify:"
 #define	FASTBOOT_CMD_FLASH	"flash:"

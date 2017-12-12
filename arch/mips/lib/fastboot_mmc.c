@@ -41,8 +41,13 @@ static char* get_dev_part_str(char *par_name)
 		 */
 		int is_recovery = !strcmp(par_name, FB_PARTITION_RECOVERY) &&
 			    !strcmp(FB_PARTITION_BOOT, partition_names[i]);
+		/*
+		 * Same approach is used for kernel device tree blob.
+		 */
+		int is_dtb = !strcmp(par_name, FB_KERNEL_DTB) &&
+			    !strcmp(FB_PARTITION_BOOT, partition_names[i]);
 
-		if (is_recovery || !strcmp(par_name, partition_names[i])) {
+		if (is_recovery || is_dtb || !strcmp(par_name, partition_names[i])) {
 			sprintf(dev_part_str, "0:%d", i + 1);
 			break;
 		}
@@ -102,6 +107,8 @@ static int update_boot_image(char *par_name, const void *buffer, int image_size)
 		argv[4] = "/boot.img";
 	} else if (!strcmp(par_name, FB_PARTITION_RECOVERY)) {
 		argv[4] = "/recovery.img";
+	} else if (!strcmp(par_name, FB_KERNEL_DTB)) {
+		argv[4] = "/jz4780.dtb";
 	} else {
 		return -1;
 	}
@@ -117,7 +124,8 @@ void cmd_flash_core(USB_STATUS * status, char *par_name,
 	int error = 1;
 
 	if (!strcmp(par_name, FB_PARTITION_BOOT) ||
-		!strcmp(par_name, FB_PARTITION_RECOVERY)) {
+		!strcmp(par_name, FB_PARTITION_RECOVERY) ||
+		!strcmp(par_name, FB_KERNEL_DTB)) {
 		if(!check_boot_magic(status, par_name, Bulk_Data_Buf)) {
 			debug("%s, line %d: valid boot image being written to \"%s\" "
 				"partition\n", __FILE__, __LINE__, par_name);
@@ -182,7 +190,8 @@ void cmd_erase_core(USB_STATUS * status, char *ptnparam, char *par_name)
 
 void cmd_getvar_partition_type(char *buf, char *ptnparam) {
 	if (!strcmp(FB_PARTITION_BOOT, ptnparam) ||
-		!strcmp(FB_PARTITION_RECOVERY, ptnparam)) {
+		!strcmp(FB_PARTITION_RECOVERY, ptnparam) ||
+		!strcmp(FB_KERNEL_DTB, ptnparam)) {
 		snprintf(buf, sizeof(buf), FASTBOOT_REPLY_OKAY "%s",
 			"raw");
 	} else if (!strcmp(FB_PARTITION_SYSTEM, ptnparam) ||

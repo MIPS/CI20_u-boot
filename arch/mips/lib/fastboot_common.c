@@ -30,6 +30,9 @@ lbaint_t sparse_reserve(struct sparse_storage *info,
 
 int check_boot_magic(USB_STATUS * status, char *par_name, unsigned char *buffer)
 {
+	if (!strcmp(par_name, FB_KERNEL_DTB))
+		return 0;
+
 	if (!strcmp(par_name, FB_PARTITION_BOOT) ||
 		!strcmp(par_name, FB_PARTITION_RECOVERY)) {
 

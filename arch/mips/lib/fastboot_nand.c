@@ -110,7 +110,8 @@ void cmd_flash_core(USB_STATUS * status, char *par_name,
 	}
 
 	if (!strcmp(par_name, FB_PARTITION_BOOT) ||
-	    !strcmp(par_name, FB_PARTITION_RECOVERY)) {
+	    !strcmp(par_name, FB_PARTITION_RECOVERY) ||
+	    !strcmp(par_name, FB_KERNEL_DTB)) {
 		if (ubi_part("boot", NULL)) {	// ubi part boot
 			debug("%s, line %d:  UBI partition \"boot\" does not "
 			      "exist\n", __FILE__, __LINE__);
@@ -199,7 +200,8 @@ void cmd_erase_core(USB_STATUS * status, char *ptnparam, char *par_name)
 	}
 
 	if (!strcmp(par_name, FB_PARTITION_BOOT) ||
-		!strcmp(par_name, FB_PARTITION_RECOVERY)) {
+		!strcmp(par_name, FB_PARTITION_RECOVERY) ||
+		!strcmp(par_name, FB_KERNEL_DTB)) {
 		if (ubi_part("boot", NULL)) {
 			goto exit_error;
 		}
@@ -231,7 +233,8 @@ exit_ok:
 
 void cmd_getvar_partition_type(char *buf, char *ptnparam) {
 	if (!strcmp(FB_PARTITION_BOOT, ptnparam) ||
-		!strcmp(FB_PARTITION_RECOVERY, ptnparam)) {
+		!strcmp(FB_PARTITION_RECOVERY, ptnparam) ||
+		!strcmp(FB_KERNEL_DTB, ptnparam)) {
 		snprintf(buf, sizeof(buf), FASTBOOT_REPLY_OKAY "%s",
 			 "raw");
 	} else if (!strcmp(FB_PARTITION_SYSTEM, ptnparam) ||
