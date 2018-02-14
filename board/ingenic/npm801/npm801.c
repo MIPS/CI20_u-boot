@@ -43,7 +43,7 @@ int misc_init_r(void)
 	cpccr = readl(CPM_CPCCR);
 	ahb2_div = ((cpccr & CPM_CPCCR_H2DIV_MASK) >> CPM_CPCCR_H2DIV_BIT) + 1;
 	jz4780_efuse_init(CONFIG_SYS_MEM_SPEED / ahb2_div);
-	jz4780_efuse_read(0x18, 16, (uint8_t *)&otp);
+	jz4780_efuse_read(0x8, 16, (uint8_t *)&otp);
 
 	/* put other board information into the environment */
 	setenv_ulong("serial#", otp.serial_number);
