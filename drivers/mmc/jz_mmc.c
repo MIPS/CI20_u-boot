@@ -290,12 +290,15 @@ void jz_mmc_init(int clock_div)
 	int i = 0;
 
 #if defined(CONFIG_JZ_MMC_MSC0) && (!defined(CONFIG_SPL_BUILD) || (CONFIG_JZ_MMC_SPLMSC == 0))
+	writel(readl(CPM_CLKGR0) & ~CPM_CLKGR0_MSC0, CPM_CLKGR0);
 	jz_mmc_init_one(i++, 0, MSC0_BASE, clock_div);
 #endif
 #if defined(CONFIG_JZ_MMC_MSC1) && (!defined(CONFIG_SPL_BUILD) || (CONFIG_JZ_MMC_SPLMSC == 1))
+	writel(readl(CPM_CLKGR0) & ~CPM_CLKGR0_MSC1, CPM_CLKGR0);
 	jz_mmc_init_one(i++, 1, MSC1_BASE, clock_div);
 #endif
 #if defined(CONFIG_JZ_MMC_MSC2) && (!defined(CONFIG_SPL_BUILD) || (CONFIG_JZ_MMC_SPLMSC == 2))
+	writel(readl(CPM_CLKGR0) & ~CPM_CLKGR0_MSC2, CPM_CLKGR0);
 	jz_mmc_init_one(i++, 2, MSC2_BASE, clock_div);
 #endif
 }
