@@ -20,9 +20,6 @@ ifdef CONFIG_SYS_BIG_ENDIAN
 ENDIANNESS := -EB
 endif
 
-# Default to EB if no endianess is configured
-ENDIANNESS ?= -EB
-
 PLATFORM_CPPFLAGS += -DCONFIG_MIPS -D__MIPS__
 
 #
