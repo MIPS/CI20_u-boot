@@ -50,7 +50,7 @@
 #define DDR_tRCD 15  /* ACTIVE to READ or WRITE command period to the same bank. ns*/
 #define DDR_tRC  52  /* ACTIVE to ACTIVE command period to the same bank. ns*/
 #define DDR_tWR  15  /* WRITE Recovery Time defined by register MR of DDR2 memory, ns*/
-#define DDR_tRRD DDR_MAX(4, 6000) /* ACTIVE bank A to ACTIVE bank B command period. DDR3 - tCK*/
+#define DDR_tRRD DDR_MAX(4, 10000) /* ACTIVE bank A to ACTIVE bank B command period. DDR3 - tCK*/
 #define DDR_tRTP DDR_MAX(4, 7500) /* READ to PRECHARGE command period. DDR3 spec no. 7.5ns*/
 #define DDR_tWTR DDR_MAX(4, 7500) /* WRITE to READ command delay. DDR3 spec no. 7.5 ns*/
 	 
@@ -59,15 +59,15 @@
  */
 #define DDR_tRFC   160  /* AUTO-REFRESH command period. DDR3 - ns*/
 #define DDR_tMINSR 80   /* Minimum Self-Refresh / Deep-Power-Down . DDR3 no*/
-#define DDR_tXP    DDR_MAX(3, 6000)	/* DDR3 only: Exit active power down to any valid command, ns*/
+#define DDR_tXP    DDR_MAX(3, 7500)	/* DDR3 only: Exit active power down to any valid command, ns*/
 #define DDR_tMRD   4    /* unit: tCK. Load-Mode-Register to next valid command period: DDR3 rang 4 to 7 tCK. DDR3 spec no */
 
 /* new add */
 #define DDR_BL	   8   /* DDR3 Burst length: 0 - 8 burst, 2 - 4 burst , 1 - 4 or 8(on the fly)*/
 #define DDR_tAL    0	/* Additive Latency, tCK*/
 #define DDR_tCCD   4	/* CAS# to CAS# command delay , tCK. 4 or 5 */
-#define DDR_tFAW   30	/* Four bank activate period, DDR3 - tCK */
-#define DDR_tCKE   	DDR_MAX(3, 5000)	/* CKE minimum pulse width, DDR3 spec no, tCK */
+#define DDR_tFAW   40	/* Four bank activate period, DDR3 - tCK */
+#define DDR_tCKE   	DDR_MAX(3, 7500)	/* CKE minimum pulse width, DDR3 spec no, tCK */
 #define DDR_tRL 	(DDR_tAL + DDR_CL)	/* DDR3: Read Latency = tAL + tCL */
 #define DDR_tWL 	(DDR_tAL + DDR_tCWL)	/* DDR3: Write Latency = tAL + tCWL */
 #define DDR_tRDLAT	(DDR_tRL - 2)
@@ -116,8 +116,8 @@ static const struct jz4780_ddr_config K4B2G0846Q_48_config = {
 	.timing4	= (	(31	<< DDRC_TIMING4_TRFC_BIT)	|
 				(1	<< DDRC_TIMING4_TRWCOV_BIT)	|
 				(4	<< DDRC_TIMING4_TCKE_BIT)	|
-				(9	<< DDRC_TIMING4_TMINSR_BIT)	|
-				(8	<< DDRC_TIMING4_TXP_BIT)	|
+				(10	<< DDRC_TIMING4_TMINSR_BIT)	|
+				(3	<< DDRC_TIMING4_TXP_BIT)	|
 				(3	<< DDRC_TIMING4_TMRD_BIT)),
 
 	.timing5	= (	(8	<< DDRC_TIMING5_TRTW_BIT)	|
@@ -125,7 +125,7 @@ static const struct jz4780_ddr_config K4B2G0846Q_48_config = {
 				(4	<< DDRC_TIMING5_TWDLAT_BIT)),
 
 	.timing6	= (	(25	<< DDRC_TIMING6_TXSRD_BIT)	|
-				(12	<< DDRC_TIMING6_TFAW_BIT)	|
+				(16	<< DDRC_TIMING6_TFAW_BIT)	|
 				(2	<< DDRC_TIMING6_TCFGW_BIT)	|
 				(2	<< DDRC_TIMING6_TCFGR_BIT)),
 	/* PHY */

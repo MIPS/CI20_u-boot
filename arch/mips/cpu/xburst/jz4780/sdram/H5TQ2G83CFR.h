@@ -59,7 +59,7 @@
  */
 #define DDR_tRFC   215 	/* AUTO-REFRESH command period. DDR3 - ns*/
 #define DDR_tMINSR 60   /* Minimum Self-Refresh / Deep-Power-Down . DDR3 no*/
-#define DDR_tXP    3	/* DDR3 only: Exit active power down to any valid command, ns*/
+#define DDR_tXP    DDR_MAX(3, 7500)	/* DDR3 only: Exit active power down to any valid command, ns*/
 #define DDR_tMRD   4    /* unit: tCK. Load-Mode-Register to next valid command period: DDR3 rang 4 to 7 tCK. DDR3 spec no */
 
 /* new add */
@@ -115,7 +115,7 @@ static const struct jz4780_ddr_config H5TQ2G83CFR_48_config = {
 	.timing4	= (	(42	<< DDRC_TIMING4_TRFC_BIT)	|
 				(1	<< DDRC_TIMING4_TRWCOV_BIT)	|
 				(4	<< DDRC_TIMING4_TCKE_BIT)	|
-				(7	<< DDRC_TIMING4_TMINSR_BIT)	|
+				(8	<< DDRC_TIMING4_TMINSR_BIT)	|
 				(3	<< DDRC_TIMING4_TXP_BIT)	|
 				(3	<< DDRC_TIMING4_TMRD_BIT)),
 
